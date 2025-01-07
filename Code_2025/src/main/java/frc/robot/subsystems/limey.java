@@ -54,6 +54,7 @@ public class limey extends SubsystemBase {
 
 
 // verified working
+// Controls the steering/turning
   public double rotationLock(double x_value){
     double rot = movement.calculate(x_value,0);
     if(Math.abs(rot) < .15){
@@ -88,6 +89,7 @@ public class limey extends SubsystemBase {
   }
 
 // verified working
+// side to side movement to get infront of the april tag
   public double rotAround(double x_value){
     // Calculates the speed needed to reach goal
     double xPower = movement.calculate(x_value, 0);
