@@ -29,7 +29,7 @@ public class ArmSub extends SubsystemBase {
   /** Creates a new ArmSub. */
   
   PIDController move;
-  ArmFeedforward armfeed;
+  // ArmFeedforward armfeed;
   // If it is a kraken/Falcon
   TalonFX arm = new TalonFX(Constants.armPort);
 
@@ -48,49 +48,42 @@ public class ArmSub extends SubsystemBase {
 
     //Change PID and FeedFwrd vals if needed
     move = new PIDController(.02, 0, 0);
-    move.setTolerance(2);
+    move.setTolerance(Acceptable_error);
 
-    armfeed = new ArmFeedforward(2,10,2);
+    // armfeed = new ArmFeedforward(2,10,2);
   }
 
  //All Functions below is an attempt in using PID with Angles instead of ArmFowardFeedback cuz its awful 
-  public void armMovement(double targetAngle){
-    arm.set(setArmAngle(targetAngle));
-  }
+ public void setArmAngle(double targetAngle){
+  double targetInTicks = degToTick(targetAngle); 
+
+  double power = move.calculate(arm.getPosition().getValueAsDouble(), targetInTicks);
+
+  arm.set(power);
+}
+
 
   public boolean armAtTarget(double targetAngle){
     double targetTicks = degToTick(targetAngle);
 
-    return (Math.abs(arm.getPosition().getValueAsDouble() - targetTicks)) <= .5;
+    return (Math.abs(arm.getPosition().getValueAsDouble() - targetTicks)) <= move.getErrorTolerance();
   }
 
   public double getCurrentAngle(){
-    return Math.abs(tickToDeg(arm.getPosition().getValueAsDouble()));
+    return tickToDeg(arm.getPosition().getValueAsDouble());
   }
-
-
-  public double setArmAngle(double targetAngle){
-    double targetInTicks = degToTick(targetAngle); 
-
-    double power = move.calculate(arm.getPosition().getValueAsDouble(), targetInTicks);
-
-    return power;
-  }
-
  
   private double tickToDeg(double CurrentTick){
     //return (CurrentTick/(ticks_per_Rev*ArmGearRatio))* 360;
-     return CurrentTick * 360;
+     return (CurrentTick/ticks_per_Rev) * 360;
   }
 
   private double degToTick(double targetAngle1){
     //AUTOMATICALLY SET TO 15 deg
     //this means we are converting 15 deg to ticks since that is our "goal"
 
-    return (targetAngle1 / 360); // * ticks_per_Rev * ArmGearRatio;
+    return (targetAngle1 / 360) * ticks_per_Rev; // * ticks_per_Rev * ArmGearRatio;
   } 
-
-
 
   public void armStop(){
     arm.set(0);
