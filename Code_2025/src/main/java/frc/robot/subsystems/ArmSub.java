@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.drive.RobotDriveBase;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -34,11 +35,11 @@ public class ArmSub extends SubsystemBase {
 
 
 
-  private final int targetAngle1 = 15;
+  // private final int targetAngle1 = 15;
   private final int ticks_per_Rev = 4096;
   
   //Bottom 2 values might need change
-  private final double ArmGearRatio = 5.75;
+  private final double ArmGearRatio = 6.75;
   private final int Acceptable_error = 2;
 
   public ArmSub() {
@@ -53,23 +54,23 @@ public class ArmSub extends SubsystemBase {
   }
 
  //All Functions below is an attempt in using PID with Angles instead of ArmFowardFeedback cuz its awful 
-  public void armMovement(){
-    arm.set(setArmAngle());
+  public void armMovement(double targetAngle){
+    arm.set(setArmAngle(targetAngle));
   }
 
-  public boolean armAtTarget(){
-    double targetTicks = degToTick(targetAngle1);
+  public boolean armAtTarget(double targetAngle){
+    double targetTicks = degToTick(targetAngle);
 
-    return (Math.abs(arm.getPosition().getValueAsDouble() - targetTicks)) <= Acceptable_error;
+    return (Math.abs(arm.getPosition().getValueAsDouble() - targetTicks)) <= .5;
   }
 
   public double getCurrentAngle(){
-    return tickToDeg(arm.getPosition().getValueAsDouble());
+    return Math.abs(tickToDeg(arm.getPosition().getValueAsDouble()));
   }
 
 
-  public double setArmAngle(){
-    double targetInTicks = degToTick(targetAngle1); 
+  public double setArmAngle(double targetAngle){
+    double targetInTicks = degToTick(targetAngle); 
 
     double power = move.calculate(arm.getPosition().getValueAsDouble(), targetInTicks);
 
@@ -78,13 +79,15 @@ public class ArmSub extends SubsystemBase {
 
  
   private double tickToDeg(double CurrentTick){
-    return (CurrentTick/(ticks_per_Rev*ArmGearRatio))* 360;
+    //return (CurrentTick/(ticks_per_Rev*ArmGearRatio))* 360;
+     return CurrentTick * 360;
   }
 
   private double degToTick(double targetAngle1){
     //AUTOMATICALLY SET TO 15 deg
     //this means we are converting 15 deg to ticks since that is our "goal"
-    return (targetAngle1 / 360) * ticks_per_Rev * ArmGearRatio;
+
+    return (targetAngle1 / 360); // * ticks_per_Rev * ArmGearRatio;
   } 
 
 
@@ -101,6 +104,8 @@ public class ArmSub extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("target in Angle", 45);
+    SmartDashboard.putNumber("Current Angle", getCurrentAngle());
   }
 
   @Override
