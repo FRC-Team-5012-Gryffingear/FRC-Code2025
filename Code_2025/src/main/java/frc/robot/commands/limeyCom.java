@@ -35,6 +35,7 @@ public class limeyCom extends Command {
     SmartDashboard.putNumber("Rot Fwd Lock Val", lime.rotAround(lime.getX()));
     SmartDashboard.putNumber("Rot turn Lock val", lime.rotationLock(lime.getX()));
     SmartDashboard.putNumber("Fwd Lock", lime.fwrdLock(lime.estimate3DZInches()));
+    System.out.println("WORKING");
   }
 
   // Called once the command ends or is interrupted.

@@ -32,8 +32,9 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
-    configureBindings();
     lime.setDefaultCommand(new limeyCom(lime));
+
+    configureBindings();
   }
 
   /**
@@ -62,7 +63,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
+    return null;// Autos.exampleAuto(m_exampleSubsystem);
   }
 }
 

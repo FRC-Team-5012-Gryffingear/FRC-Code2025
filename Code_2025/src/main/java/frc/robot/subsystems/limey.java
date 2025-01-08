@@ -30,10 +30,10 @@ public class limey extends SubsystemBase {
   }
 
   public double getX(){
-    return LimelightHelpers.getTX("");
+    return LimelightHelpers.getTX("limey");
   }
   public double getY(){
-    return LimelightHelpers.getTY("");
+    return LimelightHelpers.getTY("limey");
   }
 
   public double estimate3DZInches(){
@@ -45,7 +45,7 @@ public class limey extends SubsystemBase {
   }
   
   public double getTZ(){
-    Pose3d poses = LimelightHelpers.getTargetPose3d_CameraSpace("");
+    Pose3d poses = LimelightHelpers.getTargetPose3d_CameraSpace("limey");
     return poses.getZ();
   }
 
@@ -105,7 +105,7 @@ public class limey extends SubsystemBase {
 
 // Check which of the 2 getID's work
   public double getID(){
-    double ID_detected =  LimelightHelpers.getFiducialID("");
+    double ID_detected =  LimelightHelpers.getFiducialID("limey");
     SmartDashboard.putNumber("ID DETECTED IN getID", ID_detected);
     return ID_detected;
   }
