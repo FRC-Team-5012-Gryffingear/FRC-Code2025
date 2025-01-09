@@ -20,7 +20,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class limey extends SubsystemBase {
   /** Creates a new limey. */
-  public double kp = .02;
+  public double kp = .2;
   PIDController movement = new PIDController(kp, 0, 0);
 
 
