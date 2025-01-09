@@ -60,7 +60,10 @@ public class ArmSub extends SubsystemBase {
     // armfeed = new ArmFeedforward(2,10,2);
   }
 
- //All Functions below is an attempt in using PID with Angles instead of ArmFowardFeedback cuz its awful 
+ // All Functions below is an attempt in using PID with Angles instead of ArmFowardFeedback cuz its awful 
+ // Adjust all the PID settings as needed since this was done only with the motor
+
+ 
  public void setArmAngle(double targetAngle){
 
   double targetInRevs = degToRot(targetAngle); // MULTIPLY BY THE CORRECT GEAR RATIO WHEN IN ARM
