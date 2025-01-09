@@ -1,5 +1,8 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.sensors.AbsoluteSensorRange;
+import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
@@ -42,7 +45,15 @@ public class SwerveMod {
         
         DriveMotor = new TalonFX(DriveM_ID);
         SteerMotor = new TalonFX(SteerM_ID);
+        SteerEncoder = new CANcoder(encoderID);
+        
+        CANcoderConfiguration config = new CANcoderConfiguration();
+        config.MagnetSensor.MagnetOffset = encoderOffset;
 
+
+
+
+        moduleName = modName;
 
         
 
