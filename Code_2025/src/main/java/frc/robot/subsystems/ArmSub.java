@@ -5,10 +5,12 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
@@ -40,14 +42,19 @@ public class ArmSub extends SubsystemBase {
   
   //Bottom 2 values might need change
   private final double ArmGearRatio = 6.75;
-  private final int Acceptable_error = 2;
+  private final double Acceptable_error = .5;
+  
 
   public ArmSub() {
-    arm.getConfigurator().apply(new TalonFXConfiguration());
+    var talon = new TalonFXConfiguration();
+    // var invert = talon.MotorOutput.Inverted.Clockwise_Positive;
+    
+    arm.getConfigurator().apply(talon);
     arm.setNeutralMode(NeutralModeValue.Brake);
+    
 
     //Change PID and FeedFwrd vals if needed
-    move = new PIDController(.02, 0, 0);
+    move = new PIDController(.2, 0, 0);
     move.setTolerance(Acceptable_error);
 
     // armfeed = new ArmFeedforward(2,10,2);
@@ -55,34 +62,35 @@ public class ArmSub extends SubsystemBase {
 
  //All Functions below is an attempt in using PID with Angles instead of ArmFowardFeedback cuz its awful 
  public void setArmAngle(double targetAngle){
-  double targetInTicks = degToTick(targetAngle); 
 
-  double power = move.calculate(arm.getPosition().getValueAsDouble(), targetInTicks);
+  double targetInRevs = degToRot(targetAngle); // MULTIPLY BY THE CORRECT GEAR RATIO WHEN IN ARM
 
+  double power = move.calculate(arm.getPosition().getValueAsDouble(), (targetInRevs));
+  System.out.println(power);
+
+  
   arm.set(power);
 }
 
 
   public boolean armAtTarget(double targetAngle){
-    double targetTicks = degToTick(targetAngle);
 
-    return (Math.abs(arm.getPosition().getValueAsDouble() - targetTicks)) <= move.getErrorTolerance();
+    double targetRevs = degToRot(targetAngle); // MULTIPLY BY THE CORRECT GEAR RATIO
+
+    return (Math.abs(arm.getPosition().getValueAsDouble() - targetRevs)) <= move.getErrorTolerance();
   }
 
   public double getCurrentAngle(){
-    return tickToDeg(arm.getPosition().getValueAsDouble());
+    return rotToDeg(arm.getPosition().getValueAsDouble());
   }
  
-  private double tickToDeg(double CurrentTick){
-    //return (CurrentTick/(ticks_per_Rev*ArmGearRatio))* 360;
-     return (CurrentTick/ticks_per_Rev) * 360;
+  private double rotToDeg(double CurrentRev){
+    
+     return (CurrentRev) * 360; // CURRENT REV DIVIDE BY CORRECT GEAR RATIO
   }
 
-  private double degToTick(double targetAngle1){
-    //AUTOMATICALLY SET TO 15 deg
-    //this means we are converting 15 deg to ticks since that is our "goal"
-
-    return (targetAngle1 / 360) * ticks_per_Rev; // * ticks_per_Rev * ArmGearRatio;
+  private double degToRot(double targetAngle1){
+    return (targetAngle1 / 360); // MULTIPLY BY THE CORRECT GEAR RATIO 
   } 
 
   public void armStop(){
@@ -99,6 +107,8 @@ public class ArmSub extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("target in Angle", 45);
     SmartDashboard.putNumber("Current Angle", getCurrentAngle());
+    SmartDashboard.putNumber("Target in Tick", degToRot(45));
+    SmartDashboard.putNumber("Current in tick", arm.getPosition().getValueAsDouble());
   }
 
   @Override
