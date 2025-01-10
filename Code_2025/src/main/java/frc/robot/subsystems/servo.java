@@ -22,16 +22,26 @@ public class servo extends SubsystemBase {
   /** Creates a new servo. */
   PIDController servoContrl = new PIDController(.001, 0, 0);
   PWM servo1 = new PWM(Constants.servo1);
-  Servo servo2 = new Servo(Constants.servo2);
-  Servo servo3 = new Servo(Constants.servo3);
+  
 
   public servo() {
+    servo1.setBoundsMicroseconds(2000, 1800, 1500, 1200, 1000);
   }
 
+  public void settingServo45(){
+    double pulseProportion = 45 / 180; // 
+    servo1.setPosition(Math.max(0, Math.min(pulseProportion, 1)));
+    System.out.println("Current servo angle: " + servo1.getPosition());
+  }
 
   public void settingServo(){
-    System.out.println(servo1.getPosition());
-    if(Math.abs(servoContrl.calculate(servo1.getPosition(), .5)) < 0.05){
+  
+    double pow = Math.abs(servoContrl.calculate(servo1.getPosition(), .5));
+    double limitedpow = Math.max(0, Math.min(1, pow));
+
+    System.out.println(servo1.getPosition() + "\n" + " Power: " + limitedpow);
+
+    if(limitedpow < 0.05){
       servo1.setSpeed(0);
     }
     else{
@@ -39,25 +49,11 @@ public class servo extends SubsystemBase {
     }
     
   }
-  /**
-   * Example command factory method.
-   *
-   * @return a command
-   */
-  
-  /**
-   * An example method querying a boolean state of the subsystem (for example, a digital sensor).
-   *
-   * @return value of some boolean subsystem state, such as a digital sensor.
-   */
-  public boolean exampleCondition() {
-    // Query some boolean state, such as a digital sensor.
-    return false;
-  }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    settingServo45();
   }
 
   @Override
