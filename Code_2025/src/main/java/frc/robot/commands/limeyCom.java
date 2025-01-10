@@ -34,7 +34,7 @@ public class limeyCom extends Command {
   public void execute() {
     SmartDashboard.putNumber("Rot Fwd Lock Val", lime.rotAround(lime.getX()));
     SmartDashboard.putNumber("Rot turn Lock val", lime.rotationLock(lime.getX()));
-    SmartDashboard.putNumber("Fwd Lock", lime.fwrdLock(lime.estimate3DZInches()));
+    SmartDashboard.putNumber("Fwd Lock val", lime.fwrdLock(lime.estimate3DZInches()));
     System.out.println("WORKING");
   }
 
