@@ -23,6 +23,8 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.ModConstants;
 
 public class SwerveMod {
@@ -80,6 +82,16 @@ public class SwerveMod {
 
         moduleName = modName;
 
+    }
+
+    public void Info(){
+        if(RobotBase.isReal()){
+            SmartDashboard.putNumber(moduleName + "Turn rotation", getRotation().getDegrees());
+            SmartDashboard.putNumber(moduleName + " Drive Speed", DriveMotor.get());
+        }else{
+            SmartDashboard.putNumber(moduleName + " Turn Rotation", lastDesiredState.angle.getDegrees());
+            SmartDashboard.putNumber(moduleName + " Drive Speed", lastDesiredState.speedMetersPerSecond);
+        }
     }
 
     public Rotation2d getRotation(){
