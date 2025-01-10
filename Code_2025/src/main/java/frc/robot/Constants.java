@@ -16,4 +16,8 @@ public final class Constants {
   public static final int kDriverControllerPort = 0;
   public static final int armPort = 0;
   public static final int armPort2 = 1;
+
+  public static final int servo1 = 0;
+  public static final int servo2 = 1;
+  public static final int servo3 = 2;
 }
