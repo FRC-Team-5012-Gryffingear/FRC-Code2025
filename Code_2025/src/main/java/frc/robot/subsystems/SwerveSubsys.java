@@ -178,6 +178,13 @@ public class SwerveSubsys extends SubsystemBase {
     backRightModule.setModState(states[3]);
   }
 
+  public void stopMods(){
+    frontLeftModule.stop();
+    frontRightModule.stop();
+    backLeftModule.stop();
+    backRightModule.stop();
+  }
+
   @Override
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
