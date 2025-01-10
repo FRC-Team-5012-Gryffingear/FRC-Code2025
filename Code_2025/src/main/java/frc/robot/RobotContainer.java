@@ -37,9 +37,10 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
 
-    swerve.setDefaultCommand(new SwerveCom(swerve, 
-    driverController, 
-    () -> driverController.a().getAsBoolean()));
+    swerve.setDefaultCommand(new SwerveCom(
+      swerve, 
+      driverController, 
+      () -> driverController.a().getAsBoolean()));
 
   }
 
