@@ -22,17 +22,25 @@ public class servo extends SubsystemBase {
   /** Creates a new servo. */
   PIDController servoContrl = new PIDController(.001, 0, 0);
   PWM servo1 = new PWM(Constants.servo1);
+  Servo servo2 = new Servo(Constants.servo2);
   
 
   public servo() {
     servo1.setBoundsMicroseconds(2000, 1800, 1500, 1200, 1000);
+
+    servo2.setBoundsMicroseconds(2000, 1800, 1500, 1200, 1000);
+    
   }
 
   public void settingServo45(){
     double pulseProportion = 45 / 180; // 
     servo1.setPosition(Math.max(0, Math.min(pulseProportion, 1)));
     System.out.println("Current servo angle: " + servo1.getPosition());
+
+    servo2.setAngle(90);
+    System.out.println("Servo2 current POS: " + servo2.getPosition());
   }
+
 
   public void settingServo(){
   
@@ -53,7 +61,7 @@ public class servo extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    settingServo45();
+    
   }
 
   @Override
