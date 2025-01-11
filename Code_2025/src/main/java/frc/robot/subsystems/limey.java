@@ -105,12 +105,11 @@ public class limey extends SubsystemBase {
     // double pose = Math.atan((estimate3DZInches())/getX());
     double angle = Math.toRadians(tagP.getRotation().getAngle());
     SmartDashboard.putNumber("Pose angle?", tagP.getRotation().getAngle());
-    double m = estimate3DZInches()/Math.tan(angle);
+    double m = estimate3DZInches() * Math.sin(angle);
   
-    double xPower = movement.calculate(m, -Math.PI/2);
+    double xPower = movement.calculate(m, 0);
     SmartDashboard.putNumber("X power input", -xPower);
-
-
+    
     return -xPower;
   }
 
