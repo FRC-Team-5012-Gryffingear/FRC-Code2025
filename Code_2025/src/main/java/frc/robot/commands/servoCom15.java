@@ -7,17 +7,14 @@ package frc.robot.commands;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.servo;
 
-import java.util.DoubleSummaryStatistics;
 import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */
-public class servoCom extends Command {
+public class servoCom15 extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final servo serv;
-  private final DoubleSupplier plus, neg;
 
 
   /**
@@ -25,10 +22,8 @@ public class servoCom extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public servoCom(servo serv, DoubleSupplier plus, DoubleSupplier neg) {
+  public servoCom15(servo serv) {
     this.serv = serv;
-    this.plus = plus;
-    this.neg = neg;
   
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(serv);
@@ -41,7 +36,7 @@ public class servoCom extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    serv.settingServo45(plus.getAsDouble() - neg.getAsDouble());
+    serv.settingServo15();
   }
 
   // Called once the command ends or is interrupted.

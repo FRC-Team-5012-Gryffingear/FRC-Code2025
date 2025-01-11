@@ -32,31 +32,28 @@ public class servo extends SubsystemBase {
     
   }
 
-  public void settingServo45(){
-    double pulseProportion = 45 / 180; // 
-    servo1.setPosition(Math.max(0, Math.min(pulseProportion, 1)));
-    System.out.println("Current servo angle: " + servo1.getPosition());
+  public void settingServo45(double power){
+    // servo1.setPosition(servo1.getPosition());
+    System.out.println("Current Servo: " + servo2.getPulseTimeMicroseconds());
+    System.out.println("POsition: " + servo2.getPosition());
+    System.out.println("CURRETN ANGLE: " + servo2.getAngle());
+    servo2.setSpeed(power);
+    // servo1.setSpeed(0.0);
+  }
 
-    servo2.setAngle(90);
-    System.out.println("Servo2 current POS: " + servo2.getPosition());
+  public void settingServo15(){
+    double servoPosition = 90/180;
+    System.out.println("Current Servo: " + servo2.getPulseTimeMicroseconds());
+    System.out.println("POsition: " + servo2.getPosition());
+    System.out.println("CURRETN ANGLE: " + servo2.getAngle());
+    servo2.setPosition(servoPosition);
   }
 
 
   public void settingServo(){
-  
-    double pow = Math.abs(servoContrl.calculate(servo1.getPosition(), .5));
-    double limitedpow = Math.max(0, Math.min(1, pow));
-
-    System.out.println(servo1.getPosition() + "\n" + " Power: " + limitedpow);
-
-    if(limitedpow < 0.05){
-      servo1.setSpeed(0);
-    }
-    else{
-      servo1.setSpeed(servoContrl.calculate(servo1.getPosition(), .5));
-    }
-    
+      
   }
+
 
   @Override
   public void periodic() {

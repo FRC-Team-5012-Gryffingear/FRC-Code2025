@@ -47,6 +47,7 @@ public class ArmSub extends SubsystemBase {
 
   public ArmSub() {
     var talon = new TalonFXConfiguration();
+    talon.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
     // var invert = talon.MotorOutput.Inverted.Clockwise_Positive;
     
     arm.getConfigurator().apply(talon);

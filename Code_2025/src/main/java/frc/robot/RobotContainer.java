@@ -8,6 +8,7 @@ import frc.robot.commands.ArmCom;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.servoCom;
+import frc.robot.commands.servoCom15;
 import frc.robot.subsystems.ArmSub;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.servo;
@@ -37,6 +38,9 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+    serv.setDefaultCommand(new servoCom(serv,
+    () -> m_driverController.getRightTriggerAxis(), 
+     () -> m_driverController.getLeftTriggerAxis()));
   }
 
   /**
@@ -59,7 +63,8 @@ public class RobotContainer {
     m_driverController.a().toggleOnTrue(new ArmCom(arm,45));
     m_driverController.b().toggleOnTrue(new ArmCom(arm, 0));
  
-    m_driverController.x().toggleOnTrue(new servoCom(serv));
+    
+    m_driverController.y().toggleOnTrue(new servoCom15(serv));
   }
 
   /**
