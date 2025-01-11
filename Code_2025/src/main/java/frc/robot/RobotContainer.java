@@ -64,7 +64,7 @@ public class RobotContainer {
     m_driverController.b().toggleOnTrue(new ArmCom(arm, 0));
  
     
-    m_driverController.y().toggleOnTrue(new servoCom15(serv));
+    m_driverController.y().whileTrue(new servoCom15(serv));
   }
 
   /**

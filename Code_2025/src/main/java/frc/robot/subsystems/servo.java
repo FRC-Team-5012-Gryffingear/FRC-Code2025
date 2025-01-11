@@ -23,6 +23,7 @@ public class servo extends SubsystemBase {
   PIDController servoContrl = new PIDController(.001, 0, 0);
   PWM servo1 = new PWM(Constants.servo1);
   Servo servo2 = new Servo(Constants.servo2);
+  int pos = 0;
   
 
   public servo() {
@@ -46,7 +47,18 @@ public class servo extends SubsystemBase {
     System.out.println("Current Servo: " + servo2.getPulseTimeMicroseconds());
     System.out.println("POsition: " + servo2.getPosition());
     System.out.println("CURRETN ANGLE: " + servo2.getAngle());
-    servo2.setPosition(servoPosition);
+    // servo2.setPosition(servoPosition);
+    //Bounds of 1000 to 2000
+
+    for(pos = 0; pos <= 180; pos++){
+      System.out.println(pos + "valueeeeee");
+      servo2.setPosition(pos);
+    }
+    for(pos = 180; pos >= 180; pos--){
+      System.out.println(pos + "valueeeeee");
+      servo1.setPosition(pos);
+    }
+    
   }
 
 
