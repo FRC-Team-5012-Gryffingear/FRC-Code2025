@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.Optional;
+
 import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -12,8 +14,12 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.LimelightHelpers;
+import frc.robot.LimelightHelpers.LimelightResults;
+import frc.robot.LimelightHelpers.LimelightTarget_Fiducial;
+import frc.robot.LimelightHelpers.RawFiducial;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -26,7 +32,7 @@ public class limey extends SubsystemBase {
 
 
   public limey() {
-
+    LimelightHelpers.setPipelineIndex("Closest", 0);
   }
 
   public double getX(){
@@ -94,13 +100,16 @@ public class limey extends SubsystemBase {
 // side to side movement to get infront of the april tag
   public double rotAround(double x_value){
     // Calculates the speed needed to reach goal
-    double xPower = movement.calculate(x_value, 0);
-    
-    // caps the motor powers on an interval of [-1,1]
-    xPower = Math.max(-1, Math.min(1,xPower));
-
-    
+    movement.setP(.2);
+    Pose3d tagP = LimelightHelpers.getTargetPose3d_CameraSpace("");
+    // double pose = Math.atan((estimate3DZInches())/getX());
+    double angle = Math.toRadians(tagP.getRotation().getAngle());
+    SmartDashboard.putNumber("Pose angle?", tagP.getRotation().getAngle());
+    double m = estimate3DZInches()/Math.tan(angle);
+  
+    double xPower = movement.calculate(m, -Math.PI/2);
     SmartDashboard.putNumber("X power input", -xPower);
+
 
     return -xPower;
   }
@@ -118,6 +127,7 @@ public class limey extends SubsystemBase {
 
   @Override
   public void periodic() { 
+    SmartDashboard.putNumber("Estimated Z: ", estimate3DZInches());
   }
 
   @Override
