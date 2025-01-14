@@ -20,27 +20,23 @@ import frc.robot.RobotContainer;
 
 public class servo extends SubsystemBase {
   /** Creates a new servo. */
-  PIDController servoContrl = new PIDController(.001, 0, 0);
   PWM servo1 = new PWM(Constants.servo1);
   Servo servo2 = new Servo(Constants.servo2);
-  int pos = 0;
   
 
   public servo() {
     // servo1.setBoundsMicroseconds(2000, 1800, 1500, 1200, 1000);
 
-    servo2.setBoundsMicroseconds(2000, 1800, 1500, 1200, 1000);
+    // servo2.setBoundsMicroseconds(2000, 1800, 1500, 1200, 1000);
     
   }
 
   public void settingServo45(){
-    // servo1.setPosition(servo1.getPosition());
-    servo1.setPosition(0);
-    // servo1.setSpeed(0.0);
+    servo2.setAngle(45);
   }
 
   public void settingServo15(){
-   servo1.setPosition(1); 
+   servo2.setAngle(15);
   }
 
 
