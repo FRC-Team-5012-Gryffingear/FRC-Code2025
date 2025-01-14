@@ -102,14 +102,26 @@ public class limey extends SubsystemBase {
     // Calculates the speed needed to reach goal
     movement.setP(.02);
     Pose3d tagP = LimelightHelpers.getCameraPose3d_TargetSpace("");
-    // double pose = Math.atan((estimate3DZInches())/getX());
+    double xPower = 0;
+    double rotVal = Math.toDegrees(tagP.getRotation().getY());
+    // double pose = Math.atan(getX()/estimate3DZInches());
+    if(-10 < rotVal && rotVal < 10){
+      xPower = 0;
+    }else{
+      xPower = movement.calculate(rotVal, 10);
+    }
+   
+    if(xPower > 1){
+      xPower = 1;
+    }
+    else if(xPower < -1){
+      xPower = -1;
+    }
 
-  
-    double xPower = movement.calculate( Math.toDegrees(tagP.getRotation().getAngle()), 0);
-
-    SmartDashboard.putNumber("X power input", xPower);
+    SmartDashboard.putNumber("xPower value" , -xPower);
+    SmartDashboard.putNumber("rotational value of tag",(rotVal));
     
-    return xPower;
+    return -xPower;
   }
 
 
