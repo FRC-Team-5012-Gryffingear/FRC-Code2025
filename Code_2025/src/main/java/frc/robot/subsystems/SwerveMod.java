@@ -119,7 +119,7 @@ public class SwerveMod {
             return;
         }
 
-        //Might need massive change
+        //Might need massive change and might try SlewrateLimiter
         DriveMotor.set(driveCont.calculate(optimizedState.speedMetersPerSecond * 8, lastDesiredState.speedMetersPerSecond));
         SteerMotor.set(steerContrl.calculate(getRotation().getRadians(), optimizedState.angle.getRadians()));
 
