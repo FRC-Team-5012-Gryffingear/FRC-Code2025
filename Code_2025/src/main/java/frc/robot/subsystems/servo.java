@@ -27,44 +27,22 @@ public class servo extends SubsystemBase {
   
 
   public servo() {
-    servo1.setBoundsMicroseconds(2000, 1800, 1500, 1200, 1000);
+    // servo1.setBoundsMicroseconds(2000, 1800, 1500, 1200, 1000);
 
     servo2.setBoundsMicroseconds(2000, 1800, 1500, 1200, 1000);
     
   }
 
-  public void settingServo45(double power){
+  public void settingServo45(){
     // servo1.setPosition(servo1.getPosition());
-    System.out.println("Current Servo: " + servo2.getPulseTimeMicroseconds());
-    System.out.println("POsition: " + servo2.getPosition());
-    System.out.println("CURRETN ANGLE: " + servo2.getAngle());
-    servo2.setSpeed(power);
+    servo1.setPosition(0);
     // servo1.setSpeed(0.0);
   }
 
   public void settingServo15(){
-    double servoPosition = 90/180;
-    System.out.println("Current Servo: " + servo2.getPulseTimeMicroseconds());
-    System.out.println("POsition: " + servo2.getPosition());
-    System.out.println("CURRETN ANGLE: " + servo2.getAngle());
-    // servo2.setPosition(servoPosition);
-    //Bounds of 1000 to 2000
-
-    for(pos = 0; pos <= 180; pos++){
-      System.out.println(pos + "valueeeeee");
-      servo2.setPosition(pos);
-    }
-    for(pos = 180; pos >= 180; pos--){
-      System.out.println(pos + "valueeeeee");
-      servo1.setPosition(pos);
-    }
-    
+   servo1.setPosition(1); 
   }
 
-
-  public void settingServo(){
-      
-  }
 
 
   @Override

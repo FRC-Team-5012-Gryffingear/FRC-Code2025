@@ -38,9 +38,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
-    serv.setDefaultCommand(new servoCom(serv,
-    () -> m_driverController.getRightTriggerAxis(), 
-     () -> m_driverController.getLeftTriggerAxis()));
+    
   }
 
   /**
@@ -64,7 +62,8 @@ public class RobotContainer {
     m_driverController.b().toggleOnTrue(new ArmCom(arm, 0));
  
     
-    m_driverController.y().whileTrue(new servoCom15(serv));
+    m_driverController.y().toggleOnTrue(new servoCom(serv));
+    m_driverController.x().toggleOnTrue(new servoCom15(serv));
   }
 
   /**

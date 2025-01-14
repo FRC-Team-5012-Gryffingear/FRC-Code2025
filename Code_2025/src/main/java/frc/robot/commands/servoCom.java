@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class servoCom extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final servo serv;
-  private final DoubleSupplier plus, neg;
+
 
 
   /**
@@ -25,10 +25,9 @@ public class servoCom extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public servoCom(servo serv, DoubleSupplier plus, DoubleSupplier neg) {
+  public servoCom(servo serv) {
     this.serv = serv;
-    this.plus = plus;
-    this.neg = neg;
+    
   
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(serv);
@@ -41,7 +40,7 @@ public class servoCom extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    serv.settingServo45(plus.getAsDouble() - neg.getAsDouble());
+    serv.settingServo45();
   }
 
   // Called once the command ends or is interrupted.
