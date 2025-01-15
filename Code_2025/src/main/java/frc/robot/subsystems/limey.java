@@ -100,7 +100,7 @@ public class limey extends SubsystemBase {
 // side to side movement to get infront of the april tag
   public double rotAround(double x_value){
     // Calculates the speed needed to reach goal
-    movement.setP(.02);
+    // movement.setP(.02);
     Pose3d tagP = LimelightHelpers.getCameraPose3d_TargetSpace("");
     double xPower = 0;
     double rotVal = Math.toDegrees(tagP.getRotation().getY());
