@@ -28,6 +28,7 @@ public class limey extends SubsystemBase {
   /** Creates a new limey. */
   public double kp = .02;
   PIDController movement = new PIDController(kp, 0, 0);
+  PIDController sideContrl = new PIDController(.01, 0, 0);
 
 
 
@@ -108,7 +109,7 @@ public class limey extends SubsystemBase {
     if(-10 < rotVal && rotVal < 10){
       xPower = 0;
     }else{
-      xPower = movement.calculate(rotVal, 10);
+      xPower = sideContrl.calculate(rotVal, 10);
     }
    
     if(xPower > 1){
