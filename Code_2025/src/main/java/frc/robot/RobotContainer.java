@@ -37,11 +37,12 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     lime.setDefaultCommand(new limeyCom(lime));
-    
+
      swerve.setDefaultCommand(new SwerveCom(
       swerve, 
       driverController, 
-      () -> driverController.a().getAsBoolean()));
+      () -> driverController.a().getAsBoolean(),
+      () -> driverController.b().getAsBoolean()));
 
     configureBindings();
   }

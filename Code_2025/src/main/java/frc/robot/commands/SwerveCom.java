@@ -7,6 +7,7 @@ package frc.robot.commands;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.SwerveSubsys;
+import frc.robot.subsystems.limey;
 
 import java.util.function.BooleanSupplier;
 
@@ -18,18 +19,19 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 public class SwerveCom extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final SwerveSubsys m_subsystem;
+  private final limey limelight = new limey();
   private final CommandXboxController controller;
-  private final BooleanSupplier yaw; // ADD reset POSE IF NECESSARY
-
+  private final BooleanSupplier yaw, lime; // ADD reset POSE IF NECESSARY
   /**
    * Creates a new SwerveCom.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public SwerveCom(SwerveSubsys subsystem, CommandXboxController controller, BooleanSupplier yaw) {
+  public SwerveCom(SwerveSubsys subsystem, CommandXboxController controller, BooleanSupplier yaw, BooleanSupplier lime) {
     m_subsystem = subsystem;
     this.controller = controller;
     this.yaw = yaw;
+    this.lime = lime;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
@@ -51,6 +53,9 @@ public class SwerveCom extends Command {
 
     if(yaw.getAsBoolean()){
         m_subsystem.resetHeading();
+    }
+    if(lime.getAsBoolean()){
+        m_subsystem.drive3(0, 0, 0, isScheduled());
     }
 
     // ADD RESET POSE IF NECESSARY HERE
