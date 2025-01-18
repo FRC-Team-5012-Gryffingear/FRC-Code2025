@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
+import com.revrobotics.servohub.config.ServoChannelConfig.PulseRange;
 
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -59,7 +60,7 @@ public class SwerveSubsys extends SubsystemBase {
 
   private final Pigeon2 pigeon = new Pigeon2(Constants.PigeonID);
 
-  private final SwerveDriveOdometry odometry = new SwerveDriveOdometry(Constants.kinematics, getHeading(), new SwerveModulePosition[]{
+  public final SwerveDriveOdometry odometry = new SwerveDriveOdometry(Constants.kinematics, getHeading(), new SwerveModulePosition[]{
     frontLeftModule.getModPos(),
     frontRightModule.getModPos(),
     backLeftModule.getModPos(),
@@ -81,6 +82,7 @@ public class SwerveSubsys extends SubsystemBase {
         backRightModule.getModPos()
      });
 
+
     frontLeftModule.Info();
     frontRightModule.Info();
     backLeftModule.Info();
@@ -99,8 +101,7 @@ public class SwerveSubsys extends SubsystemBase {
   // Will need changes due to software changes
   public double getYaw(){
     double currentYaw = pigeon.getYaw().getValueAsDouble();
-    double angle = currentYaw % 360;
-    return angle;
+    return currentYaw;
   }
 
 
