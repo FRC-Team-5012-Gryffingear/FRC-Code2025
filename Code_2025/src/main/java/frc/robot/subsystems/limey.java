@@ -62,6 +62,7 @@ public class limey extends SubsystemBase {
 
 // verified working
 // Controls the steering/turning
+// locks onto apriltag once to prevent constant reading
   public double rotationLock(double x_value){
     double rot = movement.calculate(x_value,0);
     if(Math.abs(rot) < .15){
