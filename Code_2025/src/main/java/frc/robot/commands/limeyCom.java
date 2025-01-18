@@ -32,13 +32,14 @@ public class limeyCom extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // Rot Fwd is moving side to side to get infront of the april tag
-    // Rot turn Lock is robot rotating to face the april tag
-    // Fwd lock is getting close to the offset value
-    SmartDashboard.putNumber("Rot Fwd Lock Val", lime.rotAround(lime.getX()));
-    SmartDashboard.putNumber("Rot turn Lock val", lime.rotationLock(lime.getX()));
-    SmartDashboard.putNumber("Fwd Lock val", lime.fwrdLock(lime.estimate3DZInches()));
-    System.out.println("WORKING");
+    // // Rot Fwd is moving side to side to get infront of the april tag
+    // // Rot turn Lock is robot rotating to face the april tag
+    // // Fwd lock is getting close to the offset value
+    // SmartDashboard.putNumber("Rot Fwd Lock Val", lime.rotAround(lime.getX()));
+    // SmartDashboard.putNumber("Rot turn Lock val", lime.rotationLock(lime.getX()));
+    // SmartDashboard.putNumber("Fwd Lock val", lime.fwrdLock(lime.estimate3DZInches()));
+    // System.out.println("WORKING");
+    SmartDashboard.putNumber("TZ3D", lime.getTZ());  
   }
 
   // Called once the command ends or is interrupted.
