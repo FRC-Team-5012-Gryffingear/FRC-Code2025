@@ -82,7 +82,7 @@ public class AlignAprilTag extends Command {
         }
         initialized = true;
         //May need to cap values?
-        double yPos1 = Math.sqrt((detectedID.getZ() * detectedID.getZ()) - (x2 * x2)); // - yPID.getAccumulatedError();
+        double yPos1 = y2; // - yPID.getAccumulatedError();
         double xPos1 = x2; // - xPID.getAccumulatedError();
         double rotPos1 = rot2; // - rotPID.getAccumulatedError();
         double xOutput2 = xPID.calculate(x2, 0);
