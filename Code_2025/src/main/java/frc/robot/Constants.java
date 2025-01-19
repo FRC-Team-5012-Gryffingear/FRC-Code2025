@@ -46,10 +46,10 @@ public final class Constants {
   public static final int BackRightEncoderID = 0;
 
   // Offset should be grabbed through tunerX
-  public static final double FrontLeftOffset = -0.003173828125;
-  public static final double FrontRightOffset = .470947265625;
-  public static final double BackLeftOffset = 0.22216796875;
-  public static final double BackRightOffset = -0.003173828125;
+  public static final double FrontLeftOffset = 0.49169921875;
+  public static final double FrontRightOffset = .020263671875;
+  public static final double BackLeftOffset = -0.26196890625;
+  public static final double BackRightOffset = -0.382080078125;
 
   // True inverses motors
   public static final boolean FrontLeftInv = false;
@@ -57,7 +57,7 @@ public final class Constants {
   public static final boolean BackLeftInv = false;
   public static final boolean backRightInv = false;
 
-  public static final int PigeonID = 0;
+  public static final int PigeonID = 20;
 
   // Gives position of modules on a 2d plane
   public static final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
