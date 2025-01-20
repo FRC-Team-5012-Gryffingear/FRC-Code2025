@@ -74,6 +74,9 @@ private Field2d fieldMaker = new Field2d();
     backLeftMod.Info();
     backRightMod.Info();
 
+    SmartDashboard.putNumber("Pigeon YAW", pigeon.getYaw().getValueAsDouble());
+    SmartDashboard.putNumber("Pigeon ANGLE", pigeon.getAngle());
+
 // puts data into board to view
     fieldMaker.setRobotPose(getPose());
     SmartDashboard.putData(fieldMaker);
@@ -83,14 +86,13 @@ private Field2d fieldMaker = new Field2d();
 
   public Rotation2d getHeading(){
     //Returns the gyro heading might need invert if it is not clockwise positive
-    return Rotation2d.fromDegrees(pigeon.getAngle()); // add negative on pigeon angle
+    return Rotation2d.fromDegrees(pigeon.getAngle());
+    // return Rotation2d.fromDegrees(pigeon.getYaw().getValueAsDouble()); // add negative on pigeon angle
   }
 //Might be used to see the current yaw and how far it is from its initial starting direction
 //to autocorrect itself in the right orientation
   public double getYaw(){
-    double currentYaw = pigeon.getYaw().getValueAsDouble();
-    double angle = currentYaw % 360;
-    return angle;
+    return pigeon.getAngle();
   }
 
   public void resetHeading(){
@@ -117,12 +119,12 @@ private Field2d fieldMaker = new Field2d();
     //resets the odometry pose
     // for field references?
     //Utilizes the other Reset pose 
-    resetPose(new Pose2d());
+    resetOdomPose(new Pose2d());
     System.out.println("POSE IS RESETING");
   }
 
   //resets the orientation the robot moves in (I do not recommend using)
-  public void resetPose(Pose2d pose){
+  public void resetOdomPose(Pose2d pose){
     //
     odometry.resetPosition(
         getHeading(),

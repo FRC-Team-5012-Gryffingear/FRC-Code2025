@@ -143,7 +143,7 @@ public class SwerveMod {
 
     public void stop(){
         DriveMotor.set(0);
-        SteerMotor.set(0);
+        SteerMotor.set(0);  
     }
 
 
