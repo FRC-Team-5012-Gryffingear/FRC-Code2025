@@ -130,8 +130,8 @@ public class SwerveMod {
             return;
         }
         //else then calculate the best option to reach our desired state
-        // SwerveModuleState optimizedState = SwerveModuleState.optimize(lastDesiredState, getRotation());
-        SwerveModuleState optimizedState = new SwerveModuleState(lastDesiredState.speedMetersPerSecond, getRotation());
+        SwerveModuleState optimizedState = SwerveModuleState.optimize(lastDesiredState, getRotation());
+        // SwerveModuleState optimizedState = new SwerveModuleState(lastDesiredState.speedMetersPerSecond, getRotation());
         // optimizedState.optimize(getRotation());
 
         //Using the optimized state to calculate convert it into motor power we can use it to move
