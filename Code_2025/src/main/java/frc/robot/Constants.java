@@ -73,7 +73,6 @@ public final class Constants {
     public static final double KI = 0;
     public static final double KD = 0;
   }
-
   public static class OperatorConstants{
     public static final int DriverContrlPort = 0;
     public static final double Deadband = 0.05;
