@@ -175,7 +175,7 @@ public class AlignAprilTag extends Command {
         // SmartDashboard.putNumber("Rot Output", rotOutput);
 
     } else {
-        swerve.drive3(0, 0, 15, false);
+        swerve.drive3(0, 0, .15, false);
     }
   }
 
