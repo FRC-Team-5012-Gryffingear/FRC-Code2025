@@ -13,6 +13,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 // import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
+import com.ctre.phoenix6.swerve.SwerveModule;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -129,8 +130,9 @@ public class SwerveMod {
             return;
         }
         //else then calculate the best option to reach our desired state
-        SwerveModuleState optimizedState = SwerveModuleState.optimize(lastDesiredState, getRotation());
-        // SwerveModuleState optimizedState = new SwerveModuleState(desiredState.speedMetersPerSecond, getRotation());
+        // SwerveModuleState optimizedState = SwerveModuleState.optimize(lastDesiredState, getRotation());
+        SwerveModuleState optimizedState = new SwerveModuleState(lastDesiredState.speedMetersPerSecond, getRotation());
+        // optimizedState.optimize(getRotation());
 
         //Using the optimized state to calculate convert it into motor power we can use it to move
         DriveMotor.set(drivecont.calculate(optimizedState.speedMetersPerSecond * 8, lastDesiredState.speedMetersPerSecond));
