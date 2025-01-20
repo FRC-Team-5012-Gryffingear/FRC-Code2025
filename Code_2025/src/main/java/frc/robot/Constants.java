@@ -20,8 +20,8 @@ import edu.wpi.first.math.util.Units;
 public final class Constants {
   // TRACKWIDTH is the distance between front 2 modules
   // WHEELBASE IS THE DISTANCE BETWEEN FRONT TO THE BACK MODULES
-  public static final double trackWidth = Units.inchesToMeters(0);
-  public static final double wheelBase = Units.inchesToMeters(0);
+  public static final double trackWidth = Units.inchesToMeters(22.13);
+  public static final double wheelBase = Units.inchesToMeters(22.13);
 
   // Max velo using RPM/Gear Ratio * pi * 4(diameter)/12(feet) * 1/60(min/seconds?)
   // Assuming we are using same Swerve
@@ -30,26 +30,26 @@ public final class Constants {
   public static final double Max_Angular = Max_velo / Math.hypot(trackWidth/2, wheelBase/2);
 
   // IDS for swerve drive
-  public static final int FrontLeftDriveID = 0;
-  public static final int FrontRightDriveID = 0;
-  public static final int BackLeftDriveID = 0;
-  public static final int BackRightDriveID = 0;
+  public static final int FrontLeftDriveID = 7;
+  public static final int FrontRightDriveID = 5;
+  public static final int BackLeftDriveID = 9;
+  public static final int BackRightDriveID = 4;
 
-  public static final int FrontLeftSteerID = 0;
-  public static final int FrontRightSteerID = 0;
-  public static final int BackLeftSteerID = 0;
-  public static final int BackRightSteerID = 0;
+  public static final int FrontLeftSteerID = 11;
+  public static final int FrontRightSteerID = 1;
+  public static final int BackLeftSteerID = 8;
+  public static final int BackRightSteerID = 2;
 
-  public static final int FrontLeftEncoderID = 0;
-  public static final int FrontRightEncoderID = 0;
-  public static final int BackLeftEncoderID = 0;
+  public static final int FrontLeftEncoderID = 6;
+  public static final int FrontRightEncoderID = 12;
+  public static final int BackLeftEncoderID = 3;
   public static final int BackRightEncoderID = 0;
 
   // Offset should be grabbed through tunerX
-  public static final double FrontLeftOffset = 0;
-  public static final double FrontRightOffset = 0;
-  public static final double BackLeftOffset = 0;
-  public static final double BackRightOffset = 0;
+  public static final double FrontLeftOffset = 0.49169921875;
+  public static final double FrontRightOffset = .020263671875;
+  public static final double BackLeftOffset = -0.26196890625;
+  public static final double BackRightOffset = -0.382080078125;
 
   // True inverses motors
   public static final boolean FrontLeftInv = false;
@@ -57,7 +57,7 @@ public final class Constants {
   public static final boolean BackLeftInv = false;
   public static final boolean backRightInv = false;
 
-  public static final int PigeonID = 0;
+  public static final int PigeonID = 20;
 
   // Gives position of modules on a 2d plane
   public static final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
