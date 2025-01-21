@@ -28,9 +28,14 @@ public class RobotContainer {
   // private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   // private final limey lime = new limey();
 
+  private final limeyImproved limeI = new limeyImproved();
   private final SwerveSubsys swerve = new SwerveSubsys();
 
-  private final limeyImproved limeI = new limeyImproved();
+  private final AlignAprilTag tagMove = new AlignAprilTag(swerve, limeI);
+
+
+
+  // private final limeyImproved limeI = new limeyImproved();
   private final CommandXboxController driverController = new CommandXboxController(OperatorConstants.DriverContrlPort);
 
 
@@ -40,7 +45,7 @@ public class RobotContainer {
     // Configure the trigger bindings
     // lime.setDefaultCommand(new limeyCom(lime));
 
-    limeI.setDefaultCommand(new AlignAprilTag(swerve, limeI));
+    // limeI.setDefaultCommand(new AlignAprilTag(swerve, limeI));
 
      swerve.setDefaultCommand(new SwerveCom(
       swerve, 
@@ -75,6 +80,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return null;// Autos.exampleAuto(m_exampleSubsystem);
+    return tagMove;// Autos.exampleAuto(m_exampleSubsystem);
   }
 }

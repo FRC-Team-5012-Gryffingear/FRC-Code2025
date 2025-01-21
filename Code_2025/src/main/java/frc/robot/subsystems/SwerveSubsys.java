@@ -7,6 +7,7 @@
  */
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -41,7 +42,6 @@ private final SwerveMod backRightMod = new SwerveMod(
 // Pigeon object that determines the yaw,roll,pitch
 private final Pigeon2 pigeon = new Pigeon2(Constants.PigeonID);
 
-
 //  FL, FR, BL,
 // Determines robots position and heading on field
 private final SwerveDriveOdometry odometry = new SwerveDriveOdometry(Constants.kinematics, getHeading(), new SwerveModulePosition[] {
@@ -56,7 +56,8 @@ private final SwerveDriveOdometry odometry = new SwerveDriveOdometry(Constants.k
 //2d field for user view
 private Field2d fieldMaker = new Field2d();
 
-  public SwerveSubsys() {}
+  public SwerveSubsys() {
+  }
 
   @Override
   public void periodic() {
@@ -83,16 +84,15 @@ private Field2d fieldMaker = new Field2d();
   }
 
 
-
+// WARNING GET ANGLE GETS DEPRECATED AND GET YAW MESSES IT UP 
   public Rotation2d getHeading(){
     //Returns the gyro heading might need invert if it is not clockwise positive
-    return Rotation2d.fromDegrees(pigeon.getAngle());
+    
+    return Rotation2d.fromDegrees(-pigeon.getAngle());
     // return Rotation2d.fromDegrees(pigeon.getYaw().getValueAsDouble()); // add negative on pigeon angle
   }
-//Might be used to see the current yaw and how far it is from its initial starting direction
-//to autocorrect itself in the right orientation
   public double getYaw(){
-    return pigeon.getAngle();
+    return -pigeon.getAngle();
   }
 
   public void resetHeading(){

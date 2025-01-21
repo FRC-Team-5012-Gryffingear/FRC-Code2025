@@ -13,6 +13,7 @@ import java.util.concurrent.Semaphore;
 
 import org.opencv.core.Mat;
 
+import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.kinematics.Odometry;
@@ -25,14 +26,14 @@ public class AlignAprilTag extends Command {
   private final SwerveSubsys swerve;
   private final limeyImproved limelight;
   //Change PID values to tune the PID loop
-  private final PIDController xPID = new PIDController(0.1, 0.1, 0.0);
-  private final PIDController yPID = new PIDController(0.1, 0.1, 0.0);
-  private final PIDController rotPID = new PIDController(0.1, 0.1, 0.0);
+  private final PIDController xPID = new PIDController(0.1, 0, 0.0);
+  private final PIDController yPID = new PIDController(0.1, 0, 0.0);
+  private final PIDController rotPID = new PIDController(0.01, 0, 0.0);
   //Following two are for the THIRD Version.
   // private boolean initialized = false;
-  private boolean needs_rotate = false;
-  private double initial_gyro_yaw = -10000;
-  private boolean target_seen = true;
+  private static boolean needs_rotate = false;
+  private static double initial_gyro_yaw = -10000;
+  private static boolean target_seen = true;
 
   private double x2, april_tag_rotation, rot2;
   /**
@@ -66,29 +67,43 @@ public class AlignAprilTag extends Command {
   @Override
   public void execute() {
     Pose3d detectedID = limelight.getAprilTagValues();
+    SmartDashboard.putNumber("REAL TIME SWERVE YAW", swerve.getYaw());
+    if(LimelightHelpers.getTV("")){
+      target_seen = true;
+    }
     
     if(!target_seen){
-      swerve.drive3(0, 0, 0.15, true);
+      swerve.drive3(0, 0, 0, true);
     }
     else{
       needs_rotate = true;
+      SmartDashboard.putBoolean("needs rotate", needs_rotate);
+
       if(needs_rotate && april_tag_rotation == -10000 && initial_gyro_yaw == -10000){
-        april_tag_rotation = LimelightHelpers.getCameraPose3d_TargetSpace("").getRotation().getY();
+        // april_tag_rotation = Math.toDegrees(LimelightHelpers.getCameraPose3d_TargetSpace("").getY());
         initial_gyro_yaw = swerve.getYaw();
+        april_tag_rotation = Math.toDegrees(LimelightHelpers.getCameraPose3d_TargetSpace("").getY());
       }
       if(needs_rotate){
-        double final_gyro_yaw = initial_gyro_yaw + april_tag_rotation;
-        yPID.calculate(swerve.getYaw(),final_gyro_yaw);
-        if(yPID.getError() < 0.01){
-          needs_rotate = false;
-          april_tag_rotation = -10000;
-        }
-      }
+        //TRIED: double final_gyro_yaw =  april_tag_rotation;
+        double final_gyro_yaw = april_tag_rotation + initial_gyro_yaw;
+        // double Error_thresh = final_gyro_yaw - swerve.getYaw();
 
+        SmartDashboard.putNumber("Final Gyro addition", final_gyro_yaw);
+        // SmartDashboard.putNumber("Error thresh", Error_thresh);
+
+        double speed = rotPID.calculate(swerve.getYaw(), final_gyro_yaw);
+        SmartDashboard.putNumber("speeedd", speed);
+        // swerve.drive3(0, 0, speed, false);
+        
+        
+      
+      }
+      
+      SmartDashboard.putNumber("April tag rotation", april_tag_rotation);
+      SmartDashboard.putNumber("Init gyro yaw", initial_gyro_yaw);
     }
 
-    SmartDashboard.putNumber("Apriltag_rotation", april_tag_rotation);
-    SmartDashboard.putBoolean("needs rotate", needs_rotate);
 
 
     // //Alternative: RawFiducial detectedID = limelight.getFiducial(X); where X is the ID of the apriltag
@@ -156,85 +171,19 @@ public class AlignAprilTag extends Command {
     //     // SmartDashboard.putNumber("Theoretical X Remaining", xPos1);
     //     SmartDashboard.putNumber("Theoretical Y Remaining", yPos1);
     //     // SmartDashboard.putNumber("Theoretical Rot Remaining", rotPos1);
-
-        
-        
-        
-        
-        
-        
-        
-    //     //Get the x, y, and rot values from the limelight using static variables. SECOND
-    //     // double x1 = detectedID.getX();
-    //     // double rot1 = detectedID.getRotation().getY(); //May need tweaking to get the right value
-    //     // double absDistance = detectedID.getTranslation().getZ();
-    //     // double forwardDistance = Math.sqrt(Math.pow(absDistance, 2) * Math.pow(x1, 2));
-    //     // double y1 = forwardDistance;
-    //     // yPID.reset();
-    //     // xPID.reset();
-    //     // rotPID.reset();
-    //     // System.out.println("AAAAAAAAAAAAAAAAAAAAAAAA");
-    //     // while(!(xPID.atSetpoint() && yPID.atSetpoint() && rotPID.atSetpoint())){
-    //     //     //May need to cap values?
-    //     //     System.out.println("Hey man ");
-    //     //     xPID.setSetpoint(0);
-    //     //     rotPID.setSetpoint(0);
-    //     //     yPID.setSetpoint(0.3408);
-    //     //     double yPos = y1 - yPID.getAccumulatedError();
-    //     //     double xPos = x1 - xPID.getAccumulatedError();
-    //     //     double rotPos = rot1 - rotPID.getAccumulatedError();
-    //     //     double xOutput1 = xPID.calculate(xPos, 0);
-    //     //     double yOutput = yPID.calculate(yPos, 0.3408);
-    //     //     double rotOutput1 = rotPID.calculate(rotPos, 0);
-    //     //     swerve.drive3(xOutput1, yOutput, rotOutput1, false); //Change field relative if necessary.
-    //     //     //Hypothetical way of decreasing x1, y1, rot1 to decrease themselves.
-    //     //     // x1 -= xOutput1;
-    //     //     // y1 -= yOutput1;
-    //     //     // rot1 -= rotOutput1;
-    //     //     SmartDashboard.putNumber("X", x1);
-    //     //     SmartDashboard.putNumber("Y", y1);
-    //     //     SmartDashboard.putNumber("Y Ouput", yOutput);
-    //     //     SmartDashboard.putNumber("The Distance Z", detectedID.getZ());
-    //     //     SmartDashboard.putNumber("Rot", rot1);
-    //     //     SmartDashboard.putNumber("X Output", xOutput1);
-    //     //     SmartDashboard.putNumber("Rot Output", rotOutput1);
-
-    //     // }
-    //     // System.out.println("THe PID Condition has been met.");
-        
-
-
-
-
-
-
-
-    //     //Get the x, y, and rot values from the limelight with continous movement. FIRST
-    //     // double x = detectedID.getX();
-    //     // double y = detectedID.getZ();
-    //     // double rot = detectedID.getRotation().getY(); //May need tweaking to get the right value
-    //     // double xOutput = xPID.calculate(x, 0);
-    //     // double yOutput = yPID.calculate(y, 0.5);
-    //     // double rotOutput = rotPID.calculate(rot, 0);
-    //     // swerve.drive3(xOutput, yOutput, rotOutput, false);
-    //     // if(xPID.atSetpoint() && yPID.atSetpoint() && rotPID.atSetpoint()) {
-    //     //     swerve.drive3(0, 0, 0, false); //Change field relative if necessary.
-    //     //   }
-    //     // SmartDashboard.putNumber("X", x);
-    //     // SmartDashboard.putNumber("Y", y);
-    //     // SmartDashboard.putNumber("Rot", rot);
-    //     // SmartDashboard.putNumber("X Output", xOutput);
-    //     // SmartDashboard.putNumber("Y Output", yOutput);
-    //     // SmartDashboard.putNumber("Rot Output", rotOutput);
-
-    // } else {
-    //     swerve.drive3(0, 0, 15, false);
-    // }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    x2 = -10000;
+    april_tag_rotation = -10000;
+    rot2 = -10000;
+    initial_gyro_yaw = -10000;
+    target_seen = false;
+    needs_rotate = false;
+
+  }
 
   // Returns true when the command should end.
   @Override
