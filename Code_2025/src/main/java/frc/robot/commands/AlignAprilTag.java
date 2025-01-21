@@ -81,11 +81,12 @@ public class AlignAprilTag extends Command {
       if(needs_rotate && april_tag_rotation == -10000 && initial_gyro_yaw == -10000){
         // april_tag_rotation = Math.toDegrees(LimelightHelpers.getCameraPose3d_TargetSpace("").getY());
         initial_gyro_yaw = swerve.getYaw();
-        april_tag_rotation = Math.toDegrees(LimelightHelpers.getCameraPose3d_TargetSpace("").getY());
+        april_tag_rotation = -Math.toDegrees(LimelightHelpers.getCameraPose3d_TargetSpace("").getY());
       }
       if(needs_rotate){
-        //TRIED: double final_gyro_yaw =  april_tag_rotation;
-        double final_gyro_yaw = 90 - april_tag_rotation;
+         double final_gyro_yaw =  april_tag_rotation + swerve.getYaw();
+
+        // double final_gyro_yaw = 90 - april_tag_rotation;
         // arctan(x/z)
         // total = 180 - apriltagyaw
         // AFTER do total2 = 90 - total
