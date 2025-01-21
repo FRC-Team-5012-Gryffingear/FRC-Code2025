@@ -66,7 +66,6 @@ public class AlignAprilTag extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Pose3d detectedID = limelight.getAprilTagValues();
     SmartDashboard.putNumber("REAL TIME SWERVE YAW", swerve.getYaw());
     if(LimelightHelpers.getTV("")){
       target_seen = true;
@@ -86,8 +85,11 @@ public class AlignAprilTag extends Command {
       }
       if(needs_rotate){
         //TRIED: double final_gyro_yaw =  april_tag_rotation;
-        double final_gyro_yaw = april_tag_rotation + initial_gyro_yaw;
-        // double Error_thresh = final_gyro_yaw - swerve.getYaw();
+        double final_gyro_yaw = 90 - april_tag_rotation;
+        // arctan(x/z)
+        // total = 180 - apriltagyaw
+        // AFTER do total2 = 90 - total
+        // final gyro =  total2
 
         SmartDashboard.putNumber("Final Gyro addition", final_gyro_yaw);
         // SmartDashboard.putNumber("Error thresh", Error_thresh);
