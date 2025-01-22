@@ -34,6 +34,9 @@ public class AlignAprilTag extends Command {
   private static boolean needs_rotate = false;
   private static double initial_gyro_yaw = -10000;
   private static boolean target_seen = true;
+  private static double get_Val_X = 0;
+  private static double get_Val_Z = 0;
+
 
   private double x2, april_tag_rotation, rot2;
   /**
@@ -54,9 +57,12 @@ public class AlignAprilTag extends Command {
     // xPID.setTolerance(0.1);
     // yPID.setTolerance(0.1);
     // rotPID.setTolerance(3);
+    swerve.resetHeading();
     yPID.setSetpoint(.3048);
     x2 = -10000;
     april_tag_rotation = -10000;
+    get_Val_X = 0;
+    get_Val_Z = 0;
     rot2 = -10000;
     target_seen = false;
 
@@ -67,6 +73,11 @@ public class AlignAprilTag extends Command {
   @Override
   public void execute() {
     SmartDashboard.putNumber("REAL TIME SWERVE YAW", swerve.getYaw());
+
+    Pose3d detectedID = limelight.getAprilTagValues();
+
+    SmartDashboard.putNumber("REAL TIME APRIL TAG", Math.toDegrees(detectedID.getRotation().getY()));
+
     if(LimelightHelpers.getTV("")){
       target_seen = true;
     }
@@ -76,27 +87,38 @@ public class AlignAprilTag extends Command {
     }
     else{
       needs_rotate = true;
+      SmartDashboard.putNumber("LIVE FEED APRIL TAG", LimelightHelpers.getCameraPose3d_TargetSpace("").getY());
       SmartDashboard.putBoolean("needs rotate", needs_rotate);
 
       if(needs_rotate && april_tag_rotation == -10000 && initial_gyro_yaw == -10000){
         // april_tag_rotation = Math.toDegrees(LimelightHelpers.getCameraPose3d_TargetSpace("").getY());
         initial_gyro_yaw = swerve.getYaw();
-        april_tag_rotation = -Math.toDegrees(LimelightHelpers.getCameraPose3d_TargetSpace("").getY());
+        get_Val_X = detectedID.getX();
+        get_Val_Z = detectedID.getZ();
+        // april_tag_rotation = -Math.toDegrees(LimelightHelpers.getCameraPose3d_TargetSpace("").getY());
       }
       if(needs_rotate){
-         double final_gyro_yaw =  april_tag_rotation + swerve.getYaw();
-
+         double final_gyro_yaw = -Math.toDegrees(Math.atan(get_Val_X/ get_Val_Z));
+         SmartDashboard.putNumber(("GET X"), get_Val_X);
+         SmartDashboard.putNumber("GET Z", get_Val_Z);
         // double final_gyro_yaw = 90 - april_tag_rotation;
         // arctan(x/z)
         // total = 180 - apriltagyaw
         // AFTER do total2 = 90 - total
         // final gyro =  total2
-
-        SmartDashboard.putNumber("Final Gyro addition", final_gyro_yaw);
+        SmartDashboard.putNumber("Final Gyro addition BEFORE", final_gyro_yaw);
         // SmartDashboard.putNumber("Error thresh", Error_thresh);
-
         double speed = rotPID.calculate(swerve.getYaw(), final_gyro_yaw);
-        SmartDashboard.putNumber("speeedd", speed);
+        SmartDashboard.putNumber("speeedd BEFORE", speed);
+
+        
+        // if(Math.abs(final_gyro_yaw - swerve.getYaw()) < 4){
+        //   speed = 0;
+        //   needs_rotate = false;
+        // }
+
+        swerve.drive3(0, 0, speed, false);
+        SmartDashboard.putNumber("speeedd AFTER", speed);
         // swerve.drive3(0, 0, speed, false);
         
         
@@ -181,7 +203,10 @@ public class AlignAprilTag extends Command {
   public void end(boolean interrupted) {
     x2 = -10000;
     april_tag_rotation = -10000;
+    
     rot2 = -10000;
+    get_Val_Z = 0;
+    get_Val_X = 0;
     initial_gyro_yaw = -10000;
     target_seen = false;
     needs_rotate = false;
