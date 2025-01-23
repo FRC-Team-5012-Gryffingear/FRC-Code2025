@@ -98,7 +98,11 @@ public class AlignAprilTag extends Command {
         // april_tag_rotation = -Math.toDegrees(LimelightHelpers.getCameraPose3d_TargetSpace("").getY());
       }
       if(needs_rotate){
+        //Right side of april tag is negative, left side of april tag is positive
          double final_gyro_yaw = -Math.toDegrees(Math.atan(get_Val_X/ get_Val_Z));
+         double absolute_final_gyro_yaw = Math.abs(final_gyro_yaw);
+         double math_4_angle = Math.copySign(180 - (90 + absolute_final_gyro_yaw), final_gyro_yaw);
+
          SmartDashboard.putNumber(("GET X"), get_Val_X);
          SmartDashboard.putNumber("GET Z", get_Val_Z);
         // double final_gyro_yaw = 90 - april_tag_rotation;
