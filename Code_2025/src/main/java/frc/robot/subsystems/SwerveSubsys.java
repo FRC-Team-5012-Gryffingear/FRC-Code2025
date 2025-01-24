@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import edu.wpi.first.wpilibj.Timer;
 
 
 public class SwerveSubsys extends SubsystemBase {
@@ -41,6 +42,8 @@ private final SwerveMod backRightMod = new SwerveMod(
 
 // Pigeon object that determines the yaw,roll,pitch
 private final Pigeon2 pigeon = new Pigeon2(Constants.PigeonID);
+
+private final Timer timer = new Timer();
 
 //  FL, FR, BL,
 // Determines robots position and heading on field
@@ -114,6 +117,17 @@ private Field2d fieldMaker = new Field2d();
   }
 
 
+  public Pose2d getXSpeed(){
+    return odometry.getPoseMeters();
+  }
+  public void resetTimer(){
+    timer.reset();
+    timer.start();
+  }
+
+  public double getTimer(){
+    return timer.get();
+  }
 
   public void resetPose(){
     //resets the odometry pose
