@@ -99,10 +99,9 @@ public class AlignAprilTag extends Command {
       }
       if(needs_rotate){
         //Right side of april tag is negative, left side of april tag is positive
+        // Double the angle to "predict" and might need to remove negative
          double final_gyro_yaw = -Math.toDegrees(Math.atan(get_Val_X/ get_Val_Z));
-         double absolute_final_gyro_yaw = Math.abs(final_gyro_yaw);
-         double math_4_angle = Math.copySign(180 - (90 + absolute_final_gyro_yaw), final_gyro_yaw);
-        //  double math_4_angle_second_part = 90 - 
+         double final_angle = (final_gyro_yaw * 2) + swerve.getYaw();
         
 
          SmartDashboard.putNumber(("GET X"), get_Val_X);
@@ -112,10 +111,10 @@ public class AlignAprilTag extends Command {
         // total = 180 - apriltagyaw
         // AFTER do total2 = 90 - total
         // final gyro =  total2
-        SmartDashboard.putNumber("Final Gyro addition BEFORE", final_gyro_yaw);
+        SmartDashboard.putNumber("Final Gyro addition BEFORE", final_angle);
         // SmartDashboard.putNumber("ANGLE THETA DOS", math_4_angle);
         // SmartDashboard.putNumber("Error thresh", Error_thresh);
-        double speed = rotPID.calculate(swerve.getYaw(), final_gyro_yaw);
+        double speed = rotPID.calculate(swerve.getYaw(), final_angle);
         SmartDashboard.putNumber("speeedd BEFORE", speed/5);
 
         
