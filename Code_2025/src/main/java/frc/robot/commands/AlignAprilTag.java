@@ -102,6 +102,8 @@ public class AlignAprilTag extends Command {
          double final_gyro_yaw = -Math.toDegrees(Math.atan(get_Val_X/ get_Val_Z));
          double absolute_final_gyro_yaw = Math.abs(final_gyro_yaw);
          double math_4_angle = Math.copySign(180 - (90 + absolute_final_gyro_yaw), final_gyro_yaw);
+        //  double math_4_angle_second_part = 90 - 
+        
 
          SmartDashboard.putNumber(("GET X"), get_Val_X);
          SmartDashboard.putNumber("GET Z", get_Val_Z);
@@ -111,9 +113,10 @@ public class AlignAprilTag extends Command {
         // AFTER do total2 = 90 - total
         // final gyro =  total2
         SmartDashboard.putNumber("Final Gyro addition BEFORE", final_gyro_yaw);
+        // SmartDashboard.putNumber("ANGLE THETA DOS", math_4_angle);
         // SmartDashboard.putNumber("Error thresh", Error_thresh);
         double speed = rotPID.calculate(swerve.getYaw(), final_gyro_yaw);
-        SmartDashboard.putNumber("speeedd BEFORE", speed);
+        SmartDashboard.putNumber("speeedd BEFORE", speed/5);
 
         
         // if(Math.abs(final_gyro_yaw - swerve.getYaw()) < 4){
@@ -121,8 +124,8 @@ public class AlignAprilTag extends Command {
         //   needs_rotate = false;
         // }
 
-        swerve.drive3(0, 0, speed, false);
-        SmartDashboard.putNumber("speeedd AFTER", speed);
+        // swerve.drive3(0, 0, speed, false);
+        SmartDashboard.putNumber("speeedd AFTER", speed/5);
         // swerve.drive3(0, 0, speed, false);
         
         
