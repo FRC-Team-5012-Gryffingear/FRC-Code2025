@@ -101,7 +101,7 @@ public class AlignAprilTag extends Command {
         //Right side of april tag is negative, left side of april tag is positive
         // Double the angle to "predict" and might need to remove negative
          double final_gyro_yaw = -Math.toDegrees(Math.atan(get_Val_X/ get_Val_Z));
-         double final_angle = (final_gyro_yaw * 2) + swerve.getYaw();
+         double final_angle = (final_gyro_yaw * 2) + initial_gyro_yaw;
         
 
          SmartDashboard.putNumber(("GET X"), get_Val_X);
