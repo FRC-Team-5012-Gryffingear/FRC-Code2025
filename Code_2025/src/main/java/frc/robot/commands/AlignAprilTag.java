@@ -36,6 +36,7 @@ public class AlignAprilTag extends Command {
   private static boolean target_seen = true;
   private static double get_Val_X = 0;
   private static double get_Val_Z = 0;
+  private static double get_TX = 0;
 
 
   private double x2, april_tag_rotation, rot2;
@@ -103,6 +104,7 @@ public class AlignAprilTag extends Command {
          double final_gyro_yaw = -Math.toDegrees(Math.atan(get_Val_X/ get_Val_Z));
          double final_angle = (final_gyro_yaw * 2) + initial_gyro_yaw;
         
+         // USE limelight TX to rotate amount necessary
 
          SmartDashboard.putNumber(("GET X"), get_Val_X);
          SmartDashboard.putNumber("GET Z", get_Val_Z);
