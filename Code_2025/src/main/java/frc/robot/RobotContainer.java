@@ -51,7 +51,7 @@ public class RobotContainer {
     // Configure the trigger bindings
     // lime.setDefaultCommand(new limeyCom(lime));
 
-    limeI.setDefaultCommand(new AlignAprilTag(swerve, limeI));
+    // limeI.setDefaultCommand(new AlignAprilTag(swerve, limeI));
 
      swerve.setDefaultCommand(new SwerveCom(
       swerve, 

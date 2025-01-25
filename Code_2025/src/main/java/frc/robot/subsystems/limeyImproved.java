@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -16,6 +15,7 @@ public class limeyImproved extends SubsystemBase {
   /** Creates a new limeyImproved. */
   private RawFiducial[] fiducials;
   private Pose3d apriltagsDetected;
+  
   public limeyImproved() {
   }
 
@@ -43,6 +43,10 @@ public class limeyImproved extends SubsystemBase {
 }
   public Pose3d getAprilTagValues(){
     return apriltagsDetected;
+  }
+
+  public boolean apriltagDetected(){
+    return apriltagsDetected != null;
   }
    
   @Override

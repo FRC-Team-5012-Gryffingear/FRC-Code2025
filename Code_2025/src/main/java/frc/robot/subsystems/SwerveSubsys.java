@@ -72,8 +72,8 @@ private Field2d fieldMaker = new Field2d();
             this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
             (speeds, feedforwards) -> drive1(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
             new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
-                    new PIDConstants(0.02, 0.0, 0.0), // Translation PID constants
-                    new PIDConstants(0.02, 0.0, 0.0) // Rotation PID constants
+                    new PIDConstants(10, 0.0, 0.0), // Translation PID constants
+                    new PIDConstants(10, 0.0, 0.0) // Rotation PID constants
             ),
             config, // The robot configuration
             () -> {
@@ -119,6 +119,7 @@ private Field2d fieldMaker = new Field2d();
 // puts data into board to view
     fieldMaker.setRobotPose(getPose());
     SmartDashboard.putData(fieldMaker);
+    System.out.println("Current Pose: " + odometry.getPoseMeters());
   }
 
 
@@ -146,10 +147,11 @@ private Field2d fieldMaker = new Field2d();
 
   public Pose2d getPose(){
     //returns the odometry pose or where we currently are after moving a ton
-    return new Pose2d(
-        new Translation2d(-odometry.getPoseMeters().getX(), -odometry.getPoseMeters().getY()),
-        odometry.getPoseMeters().getRotation()
-    );
+    return odometry.getPoseMeters();
+    // return new Pose2d(
+    //     new Translation2d(-odometry.getPoseMeters().getX(), -odometry.getPoseMeters().getY()),
+    //     odometry.getPoseMeters().getRotation()
+    // );
   }
 
 
