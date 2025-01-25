@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import frc.robot.LimelightHelpers;
 import frc.robot.LimelightHelpers.RawFiducial;
+import frc.robot.subsystems.SwerveMod;
 import frc.robot.subsystems.SwerveSubsys;
 import frc.robot.subsystems.limeyImproved;
 
@@ -17,6 +18,7 @@ import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.kinematics.Odometry;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -37,6 +39,11 @@ public class AlignAprilTag extends Command {
   private static double get_Val_X = 0;
   private static double get_Val_Z = 0;
   private static double get_TX = 0;
+  private static double final_gyro_yaw = 1000000;
+  private static boolean look_for_new_tag = true;
+
+  // Math to convert rotation into distance 2pi * r (r will be in meters to match Z)
+  private static double distance_per_rot = Units.inchesToMeters(2) * Math.PI * 2; 
 
 
   private double x2, april_tag_rotation, rot2;
@@ -58,6 +65,8 @@ public class AlignAprilTag extends Command {
     // xPID.setTolerance(0.1);
     // yPID.setTolerance(0.1);
     // rotPID.setTolerance(3);
+    look_for_new_tag = true;
+    final_gyro_yaw = 1000000;
     swerve.resetHeading();
     yPID.setSetpoint(.3048);
     x2 = -10000;
@@ -67,13 +76,18 @@ public class AlignAprilTag extends Command {
     rot2 = -10000;
     target_seen = false;
 
+    swerve.resetPose();
     
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    // double real_wheel_rotation = swerve.odometry.getPoseMeters().getX();
+
     SmartDashboard.putNumber("REAL TIME SWERVE YAW", swerve.getYaw());
+
+    // SmartDashboard.putNumber("Swerve movement X value", real_wheel_rotation);
 
     Pose3d detectedID = limelight.getAprilTagValues();
 
@@ -87,56 +101,67 @@ public class AlignAprilTag extends Command {
       swerve.drive3(0, 0, 0, true);
     }
     else{
+     while(Math.abs(final_gyro_yaw - swerve.getYaw()) > 0.1 && look_for_new_tag){ 
       needs_rotate = true;
       SmartDashboard.putNumber("LIVE FEED APRIL TAG", LimelightHelpers.getCameraPose3d_TargetSpace("").getY());
       SmartDashboard.putBoolean("needs rotate", needs_rotate);
 
-      if(needs_rotate && april_tag_rotation == -10000 && initial_gyro_yaw == -10000){
+      if(needs_rotate && initial_gyro_yaw == -10000){ //  && april_tag_rotation == -10000
         // april_tag_rotation = Math.toDegrees(LimelightHelpers.getCameraPose3d_TargetSpace("").getY());
         initial_gyro_yaw = swerve.getYaw();
-        get_Val_X = detectedID.getX();
+        // get_Val_X = detectedID.getX();
         get_Val_Z = detectedID.getZ();
+        get_Val_X = detectedID.getX();
+        april_tag_rotation = detectedID.getRotation().getY();
+        // final_gyro_yaw = Math.toDegrees(april_tag_rotation) + initial_gyro_yaw;
+        
+
+        
         // april_tag_rotation = -Math.toDegrees(LimelightHelpers.getCameraPose3d_TargetSpace("").getY());
       }
       if(needs_rotate){
         //Right side of april tag is negative, left side of april tag is positive
         // Double the angle to "predict" and might need to remove negative
-         double final_gyro_yaw = -Math.toDegrees(Math.atan(get_Val_X/ get_Val_Z));
-         double final_angle = (final_gyro_yaw * 2) + initial_gyro_yaw;
+        //  double final_gyro_yaw = -Math.toDegrees(Math.atan(get_Val_X/ get_Val_Z));
+        //  double final_angle = (final_gyro_yaw * 2) + initial_gyro_yaw;
         
          // USE limelight TX to rotate amount necessary
 
          SmartDashboard.putNumber(("GET X"), get_Val_X);
          SmartDashboard.putNumber("GET Z", get_Val_Z);
-        // double final_gyro_yaw = 90 - april_tag_rotation;
+         final_gyro_yaw = Math.toDegrees(april_tag_rotation) + initial_gyro_yaw;
+        SmartDashboard.putNumber("Final_gyro_value", final_gyro_yaw);
         // arctan(x/z)
         // total = 180 - apriltagyaw
         // AFTER do total2 = 90 - total
         // final gyro =  total2
-        SmartDashboard.putNumber("Final Gyro addition BEFORE", final_angle);
+        // SmartDashboard.putNumber("Final Gyro addition BEFORE", final_angle);
         // SmartDashboard.putNumber("ANGLE THETA DOS", math_4_angle);
         // SmartDashboard.putNumber("Error thresh", Error_thresh);
-        double speed = rotPID.calculate(swerve.getYaw(), final_angle);
-        SmartDashboard.putNumber("speeedd BEFORE", speed/5);
+        double speed = rotPID.calculate(swerve.getYaw(), -final_gyro_yaw);
+        SmartDashboard.putNumber("speeedd BEFORE", speed);
 
-        
-        // if(Math.abs(final_gyro_yaw - swerve.getYaw()) < 4){
-        //   speed = 0;
-        //   needs_rotate = false;
-        // }
+        SmartDashboard.putNumber("Math Threshold", Math.abs(final_gyro_yaw - swerve.getYaw()));
+        if(Math.abs(final_gyro_yaw - swerve.getYaw()) < 0.1){
+          speed = 0;
+          needs_rotate = false;
+        }
 
-        // swerve.drive3(0, 0, speed, false);
-        SmartDashboard.putNumber("speeedd AFTER", speed/5);
+        swerve.drive3(0, 0, speed, false);
+        SmartDashboard.putNumber("speeedd AFTER", speed);
         // swerve.drive3(0, 0, speed, false);
         
         
       
       }
-      
+
       SmartDashboard.putNumber("April tag rotation", april_tag_rotation);
       SmartDashboard.putNumber("Init gyro yaw", initial_gyro_yaw);
-    }
 
+     }
+     final_gyro_yaw = 1000000;
+     look_for_new_tag = false;
+    }
 
 
     // //Alternative: RawFiducial detectedID = limelight.getFiducial(X); where X is the ID of the apriltag

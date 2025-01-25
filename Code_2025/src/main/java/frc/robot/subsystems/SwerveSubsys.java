@@ -44,7 +44,7 @@ private final Pigeon2 pigeon = new Pigeon2(Constants.PigeonID);
 
 //  FL, FR, BL,
 // Determines robots position and heading on field
-private final SwerveDriveOdometry odometry = new SwerveDriveOdometry(Constants.kinematics, getHeading(), new SwerveModulePosition[] {
+public final SwerveDriveOdometry odometry = new SwerveDriveOdometry(Constants.kinematics, getHeading(), new SwerveModulePosition[] {
     frontLeftMod.getModPos(),
     frontRightMod.getModPos(),
     backLeftMod.getModPos(),
