@@ -63,7 +63,7 @@ public class SwerveCom extends Command {
     double rotateSpeed = MathUtil.applyDeadband(controller2.getRightX(), OperatorConstants.Deadband) * 0.4;
     
     
-    swerve.drive3(xSpeed, -ySpeed, rotateSpeed*1.5, true);
+    swerve.drive3(xSpeed, -ySpeed, rotateSpeed*1.5, false);
 
     
 

@@ -41,7 +41,7 @@ public class RobotContainer {
   private final SendableChooser<Command> autoChooser;
   private final SwerveSubsys swerve = new SwerveSubsys();
 
-  private final limeyImproved limeI = new limeyImproved();
+  // private final limeyImproved limeI = new limeyImproved();
   private final CommandXboxController driverController = new CommandXboxController(OperatorConstants.DriverContrlPort);
 
 
