@@ -22,6 +22,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -186,8 +187,11 @@ private Field2d fieldMaker = new Field2d();
 
   //Drive that converts the speeds into robot orientation
   private void drive1(ChassisSpeeds chassisSpeeds){
-    drive3(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond, chassisSpeeds.omegaRadiansPerSecond, false);
-  }
+    SwerveModuleState[] states = Constants.kinematics.toSwerveModuleStates(
+      ChassisSpeeds.discretize(chassisSpeeds, TimedRobot.kDefaultPeriod));
+    SwerveDriveKinematics.desaturateWheelSpeeds(states, Constants.Max_velo);
+    setModStates(states);
+    }
 
   //if not using drive1 to convert it, then make the field relative false
   public void drive2(double xSpeed, double ySpeed, double rotSpeed){
@@ -201,7 +205,7 @@ private Field2d fieldMaker = new Field2d();
         //add negative on getHeading if need to invert
       speeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotSpeed, Rotation2d.fromRadians(getHeading().getRadians()));
     }
-
+    
     SwerveModuleState[] states = Constants.kinematics.toSwerveModuleStates(speeds);
 
     setModStates(states);
