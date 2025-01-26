@@ -18,6 +18,7 @@ import com.revrobotics.spark.SparkBase.ControlType;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 // import frc.robot.subsystems.limey;
@@ -27,6 +28,7 @@ public class SwerveCom extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final SwerveSubsys swerve;
  private final CommandXboxController controller2;
+ private final BooleanSupplier yaw;
   // private final BooleanSupplier yaw;
 
   // private final BooleanSupplier limeLock;
@@ -37,9 +39,10 @@ public class SwerveCom extends Command {
 
  
   
-  public SwerveCom(SwerveSubsys subsystem, CommandXboxController controller) {
+  public SwerveCom(SwerveSubsys subsystem, CommandXboxController controller, BooleanSupplier yaw) {
     swerve = subsystem;
     controller2 = controller;
+    this.yaw = yaw;
     
   
   
@@ -51,6 +54,7 @@ public class SwerveCom extends Command {
   @Override
   public void initialize() {
     //vision.startThread();
+    // swerve.resetPose();
     swerve.resetHeading();
 
   }
@@ -61,19 +65,19 @@ public class SwerveCom extends Command {
     double xSpeed = MathUtil.applyDeadband(controller2.getLeftY(), OperatorConstants.Deadband) * 0.4;
     double ySpeed = MathUtil.applyDeadband(controller2.getLeftX(), OperatorConstants.Deadband) * 0.4;
     double rotateSpeed = MathUtil.applyDeadband(controller2.getRightX(), OperatorConstants.Deadband) * 0.4;
-    
+    SmartDashboard.putNumber("YAW YAW YAW", swerve.getYaw());
+    if(yaw.getAsBoolean()){
+      swerve.resetHeading();
+    }
     
     swerve.drive3(xSpeed, -ySpeed, -rotateSpeed*1.5, true);
-
     
-
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     swerve.stopMods();
-   // vision.stopThread();
     
   }
 

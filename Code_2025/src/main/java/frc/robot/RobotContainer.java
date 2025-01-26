@@ -49,7 +49,8 @@ public class RobotContainer {
 
      swerve.setDefaultCommand(new SwerveCom(
       swerve, 
-      driverController));
+      driverController,
+      () -> driverController.a().getAsBoolean()));
 
     configureBindings();
   }

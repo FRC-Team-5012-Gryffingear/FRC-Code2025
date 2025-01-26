@@ -67,7 +67,7 @@ public class SwerveMod {
         config.MagnetSensor.MagnetOffset = offset;
         //Config to full 360 if problems set back to signed half
         // config.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
-        
+        config.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 1;
         config.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
         
         //apply the config into the Encoder

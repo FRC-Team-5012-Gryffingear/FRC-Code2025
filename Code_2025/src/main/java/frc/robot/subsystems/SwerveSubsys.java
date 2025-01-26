@@ -89,11 +89,15 @@ private Field2d fieldMaker = new Field2d();
   public Rotation2d getHeading(){
     //Returns the gyro heading might need invert if it is not clockwise positive
     
-    return Rotation2d.fromDegrees(-pigeon.getAngle());
+    return Rotation2d.fromDegrees(pigeon.getAngle());
     // return Rotation2d.fromDegrees(pigeon.getYaw().getValueAsDouble()); // add negative on pigeon angle
   }
   public double getYaw(){
-    return -pigeon.getAngle();
+    return pigeon.getAngle();
+  }
+
+  public double inv_get_Yaw(){
+    return pigeon.getAngle() % 360;
   }
 
   public void resetHeading(){
