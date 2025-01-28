@@ -4,40 +4,39 @@
 
 package frc.robot.commands;
 
+import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.ArcadeSubsystem;
-
-import java.util.function.DoubleSupplier;
-
+import frc.robot.subsystems.ExampleSubsystem;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */
-public class ArcadeCommand extends Command {
+public class AlignAprilTag extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final ArcadeSubsystem m_subsystem;
-  private final DoubleSupplier RT, LT, TT;
-
+  private final ArcadeSubsystem arcade;
+  private final PIDController forwardPID = new PIDController(0.2, 0, 0);
+  private final PIDController turnPID = new PIDController(0.1, 0, 0);
   /**
-   * Creates a new ArcadeCommand.
+   * Creates a new AlignAprilTag.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ArcadeCommand(ArcadeSubsystem subsystem, DoubleSupplier R, DoubleSupplier L, DoubleSupplier T) {
-    m_subsystem = subsystem;
-    RT = R;
-    LT = L;
-    TT = T;
+  public AlignAprilTag(ArcadeSubsystem subsystem) {
+    arcade = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.moveAndTurn(RT.getAsDouble() - LT.getAsDouble(), TT.getAsDouble());
+    
   }
 
   // Called once the command ends or is interrupted.
