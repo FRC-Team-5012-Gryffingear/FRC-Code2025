@@ -202,9 +202,10 @@ public class AlignAprilTag extends Command {
       }
       
       // double speedX = xPID.calculate(real_wheel_rotation, get_Val_Z);
-      double speedZ = yPID.calculate(swerve.odometry.getPoseMeters().getY(),get_Val_X);
+      //SIDE TO SIDE: odometry Y / FOWARD BACK: Odometry X
+      double speedZ = yPID.calculate(swerve.odometry.getPoseMeters().getX(),get_Val_Z);
 
-      SmartDashboard.putNumber("Z pose robot", swerve.odometry.getPoseMeters().getY());
+      SmartDashboard.putNumber("Z pose robot", swerve.odometry.getPoseMeters().getX());
 
       // SmartDashboard.putNumber("XAVALUE", speedX);
       SmartDashboard.putNumber("ZAVALUE2", speedZ);
