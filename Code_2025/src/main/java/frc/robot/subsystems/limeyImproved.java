@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.LimelightHelpers;
@@ -24,6 +26,10 @@ public class limeyImproved extends SubsystemBase {
   public void periodic() {
     fiducials = LimelightHelpers.getRawFiducials("");
     apriltagsDetected = LimelightHelpers.getCameraPose3d_TargetSpace("");
+    Pose2d pose = getMegaTagPose();
+    if (pose != null) {
+      System.out.print("Mega Tag Pose: " + pose);
+    }
   }
 
   public RawFiducial getFiducial(int id) {
@@ -33,6 +39,19 @@ public class limeyImproved extends SubsystemBase {
       }
     }
     return null;
+  }
+
+  public Pose2d getMegaTagPose(){
+    double[] pose = LimelightHelpers.getBotPose_wpiBlue("");
+    if (pose.length < 6) {
+      return null;
+    } 
+
+    double x = pose[0]; // X Pos
+    double y = pose[1]; //Y Pos
+    double rot = pose[5]; // Yaw
+
+    return new Pose2d(x, y, Rotation2d.fromDegrees(rot));
   }
 
   public RawFiducial getFiducial() {

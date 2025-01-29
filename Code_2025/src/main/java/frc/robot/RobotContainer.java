@@ -38,8 +38,9 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   // private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   // private final limey lime = new limey();
-  private final SendableChooser<Command> autoChooser;
+  // private final SendableChooser<Command> autoChooser;
   private final SwerveSubsys swerve = new SwerveSubsys();
+  private final limeyImproved limeI = new limeyImproved();
 
   // private final limeyImproved limeI = new limeyImproved();
   private final CommandXboxController driverController = new CommandXboxController(OperatorConstants.DriverContrlPort);
@@ -52,19 +53,19 @@ public class RobotContainer {
     // lime.setDefaultCommand(new limeyCom(lime));
 
     // limeI.setDefaultCommand(new AlignAprilTag(swerve, limeI));
-
+    
      swerve.setDefaultCommand(new SwerveCom(
       swerve, 
       driverController));
     
-    // Build an auto chooser. This will use Commands.none() as the default option.
-    autoChooser = AutoBuilder.buildAutoChooser("Test Auto");
-    NamedCommands.registerCommand("WORKING", Commands.print("AUTO IS WORKING"));
-    autoChooser.addOption("MOVE", new PathPlannerAuto("Test Auto"));
-    // Another option that allows you to specify the default auto by its name
-    // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
+    // // Build an auto chooser. This will use Commands.none() as the default option.
+    // autoChooser = AutoBuilder.buildAutoChooser("Test Auto");
+    // NamedCommands.registerCommand("WORKING", Commands.print("AUTO IS WORKING"));
+    // autoChooser.addOption("MOVE", new PathPlannerAuto("Test Auto"));
+    // // Another option that allows you to specify the default auto by its name
+    // // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
 
-    SmartDashboard.putData("Auto Chooser", autoChooser);
+    // SmartDashboard.putData("Auto Chooser", autoChooser);
 
     configureBindings();
   }
@@ -95,16 +96,17 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    try{
-        // Load the path you want to follow using its name in the GUI
-        PathPlannerPath path = PathPlannerPath.fromPathFile("TestPath");
+    return new AlignAprilTag(swerve, limeI::getMegaTagPose);
+    // try{
+    //     // Load the path you want to follow using its name in the GUI
+    //     PathPlannerPath path = PathPlannerPath.fromPathFile("TestPath");
 
-        // Create a path following command using AutoBuilder. This will also trigger event markers.
-        return AutoBuilder.followPath(path);
-    } catch (Exception e) {
-        DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
-        return Commands.none();
-    }
-    // return autoChooser.getSelected();// Autos.exampleAuto(m_exampleSubsystem);
+    //     // Create a path following command using AutoBuilder. This will also trigger event markers.
+    //     return AutoBuilder.followPath(path);
+    // } catch (Exception e) {
+    //     DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
+    //     return Commands.none();
+    // }
+    // // return autoChooser.getSelected();// Autos.exampleAuto(m_exampleSubsystem);
   }
 }
