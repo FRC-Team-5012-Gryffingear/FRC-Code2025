@@ -125,7 +125,7 @@ private Field2d fieldMaker = new Field2d();
     fieldMaker.setRobotPose(getPose());
     SmartDashboard.putData(fieldMaker);
 
-    PoseEstimator<Pose2d> m_poseEstimator = new PoseEstimator<Pose2d>(null, odometry, null, null);
+    // PoseEstimator<Pose2d> m_poseEstimator = new PoseEstimator<Pose2d>(null, odometry, null, null);
     LimelightHelpers.SetRobotOrientation("limelight", getYaw(), 0, 0, 0, 0, 0);
     LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
     boolean doRejectUpdate = false;
@@ -139,10 +139,10 @@ private Field2d fieldMaker = new Field2d();
       }
       if(!doRejectUpdate)
       {
-        m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
-        m_poseEstimator.addVisionMeasurement(
-            mt2.pose,
-            mt2.timestampSeconds);
+        // m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
+        // m_poseEstimator.addVisionMeasurement(
+        //     mt2.pose,
+        //     mt2.timestampSeconds);
       }
   }
 
