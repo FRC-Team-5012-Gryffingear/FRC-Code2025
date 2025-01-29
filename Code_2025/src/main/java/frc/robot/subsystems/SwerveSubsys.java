@@ -15,6 +15,7 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.PoseEstimator;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -23,6 +24,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -51,6 +53,8 @@ private final SwerveMod backRightMod = new SwerveMod(
 // Pigeon object that determines the yaw,roll,pitch
 private final Pigeon2 pigeon = new Pigeon2(Constants.PigeonID);
 
+private final PoseEstimator m_poseEstimator;
+private boolean rejectVisionUpdate = false;
 
 //  FL, FR, BL,
 // Determines robots position and heading on field
@@ -67,6 +71,20 @@ private final SwerveDriveOdometry odometry = new SwerveDriveOdometry(Constants.k
 private Field2d fieldMaker = new Field2d();
 
   public SwerveSubsys() {
+    //Values for vectors need to be changed for better accuracy.
+    m_poseEstimator = new SwerveDrivePoseEstimator(
+      Constants.kinematics, 
+      Rotation2d.fromDegrees(pigeon.getYaw().getValueAsDouble()), 
+      new SwerveModulePosition[] {
+        frontLeftMod.getModPos(),
+        frontRightMod.getModPos(),
+        backLeftMod.getModPos(),
+        backRightMod.getModPos()
+      }, 
+      new Pose2d(0, 0, new Rotation2d(0)), 
+      VecBuilder.fill(0.1, 0.1, Units.degreesToRadians(1.0)), 
+      VecBuilder.fill(0.7, 0.7, Units.degreesToRadians(30))
+    );
     RobotConfig config;
     try{
       config = RobotConfig.fromGUISettings();
@@ -102,6 +120,7 @@ private Field2d fieldMaker = new Field2d();
     
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public void periodic() {
     // updates odometry
@@ -125,6 +144,7 @@ private Field2d fieldMaker = new Field2d();
     fieldMaker.setRobotPose(getPose());
     SmartDashboard.putData(fieldMaker);
 
+<<<<<<< HEAD
     // PoseEstimator<Pose2d> m_poseEstimator = new PoseEstimator<Pose2d>(null, odometry, null, null);
     LimelightHelpers.SetRobotOrientation("limelight", getYaw(), 0, 0, 0, 0, 0);
     LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
@@ -144,6 +164,28 @@ private Field2d fieldMaker = new Field2d();
         //     mt2.pose,
         //     mt2.timestampSeconds);
       }
+=======
+    //This is from Limelight Documentation, it is used to make sure the mega tag works.
+    LimelightHelpers.SetRobotOrientation("",
+    m_poseEstimator.getEstimatedPosition().getRotation().getDegrees(),
+    0,
+    0,
+    0,
+    0,
+    0);
+
+    LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue("");
+    if(Math.abs(pigeon.getRate()) > 720 || mt2.tagCount ==0){
+      rejectVisionUpdate = true;
+    } else{
+      rejectVisionUpdate = false;
+    }
+
+    if(!rejectVisionUpdate){
+      m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.7, 0.7, 999999999));
+      m_poseEstimator.addVisionMeasurement(mt2.pose, mt2.timestampSeconds);
+    }
+>>>>>>> 450bd0b1fc188cdac9a7ab1d26b6218be18e27ee
   }
 
 
@@ -208,7 +250,7 @@ private Field2d fieldMaker = new Field2d();
   }
 
   //Drive that converts the speeds into robot orientation
-  private void drive1(ChassisSpeeds chassisSpeeds){
+  public void drive1(ChassisSpeeds chassisSpeeds){
     SwerveModuleState[] states = Constants.kinematics.toSwerveModuleStates(
       ChassisSpeeds.discretize(chassisSpeeds, TimedRobot.kDefaultPeriod));
     SwerveDriveKinematics.desaturateWheelSpeeds(states, Constants.Max_velo);
