@@ -144,7 +144,6 @@ private Field2d fieldMaker = new Field2d();
     fieldMaker.setRobotPose(getPose());
     SmartDashboard.putData(fieldMaker);
 
-<<<<<<< HEAD
     // PoseEstimator<Pose2d> m_poseEstimator = new PoseEstimator<Pose2d>(null, odometry, null, null);
     LimelightHelpers.SetRobotOrientation("limelight", getYaw(), 0, 0, 0, 0, 0);
     LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
@@ -164,28 +163,6 @@ private Field2d fieldMaker = new Field2d();
         //     mt2.pose,
         //     mt2.timestampSeconds);
       }
-=======
-    //This is from Limelight Documentation, it is used to make sure the mega tag works.
-    LimelightHelpers.SetRobotOrientation("",
-    m_poseEstimator.getEstimatedPosition().getRotation().getDegrees(),
-    0,
-    0,
-    0,
-    0,
-    0);
-
-    LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue("");
-    if(Math.abs(pigeon.getRate()) > 720 || mt2.tagCount ==0){
-      rejectVisionUpdate = true;
-    } else{
-      rejectVisionUpdate = false;
-    }
-
-    if(!rejectVisionUpdate){
-      m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.7, 0.7, 999999999));
-      m_poseEstimator.addVisionMeasurement(mt2.pose, mt2.timestampSeconds);
-    }
->>>>>>> 450bd0b1fc188cdac9a7ab1d26b6218be18e27ee
   }
 
 
