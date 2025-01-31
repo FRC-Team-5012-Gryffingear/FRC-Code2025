@@ -7,6 +7,8 @@
  */
 package frc.robot.subsystems;
 
+import java.util.Optional;
+
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
@@ -54,7 +56,6 @@ private final SwerveMod backRightMod = new SwerveMod(
 private final Pigeon2 pigeon = new Pigeon2(Constants.PigeonID);
 
 private final PoseEstimator m_poseEstimator;
-private boolean rejectVisionUpdate = false;
 
 //  FL, FR, BL,
 // Determines robots position and heading on field
@@ -72,50 +73,13 @@ private Field2d fieldMaker = new Field2d();
 
   public SwerveSubsys() {
     //Values for vectors need to be changed for better accuracy.
-    m_poseEstimator = new SwerveDrivePoseEstimator(
-      Constants.kinematics, 
-      Rotation2d.fromDegrees(pigeon.getYaw().getValueAsDouble()), 
-      new SwerveModulePosition[] {
-        frontLeftMod.getModPos(),
-        frontRightMod.getModPos(),
-        backLeftMod.getModPos(),
-        backRightMod.getModPos()
-      }, 
-      new Pose2d(0, 0, new Rotation2d(0)), 
-      VecBuilder.fill(0.1, 0.1, Units.degreesToRadians(1.0)), 
-      VecBuilder.fill(0.7, 0.7, Units.degreesToRadians(30))
-    );
-    RobotConfig config;
-    try{
-      config = RobotConfig.fromGUISettings();
-      
-      AutoBuilder.configure(
-            this::getPose, // Robot pose supplier
-            this::resetOdomPose, // Method to reset odometry (will be called if your auto has a starting pose)
-            this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-            (speeds, feedforwards) -> drive1(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
-            new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
-                    new PIDConstants(0.1, 0.0, 0.0), // Translation PID constants
-                    new PIDConstants(0.5, 0.0, 0.0) // Rotation PID constants
-            ),
-            config, // The robot configuration
-            () -> {
-              // Boolean supplier that controls when the path will be mirrored for the red alliance
-              // This will flip the path being followed to the red side of the field.
-              // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-
-              var alliance = DriverStation.getAlliance();
-              if (alliance.isPresent()) {
-                return alliance.get() == DriverStation.Alliance.Red;
-              }
-              return false;
-            },
-            this // Reference to this subsystem to set requirements
-    );
-    } catch (Exception e) {
-      // Handle exception as needed
-      e.printStackTrace();
-    }
+    m_poseEstimator = new SwerveDrivePoseEstimator(Constants.kinematics, Rotation2d.fromDegrees(getYaw()), 
+    new SwerveModulePosition[] {
+      frontLeftMod.getModPos(),
+      frontRightMod.getModPos(),
+      backLeftMod.getModPos(),
+      backRightMod.getModPos()
+  }, new Pose2d());
 
     
   }
@@ -144,25 +108,12 @@ private Field2d fieldMaker = new Field2d();
     fieldMaker.setRobotPose(getPose());
     SmartDashboard.putData(fieldMaker);
 
-    // PoseEstimator<Pose2d> m_poseEstimator = new PoseEstimator<Pose2d>(null, odometry, null, null);
-    LimelightHelpers.SetRobotOrientation("limelight", getYaw(), 0, 0, 0, 0, 0);
-    LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
-    boolean doRejectUpdate = false;
-    if(Math.abs(pigeon.getRate()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
-      {
-        doRejectUpdate = true;
-      }
-      if(mt2.tagCount == 0)
-      {
-        doRejectUpdate = true;
-      }
-      if(!doRejectUpdate)
-      {
-        // m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
-        // m_poseEstimator.addVisionMeasurement(
-        //     mt2.pose,
-        //     mt2.timestampSeconds);
-      }
+    m_poseEstimator.update(Rotation2d.fromDegrees(getYaw()), new SwerveModulePosition[] {
+      frontLeftMod.getModPos(),
+      frontRightMod.getModPos(),
+      backLeftMod.getModPos(),
+      backRightMod.getModPos()
+  });
   }
 
 
