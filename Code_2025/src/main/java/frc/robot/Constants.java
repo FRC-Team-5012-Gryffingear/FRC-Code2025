@@ -59,6 +59,8 @@ public final class Constants {
 
   public static final int PigeonID = 20;
 
+  public static final int elev_Encoder = 10;
+
   // Gives position of modules on a 2d plane
   public static final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
     new Translation2d(wheelBase/2, -trackWidth/2), // FR

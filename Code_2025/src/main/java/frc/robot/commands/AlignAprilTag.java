@@ -16,6 +16,7 @@ import org.opencv.core.Mat;
 
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.kinematics.Odometry;
 import edu.wpi.first.math.util.Units;
@@ -29,7 +30,7 @@ public class AlignAprilTag extends Command {
   private final SwerveSubsys swerve;
   private final limeyImproved limelight;
   //Change PID values to tune the PID loop
-  private final PIDController xPID = new PIDController(0.01, 0, 0.0);
+  private final PIDController xPID = new PIDController(0.1, 0, 0.0);
   private final PIDController yPID = new PIDController(0.03, 0, 0.0);
   private final PIDController rotPID = new PIDController(0.0135, 0, 0.0);
   //Following two are for the THIRD Version.
@@ -39,7 +40,6 @@ public class AlignAprilTag extends Command {
   private static boolean target_seen = true;
   private static double get_Val_X = 0;
   private static double get_Val_Z = 0;
-  private static double get_TX = 0;
   private static double final_gyro_yaw = 1000000;
   private static boolean look_for_new_tag = true;
   private static boolean moving_fwd = false;
@@ -158,7 +158,7 @@ public class AlignAprilTag extends Command {
           SmartDashboard.putNumber("speeedd AFTER INNNN", speed);
         }
 
-        swerve.drive3(0, 0, -speed, false);
+        // swerve.drive3(0, 0, -speed, false);
         SmartDashboard.putNumber("speeedd AFTER", -speed);
 
         if(Math.abs(speed) < .07){
@@ -203,10 +203,14 @@ public class AlignAprilTag extends Command {
       
       // double speedX = xPID.calculate(real_wheel_rotation, get_Val_Z);
       //SIDE TO SIDE: odometry Y / FOWARD BACK: Odometry X
-      double speedZ = yPID.calculate(swerve.odometry.getPoseMeters().getX(),get_Val_Z);
+      double getNewZ = LimelightHelpers.getCameraPose3d_TargetSpace("").getZ();
+
+      double speedZ = xPID.calculate(swerve.odometry.getPoseMeters().getX(),-get_Val_Z);
 
       SmartDashboard.putNumber("Z pose robot", swerve.odometry.getPoseMeters().getX());
+      SmartDashboard.putNumber("New getValue Z", getNewZ);
 
+      SmartDashboard.putNumber("get Value Z", -get_Val_Z);
       // SmartDashboard.putNumber("XAVALUE", speedX);
       SmartDashboard.putNumber("ZAVALUE2", speedZ);
       // (x, y, rot, false)
