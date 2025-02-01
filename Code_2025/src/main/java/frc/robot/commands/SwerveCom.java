@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import frc.robot.Constants;
+import frc.robot.LimelightHelpers;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.ExampleSubsystem;
 //import frc.robot.subsystems.LedSubsystem;
@@ -54,8 +55,9 @@ public class SwerveCom extends Command {
   @Override
   public void initialize() {
     //vision.startThread();
-    // swerve.resetPose();
+    swerve.resetPose();
     swerve.resetHeading();
+    
 
   }
 
@@ -71,7 +73,9 @@ public class SwerveCom extends Command {
     }
     
     swerve.drive3(xSpeed, -ySpeed, -rotateSpeed*1.5, true);
-    
+    SmartDashboard.putNumber("getXXValue", LimelightHelpers.getCameraPose3d_TargetSpace("").getX());
+    SmartDashboard.putNumber("side value", (swerve.odometry.getPoseMeters().getY()/14.968) -.2);
+    SmartDashboard.putNumber("fwd value", (swerve.odometry.getPoseMeters().getX()/14.968) -.2);
   }
 
   // Called once the command ends or is interrupted.
