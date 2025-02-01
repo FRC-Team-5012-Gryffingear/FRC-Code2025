@@ -33,6 +33,7 @@ public class AlignAprilTag extends Command {
   private final PIDController xPID = new PIDController(0.1, 0, 0.0);
   private final PIDController yPID = new PIDController(0.03, 0, 0.0);
   private final PIDController rotPID = new PIDController(0.0135, 0, 0.0);
+  private final PIDController auto_yaw = new PIDController(.0135, 0, 0);
   //Following two are for the THIRD Version.
   // private boolean initialized = false;
   private static boolean needs_rotate = false;
@@ -183,9 +184,6 @@ public class AlignAprilTag extends Command {
      }
      
 
-
-
-
      System.out.println("OUTSIDE");
     
 
@@ -215,6 +213,8 @@ public class AlignAprilTag extends Command {
       // double getNewZ = LimelightHelpers.getCameraPose3d_TargetSpace("").getZ();
 
       double speedZ = xPID.calculate(swerve.odometry.getPoseMeters().getX() / conversion,-get_Val_Z);
+      
+      double store_auto_yaw = auto_yaw.calculate(swerve.getYaw(),final_gyro_yaw);
 
       SmartDashboard.putNumber("Z pose robot", swerve.odometry.getPoseMeters().getX() / conversion);
       // SmartDashboard.putNumber("New getValue Z", getNewZ);
@@ -226,12 +226,14 @@ public class AlignAprilTag extends Command {
       
       // swerve.drive3(0,speedZ, 0,false);
       
+      
+     
 
       if(Math.abs(speedZ) < 0.07){
         speedZ = 0; 
         moving_fwd = false;
       }
-      swerve.drive3(-speedZ, 0, 0, false);
+      swerve.drive3(-speedZ, 0, store_auto_yaw, false);
 
       SmartDashboard.putNumber("FWD SPEED AFTER", -speedZ);
      }
