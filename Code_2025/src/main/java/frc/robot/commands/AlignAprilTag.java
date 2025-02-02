@@ -159,6 +159,7 @@ public class AlignAprilTag extends Command {
           abs_final = Math.copySign(Math.abs(final_gyro_yaw+10), final_gyro_yaw);
         }
 
+
         SmartDashboard.putNumber("Abs final val", abs_final);
 
         double speed = MathUtil.clamp(rotPID.calculate(swerve.inv_get_Yaw(),abs_final), -.5, .5);
@@ -170,7 +171,7 @@ public class AlignAprilTag extends Command {
           speed = 0;
           needs_rotate = false;
           look_for_new_tag = true;
-          // LimelightHelpers.setLEDMode_ForceOn("");
+
           SmartDashboard.putNumber("speeedd AFTER INNNN", speed);
 
           swerve.drive3(0, 0, -speed, false);
@@ -218,9 +219,20 @@ public class AlignAprilTag extends Command {
       // double speedX = xPID.calculate(real_wheel_rotation, get_Val_Z);
       //SIDE TO SIDE: odometry Y / FOWARD BACK: Odometry X
       // double getNewZ = LimelightHelpers.getCameraPose3d_TargetSpace("").getZ();
+      double abs_final_Y = 0;
+
+      if( (-get_Val_X) > 0){
+        abs_final_Y = Math.copySign(Math.abs(get_Val_X)-0, -get_Val_X);
+        // abs_final = Math.copySign(Math.abs(final_gyro_yaw-3), final_gyro_yaw);
+      }
+      else{
+        abs_final_Y = Math.copySign(Math.abs(get_Val_X)-1, -get_Val_X);
+        // abs_final = Math.copySign(Math.abs(final_gyro_yaw+10), final_gyro_yaw);
+      }
 
       double speedZ = MathUtil.clamp(xPID.calculate((swerve.odometry.getPoseMeters().getX() / conversion)-.9,-get_Val_Z), -0.05, 0.05);
-      double speedY = MathUtil.clamp(yPID.calculate(((swerve.odometry.getPoseMeters().getY()) / conversion) + .05, -get_Val_X) , -.05,.05);
+      double speedY = MathUtil.clamp(yPID.calculate(((swerve.odometry.getPoseMeters().getY()) / conversion), abs_final_Y) , -.05,.05);
+      SmartDashboard.putNumber("Abs final side move", abs_final_Y);
 
       double store_auto_yaw = MathUtil.clamp(auto_yaw.calculate(swerve.inv_get_Yaw(),abs_final),-.2,.2);
       SmartDashboard.putNumber("Auto yaw value ", store_auto_yaw);
