@@ -30,11 +30,13 @@ public class AlignAprilTag extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final SwerveSubsys swerve;
   private final limeyImproved limelight;
+  // private final String limeName = "";
+
   //Change PID values to tune the PID loop
   private final PIDController xPID = new PIDController(0.1, 0, 0.0);
-  private final PIDController yPID = new PIDController(0.5, 0, 0.0);
-  private final PIDController rotPID = new PIDController(0.0135, 0, 0.0);
-  private final PIDController auto_yaw = new PIDController(.0135, 0, 0);
+  private final PIDController yPID = new PIDController(0.6, 0, 0.0);
+  private final PIDController rotPID = new PIDController(0.01, 0, 0.0);
+  private final PIDController auto_yaw = new PIDController(.01, 0, 0.0);
   //Following two are for the THIRD Version.
   // private boolean initialized = false;
   private static boolean needs_rotate = false;
@@ -56,10 +58,9 @@ public class AlignAprilTag extends Command {
   private static double current_id = -1;
 
   // Math to convert rotation into distance 2pi * r (r will be in meters to match Z)
-  private static double distance_per_rot = Units.inchesToMeters(2) * Math.PI * 2; 
 
 
-  private double x2, april_tag_rotation, rot2;
+  private double april_tag_rotation;
   /**
    * Creates a new AlignAprilTag.
    *
@@ -85,11 +86,9 @@ public class AlignAprilTag extends Command {
     look_for_new_tag = false;
     final_gyro_yaw = 1000000;
     swerve.resetHeading();
-    x2 = -10000;
     april_tag_rotation = -10000;
     get_Val_X = 0;
     get_Val_Z = 0;
-    rot2 = -10000;
     target_seen = false;
     first_tag_id = -1;
     current_id = -1;
@@ -101,7 +100,8 @@ public class AlignAprilTag extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double real_wheel_rotation = swerve.odometry.getPoseMeters().getX();
+    // double real_wheel_rotation = swerve.odometry.getPoseMeters().getX();
+    System.out.println("WE ARE EXECUTING");
 
     SmartDashboard.putNumber("REAL TIME SWERVE YAW", swerve.getYaw());
 
@@ -121,6 +121,8 @@ public class AlignAprilTag extends Command {
     }
     else{
 
+    // if(Math.round(swerve.inv_get_Yaw()) == Math.round(detectedID.getRotation().getY())){    }
+      // SmartDashboard.putBoolean(, check)
      while(!look_for_new_tag){ // && Math.abs(final_gyro_yaw - swerve.getYaw()) > 0.1 
       // LimelightHelpers.setLEDMode_ForceOff("");
       needs_rotate = true;
@@ -167,7 +169,7 @@ public class AlignAprilTag extends Command {
         SmartDashboard.putNumber("speeedd BEFORE", speed);
         
 
-        if(Math.abs(speed) < 0.02){ // Math.abs(final_gyro_yaw - swerve.getYaw()) < 0.5
+        if(Math.abs(speed) < 0.05){ // Math.abs(final_gyro_yaw - swerve.getYaw()) < 0.5
           speed = 0;
           needs_rotate = false;
           look_for_new_tag = true;
@@ -210,7 +212,7 @@ public class AlignAprilTag extends Command {
      }
 
      SmartDashboard.putBoolean("Boolean forward", moving_fwd);
-     if(moving_fwd && moving_side){
+     if(moving_fwd){
       if(!check){
         swerve.resetPose();
         check = true;
@@ -219,33 +221,21 @@ public class AlignAprilTag extends Command {
       // double speedX = xPID.calculate(real_wheel_rotation, get_Val_Z);
       //SIDE TO SIDE: odometry Y / FOWARD BACK: Odometry X
       // double getNewZ = LimelightHelpers.getCameraPose3d_TargetSpace("").getZ();
-      double abs_final_Y = 0;
+      
 
-      if( (-get_Val_X) > 0){
-        abs_final_Y = Math.copySign(Math.abs(get_Val_X)-0, -get_Val_X);
-        // abs_final = Math.copySign(Math.abs(final_gyro_yaw-3), final_gyro_yaw);
-      }
-      else{
-        abs_final_Y = Math.copySign(Math.abs(get_Val_X)-1, -get_Val_X);
-        // abs_final = Math.copySign(Math.abs(final_gyro_yaw+10), final_gyro_yaw);
-      }
-
-      double speedZ = MathUtil.clamp(xPID.calculate((swerve.odometry.getPoseMeters().getX() / conversion)-.9,-get_Val_Z), -0.05, 0.05);
-      double speedY = MathUtil.clamp(yPID.calculate(((swerve.odometry.getPoseMeters().getY()) / conversion), abs_final_Y) , -.05,.05);
-      SmartDashboard.putNumber("Abs final side move", abs_final_Y);
+      double speedZ = MathUtil.clamp(xPID.calculate((swerve.odometry.getPoseMeters().getX() / conversion)-.78,-get_Val_Z), -0.05, 0.05);
 
       double store_auto_yaw = MathUtil.clamp(auto_yaw.calculate(swerve.inv_get_Yaw(),abs_final),-.2,.2);
       SmartDashboard.putNumber("Auto yaw value ", store_auto_yaw);
 
       SmartDashboard.putNumber("Z pose robot", swerve.odometry.getPoseMeters().getX() / conversion);
-      SmartDashboard.putNumber("X pose robot", swerve.odometry.getPoseMeters().getY() / conversion);
       // SmartDashboard.putNumber("New getValue Z", getNewZ);
 
+
+
       SmartDashboard.putNumber("get Value Z", -get_Val_Z);  
-      SmartDashboard.putNumber("get Value X", -get_Val_X);
       // SmartDashboard.putNumber("XAVALUE", speedX);
       SmartDashboard.putNumber("FWD SPEED BEFORE", -speedZ);
-      SmartDashboard.putNumber("SIDE SPEED BEFORE", -speedY);
       // (x, y, rot, false)
       
       // swerve.drive3(0,speedZ, 0,false);
@@ -257,17 +247,66 @@ public class AlignAprilTag extends Command {
         speedZ = 0; 
         moving_fwd = false;
       }
-      if(Math.abs(speedY) < 0.01){
+      
+        
+        
+      
+      // swerve.drive3(0,-speedY, 0, false);
+
+
+
+      swerve.drive3(-speedZ, 0, -store_auto_yaw, false);
+
+      // swerve.drive3(0, 0, -store_auto_yaw,false);
+      SmartDashboard.putNumber("FWD SPEED AFTER", -speedZ);
+     }
+
+
+     if(!moving_fwd && moving_side){
+
+      double abs_final_Y = 0;
+
+      if( (-get_Val_X) > 0){
+        // -.02 makes it full front
+        abs_final_Y = Math.copySign((Math.abs(get_Val_X) - 0.02), -get_Val_X);
+        // abs_final = Math.copySign(Math.abs(final_gyro_yaw-3), final_gyro_yaw);
+      }
+      else{
+        abs_final_Y = Math.copySign(Math.abs(get_Val_X)+.17, -get_Val_X);
+        // abs_final = Math.copySign(Math.abs(final_gyro_yaw+10), final_gyro_yaw);
+      }
+
+      //Side to side movement
+      // abs_final_Y = Math.copySign((Math.abs(get_Val_X) - 0.02), -get_Val_X) ;
+
+
+      // double speedY = MathUtil.clamp(yPID.calculate(((swerve.odometry.getPoseMeters().getY()) / conversion), -get_Val_X) , -.04,.04); // abs_final_Y as setpoint
+
+      double speedY = MathUtil.clamp(yPID.calculate(((swerve.odometry.getPoseMeters().getY()) / conversion), abs_final_Y) , -.04,.04); // -get_Val_X as setpoint
+
+      SmartDashboard.putNumber("Abs final side move", abs_final_Y);
+
+      double store_auto_yaw = MathUtil.clamp(auto_yaw.calculate(swerve.inv_get_Yaw(),abs_final),-.2,.2);
+
+      if(Math.abs(store_auto_yaw) < 0.01){
+        store_auto_yaw = 0;
+      }
+
+      // swerve.drive3(0, -speedY, 0, false);
+      swerve.drive3(0, -speedY, -store_auto_yaw, false);
+
+      SmartDashboard.putNumber("Store auto yaw", -store_auto_yaw);
+      
+      SmartDashboard.putNumber("X pose robot", swerve.odometry.getPoseMeters().getY() / conversion);
+      SmartDashboard.putNumber("get Value X", -get_Val_X);
+      SmartDashboard.putNumber("SIDE SPEED BEFORE", -speedY);
+
+
+      if(Math.abs(speedY) < 0.03){
         speedY = 0;
         moving_side = false;
       }
-    
-      // swerve.drive3(-speedZ,0, -store_auto_yaw, false);
-      swerve.drive3(-speedZ, -speedY, -store_auto_yaw, false);
-
-      // swerve.drive3(0, 0, -store_auto_yaw,false);
       SmartDashboard.putNumber("SIDE SPEED AFTER", -speedY);
-      SmartDashboard.putNumber("FWD SPEED AFTER", -speedZ);
      }
      
 
@@ -281,10 +320,8 @@ public class AlignAprilTag extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    x2 = -10000;
     april_tag_rotation = -10000;
     
-    rot2 = -10000;
     get_Val_Z = 0;
     get_Val_X = 0;
     initial_gyro_yaw = -10000;
