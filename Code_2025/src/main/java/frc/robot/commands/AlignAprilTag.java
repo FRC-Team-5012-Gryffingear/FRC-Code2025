@@ -135,7 +135,7 @@ public class AlignAprilTag extends Command {
         // get_Val_X = detectedID.getX();
         get_Val_Z = detectedID.getZ();
         get_Val_X = detectedID.getX();
-        april_tag_rotation = detectedID.getRotation().getY();
+        // april_tag_rotation = detectedID.getRotation().getY();
 
         first_tag_id = LimelightHelpers.getFiducialID("");
         // final_gyro_yaw = Math.toDegrees(april_tag_rotation) + initial_gyro_yaw;
@@ -144,8 +144,10 @@ public class AlignAprilTag extends Command {
         
         // april_tag_rotation = -Math.toDegrees(LimelightHelpers.getCameraPose3d_TargetSpace("").getY());
       }
-      if(needs_rotate){
 
+      if(needs_rotate){
+         april_tag_rotation = detectedID.getRotation().getY();
+         get_Val_X = detectedID.getX();
          SmartDashboard.putNumber(("GET X"), get_Val_X);
          SmartDashboard.putNumber("GET Z", get_Val_Z);
 
@@ -154,37 +156,45 @@ public class AlignAprilTag extends Command {
         SmartDashboard.putNumber("Final_gyro_value", final_gyro_yaw+10);
         
         
-        if(april_tag_rotation > 0){
-          abs_final = Math.copySign(Math.abs(final_gyro_yaw-3), final_gyro_yaw);
-        }
-        else{
-          abs_final = Math.copySign(Math.abs(final_gyro_yaw+10), final_gyro_yaw);
-        }
+        // if(april_tag_rotation > 0){
+        //   abs_final = Math.copySign(Math.abs(final_gyro_yaw-3), final_gyro_yaw);
+        // }
+        // else{
+        //   abs_final = Math.copySign(Math.abs(final_gyro_yaw+10), final_gyro_yaw);
+        // }
 
 
-        SmartDashboard.putNumber("Abs final val", abs_final);
+        // SmartDashboard.putNumber("Abs final val", abs_final);
 
-        double speed = MathUtil.clamp(rotPID.calculate(swerve.inv_get_Yaw(),abs_final), -.5, .5);
+        //Idk if speed and speedY should be positive or negative...
+        double speed = MathUtil.clamp(rotPID.calculate(april_tag_rotation, 0), -.5, .5);
+        double speedY = MathUtil.clamp(yPID.calculate(detectedID.getX(), 0) , -.04,.04); // -get_Val_X as setpoint
         SmartDashboard.putNumber("Swerve inside", swerve.inv_get_Yaw());
         SmartDashboard.putNumber("speeedd BEFORE", speed);
-        
+        SmartDashboard.putNumber("SIDE SPEED BEFORE", -speedY);
 
-        if(Math.abs(speed) < 0.05){ // Math.abs(final_gyro_yaw - swerve.getYaw()) < 0.5
+
+        if(Math.abs(speed) < 0.05 && Math.abs(speedY) <0.03){ // Math.abs(final_gyro_yaw - swerve.getYaw()) < 0.5
           speed = 0;
           needs_rotate = false;
           look_for_new_tag = true;
+          speedY = 0;
+
 
           SmartDashboard.putNumber("speeedd AFTER INNNN", speed);
+          SmartDashboard.putNumber("SIDE SPEED AFTER", -speedY);
+          
 
-          swerve.drive3(0, 0, -speed, false);
+          swerve.drive3(0, -speedY, -speed, false);
           // snap = swerve.getYaw();
           break;
         }
 
-        swerve.drive3(0, 0, -speed, false);
+        swerve.drive3(0, -speedY, -speed, false);
 
         SmartDashboard.putNumber("speeedd AFTER", -speed);
       }
+     
 
       SmartDashboard.putNumber("April tag rotation", april_tag_rotation);
       SmartDashboard.putNumber("Init gyro yaw", initial_gyro_yaw);
@@ -262,52 +272,52 @@ public class AlignAprilTag extends Command {
      }
 
 
-     if(!moving_fwd && moving_side){
+    //  if(!moving_fwd && moving_side){
 
-      double abs_final_Y = 0;
+    //   double abs_final_Y = 0;
 
-      if( (-get_Val_X) > 0){
-        // -.02 makes it full front
-        abs_final_Y = Math.copySign((Math.abs(get_Val_X) - 0.02), -get_Val_X);
-        // abs_final = Math.copySign(Math.abs(final_gyro_yaw-3), final_gyro_yaw);
-      }
-      else{
-        abs_final_Y = Math.copySign(Math.abs(get_Val_X)+.17, -get_Val_X);
-        // abs_final = Math.copySign(Math.abs(final_gyro_yaw+10), final_gyro_yaw);
-      }
+    //   if( (-get_Val_X) > 0){
+    //     // -.02 makes it full front
+    //     abs_final_Y = Math.copySign((Math.abs(get_Val_X) - 0.02), -get_Val_X);
+    //     // abs_final = Math.copySign(Math.abs(final_gyro_yaw-3), final_gyro_yaw);
+    //   }
+    //   else{
+    //     abs_final_Y = Math.copySign(Math.abs(get_Val_X)+.17, -get_Val_X);
+    //     // abs_final = Math.copySign(Math.abs(final_gyro_yaw+10), final_gyro_yaw);
+    //   }
 
-      //Side to side movement
-      // abs_final_Y = Math.copySign((Math.abs(get_Val_X) - 0.02), -get_Val_X) ;
+    //   //Side to side movement
+    //   // abs_final_Y = Math.copySign((Math.abs(get_Val_X) - 0.02), -get_Val_X) ;
 
 
-      // double speedY = MathUtil.clamp(yPID.calculate(((swerve.odometry.getPoseMeters().getY()) / conversion), -get_Val_X) , -.04,.04); // abs_final_Y as setpoint
+    //   // double speedY = MathUtil.clamp(yPID.calculate(((swerve.odometry.getPoseMeters().getY()) / conversion), -get_Val_X) , -.04,.04); // abs_final_Y as setpoint
 
-      double speedY = MathUtil.clamp(yPID.calculate(((swerve.odometry.getPoseMeters().getY()) / conversion), abs_final_Y) , -.04,.04); // -get_Val_X as setpoint
+    //   double speedY = MathUtil.clamp(yPID.calculate(((swerve.odometry.getPoseMeters().getY()) / conversion), abs_final_Y) , -.04,.04); // -get_Val_X as setpoint
 
-      SmartDashboard.putNumber("Abs final side move", abs_final_Y);
+    //   SmartDashboard.putNumber("Abs final side move", abs_final_Y);
 
-      double store_auto_yaw = MathUtil.clamp(auto_yaw.calculate(swerve.inv_get_Yaw(),abs_final),-.2,.2);
+    //   double store_auto_yaw = MathUtil.clamp(auto_yaw.calculate(swerve.inv_get_Yaw(),abs_final),-.2,.2);
 
-      if(Math.abs(store_auto_yaw) < 0.01){
-        store_auto_yaw = 0;
-      }
+    //   if(Math.abs(store_auto_yaw) < 0.01){
+    //     store_auto_yaw = 0;
+    //   }
 
-      // swerve.drive3(0, -speedY, 0, false);
-      swerve.drive3(0, -speedY, -store_auto_yaw, false);
+    //   // swerve.drive3(0, -speedY, 0, false);
+    //   swerve.drive3(0, -speedY, -store_auto_yaw, false);
 
-      SmartDashboard.putNumber("Store auto yaw", -store_auto_yaw);
+    //   SmartDashboard.putNumber("Store auto yaw", -store_auto_yaw);
       
-      SmartDashboard.putNumber("X pose robot", swerve.odometry.getPoseMeters().getY() / conversion);
-      SmartDashboard.putNumber("get Value X", -get_Val_X);
-      SmartDashboard.putNumber("SIDE SPEED BEFORE", -speedY);
+    //   SmartDashboard.putNumber("X pose robot", swerve.odometry.getPoseMeters().getY() / conversion);
+    //   SmartDashboard.putNumber("get Value X", -get_Val_X);
+    //   SmartDashboard.putNumber("SIDE SPEED BEFORE", -speedY);
 
 
-      if(Math.abs(speedY) < 0.03){
-        speedY = 0;
-        moving_side = false;
-      }
-      SmartDashboard.putNumber("SIDE SPEED AFTER", -speedY);
-     }
+    //   if(Math.abs(speedY) < 0.03){
+    //     speedY = 0;
+    //     moving_side = false;
+    //   }
+    //   SmartDashboard.putNumber("SIDE SPEED AFTER", -speedY);
+    //  }
      
 
     //  if(current_id != first_tag_id && LimelightHelpers.getTV("")){ //
@@ -336,3 +346,4 @@ public class AlignAprilTag extends Command {
     return false;
   }
 }
+
