@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import frc.robot.subsystems.ArcadeSubsystem;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -15,17 +16,23 @@ public class ArcadeCommand extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ArcadeSubsystem m_subsystem;
   private final DoubleSupplier RT, LT, TT;
+  /*BooleanSupplier here
+   * and add it to the system/function
+   */
+  private final BooleanSupplier AT;
+
 
   /**
    * Creates a new ArcadeCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ArcadeCommand(ArcadeSubsystem subsystem, DoubleSupplier R, DoubleSupplier L, DoubleSupplier T) {
+  public ArcadeCommand(ArcadeSubsystem subsystem, DoubleSupplier R, DoubleSupplier L, DoubleSupplier T,BooleanSupplier A) {
     m_subsystem = subsystem;
     RT = R;
     LT = L;
     TT = T;
+    AT = A;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
@@ -38,6 +45,8 @@ public class ArcadeCommand extends Command {
   @Override
   public void execute() {
     m_subsystem.moveAndTurn(RT.getAsDouble() - LT.getAsDouble(), TT.getAsDouble());
+    
+    m_subsystem.coralouttake(AT.getAsBoolean());
   }
 
   // Called once the command ends or is interrupted.

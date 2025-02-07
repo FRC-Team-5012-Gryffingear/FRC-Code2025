@@ -48,7 +48,8 @@ public class RobotContainer {
     arcade.setDefaultCommand(new ArcadeCommand(arcade,
     () -> m_driverController.getRightTriggerAxis(),
     () -> m_driverController.getLeftTriggerAxis(),
-    () -> m_driverController.getLeftX()));
+    () -> m_driverController.getLeftX(),
+    () -> m_driverController.a().getAsBoolean()));
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     // new Trigger(m_exampleSubsystem::exampleCondition)
     //     .onTrue(new ExampleCommand(m_exampleSubsystem));
