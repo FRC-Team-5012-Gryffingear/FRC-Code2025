@@ -49,6 +49,7 @@ public class AlignAprilTag extends Command {
   private static boolean moving_fwd = false;
   private static boolean moving_side = false;
   private static boolean check = false;
+  private static boolean phase1, phase2 = false;
   private static final double conversion = 14.968;
   // private static double snap = 0;
   private static double abs_final = 0;
@@ -79,6 +80,8 @@ public class AlignAprilTag extends Command {
     // xPID.setTolerance(0.1);
     // yPID.setTolerance(0.1);
     // rotPID.setTolerance(3);
+    phase1 = true;
+    phase2 = false;
     check =false;
     abs_final = 0;
     moving_fwd = false;
@@ -146,9 +149,6 @@ public class AlignAprilTag extends Command {
       }
       if(needs_rotate){
 
-         SmartDashboard.putNumber(("GET X"), get_Val_X);
-         SmartDashboard.putNumber("GET Z", get_Val_Z);
-
 
         final_gyro_yaw = Math.toDegrees(april_tag_rotation) + initial_gyro_yaw;
         SmartDashboard.putNumber("Final_gyro_value", final_gyro_yaw+10);
@@ -212,7 +212,10 @@ public class AlignAprilTag extends Command {
      }
 
      SmartDashboard.putBoolean("Boolean forward", moving_fwd);
+
+
      if(moving_fwd){
+
       if(!check){
         swerve.resetPose();
         check = true;
@@ -221,9 +224,15 @@ public class AlignAprilTag extends Command {
       // double speedX = xPID.calculate(real_wheel_rotation, get_Val_Z);
       //SIDE TO SIDE: odometry Y / FOWARD BACK: Odometry X
       // double getNewZ = LimelightHelpers.getCameraPose3d_TargetSpace("").getZ();
-      
 
-      double speedZ = MathUtil.clamp(xPID.calculate((swerve.odometry.getPoseMeters().getX() / conversion)-.78,-get_Val_Z), -0.05, 0.05);
+      // double speedZ = 0;
+      // if(phase1){
+      //   speedZ = MathUtil.clamp(xPID.calculate((swerve.odometry.getPoseMeters().getX() / conversion),-get_Val_Z), -0.05, 0.05);
+      // }else{
+      //   speedZ = MathUtil.clamp(xPID.calculate((swerve.odometry.getPoseMeters().getX() / conversion)-.78,-get_Val_Z), -0.05, 0.05);
+      // }
+
+      double speedZ = MathUtil.clamp(xPID.calculate((swerve.odometry.getPoseMeters().getX() / conversion),-get_Val_Z), -0.05, 0.05);
 
       double store_auto_yaw = MathUtil.clamp(auto_yaw.calculate(swerve.inv_get_Yaw(),abs_final),-.2,.2);
       SmartDashboard.putNumber("Auto yaw value ", store_auto_yaw);
@@ -305,29 +314,58 @@ public class AlignAprilTag extends Command {
       if(Math.abs(speedY) < 0.03){
         speedY = 0;
         moving_side = false;
+        phase1 = false;
+        phase2 = true;
       }
       SmartDashboard.putNumber("SIDE SPEED AFTER", -speedY);
      }
      
+   
+
+    //  if(!phase1 && phase2){
+    //   System.out.println("PASSSEEEEEEEEEEEEEEEEEEEEEEEEDDDDDDDDDDDDDDDDDDDDDD");
+    //   SmartDashboard.putNumber(("GET X"), get_Val_X);
+    //   SmartDashboard.putNumber("GET Z", get_Val_Z);
+    //   needs_rotate = true;
+    //   look_for_new_tag = false;
+    //   check = false;
+    //   initial_gyro_yaw = -10000;
+    //   get_Val_X = 0;
+    //   get_Val_Z = 0;
+    //   // moving_fwd = false;
+    //   // moving_side = false;
+    //   phase2 = false;
+    //  }
 
     //  if(current_id != first_tag_id && LimelightHelpers.getTV("")){ //
     //   look_for_new_tag = false;
     //   final_gyro_yaw = 1000000;     
     // }
+
+     
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    phase1 = true;
+    phase2 = false;
+    check =false;
+    abs_final = 0;
+    moving_fwd = false;
+    moving_side = false;
+    look_for_new_tag = false;
+    final_gyro_yaw = 1000000;
+    swerve.resetHeading();
     april_tag_rotation = -10000;
-    
-    get_Val_Z = 0;
     get_Val_X = 0;
-    initial_gyro_yaw = -10000;
+    get_Val_Z = 0;
     target_seen = false;
-    needs_rotate = false;
+    first_tag_id = -1;
+    current_id = -1;
 
+    swerve.resetPose();
   }
 
   // Returns true when the command should end.
