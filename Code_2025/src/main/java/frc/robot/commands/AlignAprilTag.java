@@ -132,6 +132,8 @@ public class AlignAprilTag extends Command {
       needs_rotate = true;
       SmartDashboard.putNumber("LIVE FEED APRIL TAG", LimelightHelpers.getCameraPose3d_TargetSpace("").getY());
       SmartDashboard.putBoolean("needs rotate", needs_rotate);
+      SmartDashboard.putBoolean("Phase 1", phase1);
+      SmartDashboard.putBoolean("Phase 2", phase2);
 
       if(needs_rotate && initial_gyro_yaw == -10000){ //  && april_tag_rotation == -10000
         // april_tag_rotation = Math.toDegrees(LimelightHelpers.getCameraPose3d_TargetSpace("").getY());
@@ -248,7 +250,7 @@ public class AlignAprilTag extends Command {
 
 
      if(phase2){
-
+     SmartDashboard.putBoolean("Phase 2 IF STATEMENT", phase2);
      SmartDashboard.putBoolean("Boolean forward", moving_fwd);
      if(moving_fwd){
       if(!check){
@@ -263,7 +265,7 @@ public class AlignAprilTag extends Command {
         // abs_final = Math.copySign(Math.abs(final_gyro_yaw-3), final_gyro_yaw);
       }
       else{
-        abs_final_Y = Math.copySign(Math.abs(get_Val_X)+.4, -get_Val_X); // +.17
+        abs_final_Y = Math.copySign(Math.abs(get_Val_X)+(0.4), -get_Val_X); // +.17
         // abs_final = Math.copySign(Math.abs(final_gyro_yaw+10), final_gyro_yaw);
       }
 
@@ -296,12 +298,12 @@ public class AlignAprilTag extends Command {
       SmartDashboard.putNumber("Store auto yaw", -store_auto_yaw);
       
       SmartDashboard.putNumber("X pose robot", swerve.odometry.getPoseMeters().getY() / conversion);
-      SmartDashboard.putNumber("get Value X", -get_Val_X);
+      SmartDashboard.putNumber("get Value X", get_Val_X);
       SmartDashboard.putNumber("SIDE SPEED BEFORE", -speedY);
       
      
 
-      if(Math.abs(speedZ) < 0.01 && Math.abs(speedY) < 0.01){
+      if(Math.abs(speedZ) < 0.03 && Math.abs(speedY) < 0.01){
         speedZ = 0; 
         speedY = 0;
         moving_side = false;
