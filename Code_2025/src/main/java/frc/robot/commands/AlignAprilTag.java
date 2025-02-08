@@ -217,20 +217,65 @@ public class AlignAprilTag extends Command {
       System.out.println("the true falser ");
      }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
      if(phase2){
+
      SmartDashboard.putBoolean("Boolean forward", moving_fwd);
      if(moving_fwd){
       if(!check){
         swerve.resetPose();
         check = true;
       }
-      
-      // double speedX = xPID.calculate(real_wheel_rotation, get_Val_Z);
-      //SIDE TO SIDE: odometry Y / FOWARD BACK: Odometry X
-      // double getNewZ = LimelightHelpers.getCameraPose3d_TargetSpace("").getZ();
-      
+      double abs_final_Y = 0;
 
-      double speedZ = MathUtil.clamp(xPID.calculate((swerve.odometry.getPoseMeters().getX() / conversion)-.78,-get_Val_Z), -0.05, 0.05);
+      if( (-get_Val_X) > 0){
+        // -.02 makes it full front
+        abs_final_Y = Math.copySign((Math.abs(get_Val_X)), -get_Val_X);// -0.02
+        // abs_final = Math.copySign(Math.abs(final_gyro_yaw-3), final_gyro_yaw);
+      }
+      else{
+        abs_final_Y = Math.copySign(Math.abs(get_Val_X)+.4, -get_Val_X); // +.17
+        // abs_final = Math.copySign(Math.abs(final_gyro_yaw+10), final_gyro_yaw);
+      }
+
+      double speedY = MathUtil.clamp(yPID.calculate(((swerve.odometry.getPoseMeters().getY()) / conversion), abs_final_Y) , -.04,.04); // -get_Val_X as setpoint
+
+      SmartDashboard.putNumber("Abs final side move", abs_final_Y);
+
+      
+      //SIDE TO SIDE: odometry Y / FOWARD BACK: Odometry X 
+           
+
+      double speedZ = MathUtil.clamp(xPID.calculate((swerve.odometry.getPoseMeters().getX() / conversion)-.9,-get_Val_Z), -0.05, 0.05);// -.78
 
       double store_auto_yaw = MathUtil.clamp(auto_yaw.calculate(swerve.inv_get_Yaw(),abs_final),-.2,.2);
       SmartDashboard.putNumber("Auto yaw value ", store_auto_yaw);
@@ -248,81 +293,60 @@ public class AlignAprilTag extends Command {
       // swerve.drive3(0,speedZ, 0,false);
       
       
+      SmartDashboard.putNumber("Store auto yaw", -store_auto_yaw);
+      
+      SmartDashboard.putNumber("X pose robot", swerve.odometry.getPoseMeters().getY() / conversion);
+      SmartDashboard.putNumber("get Value X", -get_Val_X);
+      SmartDashboard.putNumber("SIDE SPEED BEFORE", -speedY);
+      
      
 
-      if(Math.abs(speedZ) < 0.03){
+      if(Math.abs(speedZ) < 0.01 && Math.abs(speedY) < 0.01){
         speedZ = 0; 
+        speedY = 0;
+        moving_side = false;
         moving_fwd = false;
+        phase2 = false;
       }
-      
-        
-        
-      
+
       // swerve.drive3(0,-speedY, 0, false);
 
-
-
-      swerve.drive3(-speedZ, 0, -store_auto_yaw, false);
+      swerve.drive3(-speedZ, -speedY, -store_auto_yaw, false);
 
       // swerve.drive3(0, 0, -store_auto_yaw,false);
       SmartDashboard.putNumber("FWD SPEED AFTER", -speedZ);
      }
 
 
-     if(!moving_fwd && moving_side){
+    //  if(!moving_fwd && moving_side){
 
-      double abs_final_Y = 0;
-
-      if( (-get_Val_X) > 0){
-        // -.02 makes it full front
-        abs_final_Y = Math.copySign((Math.abs(get_Val_X) - 0.02), -get_Val_X);
-        // abs_final = Math.copySign(Math.abs(final_gyro_yaw-3), final_gyro_yaw);
-      }
-      else{
-        abs_final_Y = Math.copySign(Math.abs(get_Val_X)+.17, -get_Val_X);
-        // abs_final = Math.copySign(Math.abs(final_gyro_yaw+10), final_gyro_yaw);
-      }
-
+      
       //Side to side movement
       // abs_final_Y = Math.copySign((Math.abs(get_Val_X) - 0.02), -get_Val_X) ;
 
 
-      // double speedY = MathUtil.clamp(yPID.calculate(((swerve.odometry.getPoseMeters().getY()) / conversion), -get_Val_X) , -.04,.04); // abs_final_Y as setpoint
 
-      double speedY = MathUtil.clamp(yPID.calculate(((swerve.odometry.getPoseMeters().getY()) / conversion), abs_final_Y) , -.04,.04); // -get_Val_X as setpoint
+      
+      // double store_auto_yaw = MathUtil.clamp(auto_yaw.calculate(swerve.inv_get_Yaw(),abs_final),-.2,.2);
 
-      SmartDashboard.putNumber("Abs final side move", abs_final_Y);
-
-      double store_auto_yaw = MathUtil.clamp(auto_yaw.calculate(swerve.inv_get_Yaw(),abs_final),-.2,.2);
-
-      if(Math.abs(store_auto_yaw) < 0.01){
-        store_auto_yaw = 0;
-      }
+      // if(Math.abs(store_auto_yaw) < 0.01){
+      //   store_auto_yaw = 0;
+      // }
 
       // swerve.drive3(0, -speedY, 0, false);
 
-      SmartDashboard.putNumber("Store auto yaw", -store_auto_yaw);
-      
-      SmartDashboard.putNumber("X pose robot", swerve.odometry.getPoseMeters().getY() / conversion);
-      SmartDashboard.putNumber("get Value X", -get_Val_X);
-      SmartDashboard.putNumber("SIDE SPEED BEFORE", -speedY);
 
 
-      if(Math.abs(speedY) < 0.03){
-        speedY = 0;
-        moving_side = false;
-        phase2 = false;
-      }
-      swerve.drive3(0, -speedY, -store_auto_yaw, false);
+      // if(Math.abs(speedY) < 0.03){
+      //   speedY = 0;
+      //   moving_side = false;
+      //   phase2 = false;
+      // }
+      // swerve.drive3(0, -speedY, -store_auto_yaw, false);
 
-      SmartDashboard.putNumber("SIDE SPEED AFTER", -speedY);
-     }
-     
-
-    //  if(current_id != first_tag_id && LimelightHelpers.getTV("")){ //
-    //   look_for_new_tag = false;
-    //   final_gyro_yaw = 1000000;     
-    // }
+      // SmartDashboard.putNumber("SIDE SPEED AFTER", -speedY);
+    //  }
+    
      }
     }
   }
