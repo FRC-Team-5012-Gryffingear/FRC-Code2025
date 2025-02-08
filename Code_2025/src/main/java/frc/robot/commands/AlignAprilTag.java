@@ -169,18 +169,19 @@ public class AlignAprilTag extends Command {
 
         //Idk if speed and speedY should be positive or negative...
         double speed = MathUtil.clamp(rotPID.calculate(april_tag_rotation, 0), -.5, .5);
-        double speedY = MathUtil.clamp(yPID.calculate(detectedID.getX(), 0) , -.04,.04); // -get_Val_X as setpoint
+        double speedY = MathUtil.clamp(yPID.calculate(LimelightHelpers.getCameraPose3d_TargetSpace("").getX(),0) , -.04,.04); // -get_Val_X as setpoint
         SmartDashboard.putNumber("Swerve inside", swerve.inv_get_Yaw());
         SmartDashboard.putNumber("speeedd BEFORE", speed);
         SmartDashboard.putNumber("SIDE SPEED BEFORE", -speedY);
 
 
-        if(Math.abs(speed) < 0.05 && Math.abs(speedY) <0.03){ // Math.abs(final_gyro_yaw - swerve.getYaw()) < 0.5
+        if(Math.abs(speed) < 0.05 && Math.abs(speedY) <0.03 && Math.abs(speed) > 0 && Math.abs(speedY) > 0){ // Math.abs(final_gyro_yaw - swerve.getYaw()) < 0.5
           speed = 0;
           needs_rotate = false;
           look_for_new_tag = true;
           speedY = 0;
 
+          System.out.println("WAAAAAA");
 
           SmartDashboard.putNumber("speeedd AFTER INNNN", speed);
           SmartDashboard.putNumber("SIDE SPEED AFTER", -speedY);
