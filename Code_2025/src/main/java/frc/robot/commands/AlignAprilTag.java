@@ -108,6 +108,7 @@ public class AlignAprilTag extends Command {
     // SmartDashboard.putNumber("Swerve movement X value", real_wheel_rotation);
 
     Pose3d detectedID = limelight.getAprilTagValues();
+    SmartDashboard.putNumber("detectedID", detectedID.getX());
 
     SmartDashboard.putNumber("REAL TIME APRIL TAG", Math.toDegrees(detectedID.getRotation().getY()));
 
@@ -185,12 +186,12 @@ public class AlignAprilTag extends Command {
           SmartDashboard.putNumber("SIDE SPEED AFTER", -speedY);
           
 
-          swerve.drive3(0, -speedY, -speed, false);
+          // swerve.drive3(0, -speedY, -speed, false);
           // snap = swerve.getYaw();
           break;
         }
 
-        swerve.drive3(0, -speedY, -speed, false);
+        // swerve.drive3(0, -speedY, -speed, false);
 
         SmartDashboard.putNumber("speeedd AFTER", -speed);
       }
@@ -265,7 +266,7 @@ public class AlignAprilTag extends Command {
 
 
 
-      swerve.drive3(-speedZ, 0, -store_auto_yaw, false);
+      // swerve.drive3(-speedZ, 0, -store_auto_yaw, false);
 
       // swerve.drive3(0, 0, -store_auto_yaw,false);
       SmartDashboard.putNumber("FWD SPEED AFTER", -speedZ);
