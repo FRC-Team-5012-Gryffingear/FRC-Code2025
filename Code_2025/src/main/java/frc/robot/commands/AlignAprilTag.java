@@ -164,7 +164,7 @@ public class AlignAprilTag extends Command {
 
         SmartDashboard.putNumber("Abs final val", abs_final);
 
-        double speed = MathUtil.clamp(rotPID.calculate(swerve.inv_get_Yaw(),abs_final), -.5, .5);
+        double speed = MathUtil.clamp(rotPID.calculate(swerve.inv_get_Yaw(),abs_final), -.4, .4);
         SmartDashboard.putNumber("Swerve inside", swerve.inv_get_Yaw());
         SmartDashboard.putNumber("speeedd BEFORE", speed);
         
