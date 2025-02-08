@@ -48,7 +48,7 @@ public class AlignAprilTag extends Command {
   private static boolean look_for_new_tag = true;
   private static boolean moving_fwd = false;
   private static boolean moving_side = false;
-  private static boolean check = false;
+  private static boolean check, phase1,phase2 = false;
   private static final double conversion = 14.968;
   // private static double snap = 0;
   private static double abs_final = 0;
@@ -92,6 +92,8 @@ public class AlignAprilTag extends Command {
     target_seen = false;
     first_tag_id = -1;
     current_id = -1;
+    phase1 = true;
+    phase2 = false;
 
     swerve.resetPose();
     
@@ -123,7 +125,9 @@ public class AlignAprilTag extends Command {
 
     // if(Math.round(swerve.inv_get_Yaw()) == Math.round(detectedID.getRotation().getY())){    }
       // SmartDashboard.putBoolean(, check)
-     while(!look_for_new_tag){ // && Math.abs(final_gyro_yaw - swerve.getYaw()) > 0.1 
+    if(phase1){
+
+    
       // LimelightHelpers.setLEDMode_ForceOff("");
       needs_rotate = true;
       SmartDashboard.putNumber("LIVE FEED APRIL TAG", LimelightHelpers.getCameraPose3d_TargetSpace("").getY());
@@ -178,10 +182,11 @@ public class AlignAprilTag extends Command {
 
           // swerve.drive3(0, 0, -speed, false);
           // snap = swerve.getYaw();
-          break;
+          phase1 = false;
+          phase2 = true;
         }
 
-        // swerve.drive3(0, 0, -speed, false);
+        swerve.drive3(0, 0, -speed, false);
 
         SmartDashboard.putNumber("speeedd AFTER", -speed);
       }
@@ -190,7 +195,8 @@ public class AlignAprilTag extends Command {
       SmartDashboard.putNumber("Init gyro yaw", initial_gyro_yaw);
       System.out.println("INSIDE");
 
-     }
+    }
+     // End of OG While Loop
      
 
      System.out.println("OUTSIDE");
@@ -211,6 +217,7 @@ public class AlignAprilTag extends Command {
       System.out.println("the true falser ");
      }
 
+     if(phase2){
      SmartDashboard.putBoolean("Boolean forward", moving_fwd);
      if(moving_fwd){
       if(!check){
@@ -255,7 +262,7 @@ public class AlignAprilTag extends Command {
 
 
 
-      // swerve.drive3(-speedZ, 0, -store_auto_yaw, false);
+      swerve.drive3(-speedZ, 0, -store_auto_yaw, false);
 
       // swerve.drive3(0, 0, -store_auto_yaw,false);
       SmartDashboard.putNumber("FWD SPEED AFTER", -speedZ);
@@ -293,7 +300,6 @@ public class AlignAprilTag extends Command {
       }
 
       // swerve.drive3(0, -speedY, 0, false);
-      // swerve.drive3(0, -speedY, -store_auto_yaw, false);
 
       SmartDashboard.putNumber("Store auto yaw", -store_auto_yaw);
       
@@ -305,7 +311,10 @@ public class AlignAprilTag extends Command {
       if(Math.abs(speedY) < 0.03){
         speedY = 0;
         moving_side = false;
+        phase2 = false;
       }
+      swerve.drive3(0, -speedY, -store_auto_yaw, false);
+
       SmartDashboard.putNumber("SIDE SPEED AFTER", -speedY);
      }
      
@@ -314,6 +323,7 @@ public class AlignAprilTag extends Command {
     //   look_for_new_tag = false;
     //   final_gyro_yaw = 1000000;     
     // }
+     }
     }
   }
 
@@ -327,6 +337,8 @@ public class AlignAprilTag extends Command {
     initial_gyro_yaw = -10000;
     target_seen = false;
     needs_rotate = false;
+    phase1 = false;
+    phase2 = false;
 
   }
 
