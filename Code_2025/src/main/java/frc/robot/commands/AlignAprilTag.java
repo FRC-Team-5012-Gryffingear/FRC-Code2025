@@ -48,7 +48,7 @@ public class AlignAprilTag extends Command {
   private static boolean look_for_new_tag = true;
   private static boolean moving_fwd = false;
   private static boolean moving_side = false;
-  private static boolean check, phase1,phase2 = false;
+  private boolean check, phase1,phase2 = false;
   private static final double conversion = 14.968;
   // private static double snap = 0;
   private static double abs_final = 0;
@@ -106,6 +106,8 @@ public class AlignAprilTag extends Command {
     System.out.println("WE ARE EXECUTING");
 
     SmartDashboard.putNumber("REAL TIME SWERVE YAW", swerve.getYaw());
+    SmartDashboard.putBoolean("Phase 1", phase1);
+    SmartDashboard.putBoolean("Phase 2", phase2);
 
     // SmartDashboard.putNumber("Swerve movement X value", real_wheel_rotation);
 
@@ -132,8 +134,6 @@ public class AlignAprilTag extends Command {
       needs_rotate = true;
       SmartDashboard.putNumber("LIVE FEED APRIL TAG", LimelightHelpers.getCameraPose3d_TargetSpace("").getY());
       SmartDashboard.putBoolean("needs rotate", needs_rotate);
-      SmartDashboard.putBoolean("Phase 1", phase1);
-      SmartDashboard.putBoolean("Phase 2", phase2);
 
       if(needs_rotate && initial_gyro_yaw == -10000){ //  && april_tag_rotation == -10000
         // april_tag_rotation = Math.toDegrees(LimelightHelpers.getCameraPose3d_TargetSpace("").getY());
@@ -250,6 +250,8 @@ public class AlignAprilTag extends Command {
 
 
      if(phase2){
+      
+      System.out.println("WORKING PHASE 2");
      SmartDashboard.putBoolean("Phase 2 IF STATEMENT", phase2);
      SmartDashboard.putBoolean("Boolean forward", moving_fwd);
      if(moving_fwd){
@@ -258,17 +260,18 @@ public class AlignAprilTag extends Command {
         check = true;
       }
       double abs_final_Y = 0;
+      
 
       if( (-get_Val_X) > 0){
         // -.02 makes it full front
-        abs_final_Y = Math.copySign((Math.abs(get_Val_X)), -get_Val_X);// -0.02
+        abs_final_Y = Math.copySign((Math.abs(get_Val_X) + (0.196 / get_Val_X)), -get_Val_X);// -0.02
         // abs_final = Math.copySign(Math.abs(final_gyro_yaw-3), final_gyro_yaw);
       }
       else{
-        abs_final_Y = Math.copySign(Math.abs(get_Val_X)+(0.4), -get_Val_X); // +.17
+        abs_final_Y = Math.copySign(Math.abs(get_Val_X) + (0.549 / get_Val_X ), -get_Val_X); // +.17
         // abs_final = Math.copySign(Math.abs(final_gyro_yaw+10), final_gyro_yaw);
       }
-
+    
       double speedY = MathUtil.clamp(yPID.calculate(((swerve.odometry.getPoseMeters().getY()) / conversion), abs_final_Y) , -.04,.04); // -get_Val_X as setpoint
 
       SmartDashboard.putNumber("Abs final side move", abs_final_Y);
@@ -277,7 +280,7 @@ public class AlignAprilTag extends Command {
       //SIDE TO SIDE: odometry Y / FOWARD BACK: Odometry X 
            
 
-      double speedZ = MathUtil.clamp(xPID.calculate((swerve.odometry.getPoseMeters().getX() / conversion)-.9,-get_Val_Z), -0.05, 0.05);// -.78
+      double speedZ = MathUtil.clamp(xPID.calculate((swerve.odometry.getPoseMeters().getX() / conversion)+(1.1 * get_Val_Z / 1.79),-get_Val_Z), -0.05, 0.05);// -.78
 
       double store_auto_yaw = MathUtil.clamp(auto_yaw.calculate(swerve.inv_get_Yaw(),abs_final),-.2,.2);
       SmartDashboard.putNumber("Auto yaw value ", store_auto_yaw);
@@ -371,6 +374,6 @@ public class AlignAprilTag extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return !phase1 && !phase2;
   }
 }
