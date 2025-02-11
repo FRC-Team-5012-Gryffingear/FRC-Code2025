@@ -135,15 +135,16 @@ public class AlignAprilTag extends Command {
         // get_Val_X = detectedID.getX();
         get_Val_Z = detectedID.getZ();
         get_Val_X = detectedID.getX();
-        april_tag_rotation = detectedID.getRotation().getY();
+        // april_tag_rotation = detectedID.getRotation().getY();
 
         first_tag_id = LimelightHelpers.getFiducialID("");
         // final_gyro_yaw = Math.toDegrees(april_tag_rotation) + initial_gyro_yaw;
         
 
         
-        // april_tag_rotation = -Math.toDegrees(LimelightHelpers.getCameraPose3d_TargetSpace("").getY());
+        // april_tag_rotation = -Math.toDegrees(LimelightHelpers.ge   tCameraPose3d_TargetSpace("").getY());
       }
+      april_tag_rotation = detectedID.getRotation().getY();
       if(needs_rotate){
 
          SmartDashboard.putNumber(("GET X"), get_Val_X);
@@ -316,7 +317,7 @@ public class AlignAprilTag extends Command {
     // }
     }
   }
-
+ 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
