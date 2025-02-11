@@ -51,6 +51,8 @@ public final class Constants {
   public static final double BackLeftOffset = -0.26196890625;
   public static final double BackRightOffset = -0.382080078125;
 
+  public static final double elevOffset = 0;
+
   // True inverses motors
   public static final boolean FrontLeftInv = false;
   public static final boolean FrontRightInv = false;

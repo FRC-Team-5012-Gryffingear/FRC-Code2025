@@ -7,9 +7,13 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AlignAprilTag;
 import frc.robot.commands.Autos;
+import frc.robot.commands.ElevatorCom;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.SwerveCom;
+import frc.robot.commands.intakeCom;
+import frc.robot.subsystems.ElevatorSubsys;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.IntakeSubsys;
 import frc.robot.subsystems.SwerveSubsys;
 import frc.robot.subsystems.limeyImproved;
 import edu.wpi.first.wpilibj.XboxController;
@@ -30,6 +34,8 @@ public class RobotContainer {
 
   private final limeyImproved limeI = new limeyImproved();
   private final SwerveSubsys swerve = new SwerveSubsys();
+  private final IntakeSubsys intake = new IntakeSubsys();
+  private final ElevatorSubsys elev = new ElevatorSubsys();
 
   private final AlignAprilTag tagMove = new AlignAprilTag(swerve, limeI);
 
@@ -37,6 +43,7 @@ public class RobotContainer {
 
   // private final limeyImproved limeI = new limeyImproved();
   private final CommandXboxController driverController = new CommandXboxController(OperatorConstants.DriverContrlPort);
+  private final CommandXboxController operatorController = new CommandXboxController(OperatorConstants.OperatorContrlPort);
 
 
 
@@ -52,26 +59,29 @@ public class RobotContainer {
       driverController,
       () -> driverController.a().getAsBoolean()));
 
+    //  intake.setDefaultCommand(new intakeCom(intake, 
+    //  () -> operatorController.leftBumper().getAsBoolean(), 
+    //  () -> operatorController.rightBumper().getAsBoolean()));
+
     configureBindings();
   }
 
-  /**
-   * Use this method to define your trigger->command mappings. Triggers can be created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
-   * predicate, or via the named factories in {@link
-   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
-   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
-   * joysticks}.
-   */
+ 
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     // new Trigger(m_exampleSubsystem::exampleCondition)
     //     .toggleOnTrue(new ExampleCommand(m_exampleSubsystem));
-
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
     // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+
+
+    
+    // operatorController.leftStick().toggleOnTrue(new ElevatorCom(elev, 0)); // default position
+    // operatorController.a().toggleOnTrue(new ElevatorCom(elev, 0)); // 1st level
+    // operatorController.b().toggleOnTrue(new ElevatorCom(elev, 0)); // 2nd level
+    // operatorController.x().toggleOnTrue(new ElevatorCom(elev, 0)); // 3rd level
+    // operatorController.y().toggleOnTrue(new ElevatorCom(elev, 0)); // Human player station
   }
 
   /**
