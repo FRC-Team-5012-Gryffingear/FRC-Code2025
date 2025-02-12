@@ -71,6 +71,25 @@ public class SwerveCom extends Command {
     if(yaw.getAsBoolean()){
       swerve.resetHeading();
     }
+    /* This is assuming we are storing data first then moving 
+
+    if(button pressed/held){
+        if(Close tag being read){
+          Collect necessary data like Z, X, and rot once. 
+
+          speed rotation = PIDrot.calculate(currentPose/conversion, distancePose)
+          speed X = PIDZ.calculate(currentPoseZ/conversion, distancePoseZ)
+          speed Y = PIDY.calculate(currentPoseX/conversion, distnacePoseX)
+
+          swerve.drive3(Y,X,rotation,false);
+
+          
+
+        }
+
+    }
+     
+     */
     
     swerve.drive3(xSpeed, -ySpeed, -rotateSpeed*1.5, true);
     SmartDashboard.putNumber("getXXValue", LimelightHelpers.getCameraPose3d_TargetSpace("").getX());
