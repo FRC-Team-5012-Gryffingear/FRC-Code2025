@@ -9,14 +9,15 @@ import frc.robot.subsystems.ArcadeSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */
 public class AlignAprilTag extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ArcadeSubsystem arcade;
-  private final PIDController forwardPID = new PIDController(0.2, 0, 0);
-  private final PIDController turnPID = new PIDController(0.1, 0, 0);
+  private final PIDController turnPID = new PIDController(0.2, 0, 0);
+  private final Timer timer = new Timer();
   /**
    * Creates a new AlignAprilTag.
    *
@@ -31,12 +32,19 @@ public class AlignAprilTag extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    timer.reset();
+    timer.start();
+    arcade.resetYaw();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
+    if(timer.get() < 5){
+      double power = 0.2;
+      double turn = turnPID.calculate(arcade.getYaw(), 0);
+      arcade.moveAndTurn(power, turn);
+    }
   }
 
   // Called once the command ends or is interrupted.

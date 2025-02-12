@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.AlignAprilTag;
 import frc.robot.commands.ArcadeCommand;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
@@ -24,6 +25,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final ArcadeSubsystem arcade = new ArcadeSubsystem();
+  private final AlignAprilTag auto = new AlignAprilTag(arcade);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
@@ -49,7 +51,8 @@ public class RobotContainer {
     () -> m_driverController.getRightTriggerAxis(),
     () -> m_driverController.getLeftTriggerAxis(),
     () -> m_driverController.getLeftX(),
-    () -> m_driverController.a().getAsBoolean()));
+    () -> m_driverController.a().getAsBoolean(),
+    () -> m_driverController.x().getAsBoolean()));
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     // new Trigger(m_exampleSubsystem::exampleCondition)
     //     .onTrue(new ExampleCommand(m_exampleSubsystem));
@@ -66,7 +69,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return null;
+    return auto;
     // Autos.exampleAuto(m_exampleSubsystem);
   }
 }
