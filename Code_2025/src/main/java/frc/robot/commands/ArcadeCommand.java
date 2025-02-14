@@ -10,6 +10,8 @@ import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.util.MsvcRuntimeException;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */
@@ -18,11 +20,12 @@ public class ArcadeCommand extends Command {
   private final ArcadeSubsystem m_subsystem;
   private final DoubleSupplier RT, LT, TT;
   private final PIDController rotPID = new PIDController(0.1, 0, 0);
+  private double storeYawValue = 0;
   /*BooleanSupplier here
    * and add it to the system/function
    */
   private final BooleanSupplier AT, CorrectionButton;
-  private boolean firstTimePressed = true;
+  private boolean holdingDown = true;
 
   /**
    * Creates a new ArcadeCommand.
@@ -44,25 +47,30 @@ public class ArcadeCommand extends Command {
   @Override
   public void initialize() {
     m_subsystem.resetYaw();
+    storeYawValue = 0;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.moveAndTurn(RT.getAsDouble() - LT.getAsDouble(), TT.getAsDouble());
-    if(CorrectionButton.getAsBoolean() && !firstTimePressed){
-      firstTimePressed = true;
-      m_subsystem.resetYaw();
-    }
-    if(!CorrectionButton.getAsBoolean()){
-      firstTimePressed = false;
-    }
-    if(CorrectionButton.getAsBoolean()){
-      m_subsystem.moveAndTurn(0, rotPID.calculate(m_subsystem.getYaw(), 0));
-    }
+    SmartDashboard.putNumber("Volt", m_subsystem.getVoltage());
+    //If the correction button is pressed and it has not been held down yet, then it is set as held down / resetting the yaw to 0.
     
-    
+    // if(Math.abs(TT.getAsDouble()) < 0.1){
+    //   PIDController control = new PIDController(0.01, 0, 0);
+    //   double speed = control.calculate(m_subsystem.getYaw(), storeYawValue);
+    //   m_subsystem.moveAndTurn(RT.getAsDouble()-LT.getAsDouble(), speed);
+
+    // }else{
+    //   m_subsystem.moveAndTurn(RT.getAsDouble()-LT.getAsDouble(), TT.getAsDouble());
+
+    //   storeYawValue = m_subsystem.getYaw();
+    // }
+    // m_subsystem.moveAndTurn(RT.getAsDouble()-LT.getAsDouble(), TT.getAsDouble());
+
     m_subsystem.coralouttake(AT.getAsBoolean());
+    SmartDashboard.putNumber("Stored yaw", storeYawValue);
+    SmartDashboard.putNumber("Current yaw", m_subsystem.getYaw());
   }
 
   // Called once the command ends or is interrupted.

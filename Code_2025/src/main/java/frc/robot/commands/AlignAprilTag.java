@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class AlignAprilTag extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ArcadeSubsystem arcade;
-  private final PIDController turnPID = new PIDController(0.2, 0, 0);
+  private final PIDController turnPID = new PIDController(0.01, 0, 0);
   private final Timer timer = new Timer();
   /**
    * Creates a new AlignAprilTag.

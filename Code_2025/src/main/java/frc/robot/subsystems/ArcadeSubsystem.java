@@ -55,6 +55,9 @@ public class ArcadeSubsystem extends SubsystemBase {
   }
 
 
+  public double getVoltage(){
+    return FLM.getBusVoltage();
+  }
 
   public void moveAndTurn(double power, double turn){
     FLM.set(ControlMode.PercentOutput, (power + turn));
@@ -79,7 +82,7 @@ public class ArcadeSubsystem extends SubsystemBase {
 
   public double getYaw(){
 
-   return pigeon.getYaw().getValueAsDouble() % 360;
+   return -pigeon.getYaw().getValueAsDouble() % 360;
   }
 
  
