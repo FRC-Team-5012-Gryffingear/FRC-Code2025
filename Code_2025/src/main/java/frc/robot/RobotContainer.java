@@ -59,6 +59,11 @@ public class RobotContainer {
       driverController,
       () -> driverController.a().getAsBoolean()));
 
+      //Testing uses only, temporary
+      elev.setDefaultCommand(new ElevatorCom(elev,
+      0,
+      operatorController));
+      
     //  intake.setDefaultCommand(new intakeCom(intake, 
     //  () -> operatorController.leftBumper().getAsBoolean(), 
     //  () -> operatorController.rightBumper().getAsBoolean()));
