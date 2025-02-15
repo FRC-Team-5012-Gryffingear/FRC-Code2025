@@ -60,10 +60,10 @@ public class RobotContainer {
       () -> driverController.a().getAsBoolean()));
 
       //Testing uses only, temporary
-      elev.setDefaultCommand(new ElevatorCom(elev,
-      0,
-      operatorController));
-      
+      // elev.setDefaultCommand(new ElevatorCom(elev,
+      // 0,
+      // operatorController));
+
     //  intake.setDefaultCommand(new intakeCom(intake, 
     //  () -> operatorController.leftBumper().getAsBoolean(), 
     //  () -> operatorController.rightBumper().getAsBoolean()));
@@ -82,10 +82,10 @@ public class RobotContainer {
 
 
     
-    // operatorController.leftStick().toggleOnTrue(new ElevatorCom(elev, 0)); // default position
-    // operatorController.a().toggleOnTrue(new ElevatorCom(elev, 0)); // 1st level
-    // operatorController.b().toggleOnTrue(new ElevatorCom(elev, 0)); // 2nd level
-    // operatorController.x().toggleOnTrue(new ElevatorCom(elev, 0)); // 3rd level
+    // operatorController.leftStick().toggleOnTrue(new ElevatorCom(elev, 0)); //1st default position
+    // operatorController.a().toggleOnTrue(new ElevatorCom(elev, 0)); // 2st level
+    operatorController.b().toggleOnTrue(new ElevatorCom(elev, 4.8)); // 3nd level
+    // operatorController.x().toggleOnTrue(new ElevatorCom(elev, 0)); // 4rd level
     // operatorController.y().toggleOnTrue(new ElevatorCom(elev, 0)); // Human player station
   }
 

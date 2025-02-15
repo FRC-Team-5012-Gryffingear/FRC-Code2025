@@ -51,7 +51,7 @@ public final class Constants {
   public static final double BackLeftOffset = -0.26196890625;
   public static final double BackRightOffset = -0.382080078125;
 
-  public static final double elevOffset = 0;
+  public static final double elevOffset = -0.30224609375;
 
   // True inverses motors
   public static final boolean FrontLeftInv = false;
@@ -61,7 +61,8 @@ public final class Constants {
 
   public static final int PigeonID = 20;
 
-  public static final int elev_Encoder = 10;
+  public static final int elev_Encoder = 14;
+  public static final int elev_Motor = 13;
 
   // Gives position of modules on a 2d plane
   public static final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(

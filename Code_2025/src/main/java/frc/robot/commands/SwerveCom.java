@@ -31,6 +31,8 @@ public class SwerveCom extends Command {
   private final SwerveSubsys swerve;
  private final CommandXboxController controller2;
  private final BooleanSupplier yaw;
+
+ //Auto
  private double initial_gyro_yaw, get_Val_X, get_Val_Z, april_tag_rotation, abs_final_Rot;
  private boolean phase1, phase2, seenTag = false;
  private final PIDController xPID = new PIDController(0.1, 0, 0.0);
@@ -85,7 +87,7 @@ public class SwerveCom extends Command {
 
 
     //swerve.drive3(xSpeed, -ySpeed, -rotateSpeed*1.5, true);
-
+    SmartDashboard.putBoolean("SeenTag", seenTag);
     if(controller2.b().getAsBoolean() && seenTag){
       SmartDashboard.putBoolean("TelePhase1", phase1);
       SmartDashboard.putBoolean("TelePhase2", phase2);
@@ -99,8 +101,10 @@ public class SwerveCom extends Command {
     } else{
       if(LimelightHelpers.getTV("")){
         seenTag = true;
-        resetValues();
+        updateAprilTagValues();
+        resetPhases();
       } else{
+        resetPhases();
         seenTag = false;
       }
       swerve.drive3(xSpeed, -ySpeed, -rotateSpeed*1.5, true);
@@ -188,9 +192,7 @@ public class SwerveCom extends Command {
       swerve.drive3(-speedZ, -speedY, -store_auto_yaw, false);
   }
 
-  public void resetValues(){
-    phase1 = true;
-    phase2 = false;
+  public void updateAprilTagValues(){
     Pose3d detectedID = LimelightHelpers.getCameraPose3d_TargetSpace("");
     initial_gyro_yaw = swerve.getYaw();
     get_Val_Z = detectedID.getZ();
@@ -201,6 +203,11 @@ public class SwerveCom extends Command {
     SmartDashboard.putNumber("LastSeenZ", get_Val_Z);
     SmartDashboard.putNumber("LastSeenRot", april_tag_rotation);
     SmartDashboard.putNumber("initialGyroYaw", initial_gyro_yaw);
+  }
+
+  public void resetPhases(){
+    phase1 = true;
+    phase2 = false;
   }
 
   // Called once the command ends or is interrupted.

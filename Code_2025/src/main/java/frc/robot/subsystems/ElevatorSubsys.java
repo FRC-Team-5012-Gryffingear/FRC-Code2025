@@ -12,6 +12,7 @@ import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -19,8 +20,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class ElevatorSubsys extends SubsystemBase {
-    private TalonSRX elevatorTalon = new TalonSRX(012012);
-    private CANcoder elevEncoder = new CANcoder(2121211);
+    private TalonSRX elevatorTalon = new TalonSRX(Constants.elev_Motor);
+    private CANcoder elevEncoder = new CANcoder(Constants.elev_Encoder);
     private double offset = Constants.elevOffset;
 
 
@@ -42,15 +43,24 @@ public class ElevatorSubsys extends SubsystemBase {
     //Gather data and determine what value and unit we are using to determine our movement
     public void elevMovement(double goal){ // each call of this function will have a different goal value
         double currentPosition = elevEncoder.getPosition().getValueAsDouble();
-        double percent = elevHold.calculate(currentPosition,goal);
+        double percent = MathUtil.clamp(elevHold.calculate(currentPosition,goal),-1,1);
+        if(Math.abs(currentPosition) > 9.78){
+          percent = 0;
+        }
         
         elevatorTalon.set(ControlMode.PercentOutput, percent);
     }
 
     public void elevUpAndDown(double power){
+      if(elevEncoder.getPosition().getValueAsDouble() > 9.78 && power > 0){
+        power = 0;
+      }
+      else if(elevEncoder.getPosition().getValueAsDouble() < 0 && power < 0){
+        power = 0;
+      }
       elevatorTalon.set(ControlMode.PercentOutput, power);
     }
-
+    
 
 
     public void resetEncoderPos(){

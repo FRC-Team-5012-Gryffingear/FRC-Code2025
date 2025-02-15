@@ -17,7 +17,7 @@ public class ElevatorCom extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ElevatorSubsys elev;
   private final double goal;
-  private final CommandXboxController controller2;
+  // private final CommandXboxController controller2;
 
   
 
@@ -26,10 +26,10 @@ public class ElevatorCom extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ElevatorCom(ElevatorSubsys subsystem,double goal, CommandXboxController controller) {
+  public ElevatorCom(ElevatorSubsys subsystem,double goal) {
     elev = subsystem;
     this.goal = goal;
-    controller2 = controller;
+    // controller2 = controller;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
@@ -43,8 +43,8 @@ public class ElevatorCom extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // elev.elevMovement(goal);
-    elev.elevUpAndDown(controller2.getRightTriggerAxis() - controller2.getLeftTriggerAxis());
+    elev.elevMovement(goal);
+    // elev.elevUpAndDown(controller2.getRightTriggerAxis() - controller2.getLeftTriggerAxis());
   }
 
   // Called once the command ends or is interrupted.
