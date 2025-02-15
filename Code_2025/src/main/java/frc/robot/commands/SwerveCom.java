@@ -19,6 +19,7 @@ import com.revrobotics.spark.SparkBase.ControlType;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -30,6 +31,12 @@ public class SwerveCom extends Command {
   private final SwerveSubsys swerve;
  private final CommandXboxController controller2;
  private final BooleanSupplier yaw;
+ private double initial_gyro_yaw, get_Val_X, get_Val_Z, april_tag_rotation, abs_final_Rot;
+ private boolean phase1, phase2, seenTag = false;
+ private final PIDController xPID = new PIDController(0.1, 0, 0.0);
+ private final PIDController yPID = new PIDController(0.6, 0, 0.0);
+ private final PIDController rotPID = new PIDController(0.01, 0, 0.0);
+ private final PIDController auto_yaw = new PIDController(.01, 0, 0.0);
   // private final BooleanSupplier yaw;
 
   // private final BooleanSupplier limeLock;
@@ -57,6 +64,9 @@ public class SwerveCom extends Command {
     //vision.startThread();
     swerve.resetPose();
     swerve.resetHeading();
+    phase1 = false;
+    phase2 = false;
+    seenTag = false;
     
 
   }
@@ -71,38 +81,139 @@ public class SwerveCom extends Command {
     if(yaw.getAsBoolean()){
       swerve.resetHeading();
     }
+
+
+
+    //swerve.drive3(xSpeed, -ySpeed, -rotateSpeed*1.5, true);
+
+    if(controller2.b().getAsBoolean() && seenTag){
+      SmartDashboard.putBoolean("TelePhase1", phase1);
+      SmartDashboard.putBoolean("TelePhase2", phase2);
+      if(phase1){
+        phase1();
+      }
+      if(phase2){
+        phase2();
+      }
+    
+    } else{
+      if(LimelightHelpers.getTV("")){
+        seenTag = true;
+        resetValues();
+      } else{
+        seenTag = false;
+      }
+      swerve.drive3(xSpeed, -ySpeed, -rotateSpeed*1.5, true);
+    }
+
     /* This is assuming we are storing data first then moving 
-
     if(button pressed/held){
-        if(Close tag being read){
-          Collect necessary data like Z, X, and rot once. 
-
-          speed rotation = PIDrot.calculate(currentPose/conversion, distancePose)
-          speed X = PIDZ.calculate(currentPoseZ/conversion, distancePoseZ)
-          speed Y = PIDY.calculate(currentPoseX/conversion, distnacePoseX)
-
-          swerve.drive3(Y,X,rotation,false);
-
-          
-
+       phase1();
+       phase2();
+      } else{
+        resetValues();
+        swerve.drive(inputs); 
         }
 
-    }
-     
+        public void phase1(){
+        // Copy Code here
+        }
+
+        public void phase2(){
+        // Copy Code here
+        }
+
+        public resetValues(){
+        //Copy Code here
+        }
      */
-    
-    swerve.drive3(xSpeed, -ySpeed, -rotateSpeed*1.5, true);
+
+
+
+
     SmartDashboard.putNumber("getXXValue", LimelightHelpers.getCameraPose3d_TargetSpace("").getX());
     SmartDashboard.putNumber("side value", (swerve.odometry.getPoseMeters().getY()/14.968) -.2);
     SmartDashboard.putNumber("fwd value", (swerve.odometry.getPoseMeters().getX()/14.968) -.2);
+  }
+
+
+  public void phase1(){
+    double final_gyro_yaw = Math.toDegrees(april_tag_rotation) + initial_gyro_yaw;
+    SmartDashboard.putNumber("TeleFinalGyro", final_gyro_yaw);
+    if(april_tag_rotation > 0){
+      abs_final_Rot = Math.copySign(Math.abs(final_gyro_yaw-3), final_gyro_yaw);
+    }
+    else{
+      abs_final_Rot = Math.copySign(Math.abs(final_gyro_yaw+10), final_gyro_yaw);
+    }
+    double speed = MathUtil.clamp(rotPID.calculate(swerve.inv_get_Yaw(),abs_final_Rot), -.5, .5);
+    SmartDashboard.putNumber("TeleRotSpeedPhase1", speed);
+    if(Math.abs(speed) < 0.05){
+      speed = 0;
+      phase1 = false;
+      phase2 = true;
+      swerve.resetPose();
+    }    
+    swerve.drive3(0, 0, -speed, false);
+  }
+
+  public void phase2(){
+    double conversion = 14.968;
+    double abs_final_Y = 0;
+      
+//may not work
+      if( (-get_Val_X) > 0){
+       abs_final_Y = Math.copySign((Math.abs(get_Val_X) + (0.196 / get_Val_X)), -get_Val_X);
+      }
+      else{
+        abs_final_Y = Math.copySign(Math.abs(get_Val_X) + (0.549 / get_Val_X ), -get_Val_X);
+      }
+
+      double speedY = MathUtil.clamp(yPID.calculate(((swerve.odometry.getPoseMeters().getY()) / conversion), abs_final_Y) , -.04,.04); // -get_Val_X as setpoint
+      double speedZ = MathUtil.clamp(xPID.calculate((swerve.odometry.getPoseMeters().getX() / conversion)+(1.1 * get_Val_Z / 1.79),-get_Val_Z), -0.05, 0.05);// -.78
+      double store_auto_yaw = MathUtil.clamp(auto_yaw.calculate(swerve.inv_get_Yaw(),abs_final_Rot),-.2,.2);
+
+      SmartDashboard.putNumber("TeleSideSpeedPhase2", speedY);
+      SmartDashboard.putNumber("TeleForwardSpeedPhase2", speedZ);
+      SmartDashboard.putNumber("TeleRotSpeedPhase2", store_auto_yaw);
+
+      if(Math.abs(speedZ) < 0.03 && Math.abs(speedY) < 0.01){
+        speedZ = 0; 
+        speedY = 0;
+        phase2 = false;
+      }
+
+      // swerve.drive3(0,-speedY, 0, false);
+
+      swerve.drive3(-speedZ, -speedY, -store_auto_yaw, false);
+  }
+
+  public void resetValues(){
+    phase1 = true;
+    phase2 = false;
+    Pose3d detectedID = LimelightHelpers.getCameraPose3d_TargetSpace("");
+    initial_gyro_yaw = swerve.getYaw();
+    get_Val_Z = detectedID.getZ();
+    get_Val_X = detectedID.getX();
+    april_tag_rotation = detectedID.getRotation().getY();
+
+    SmartDashboard.putNumber("LastSeenX", get_Val_X);
+    SmartDashboard.putNumber("LastSeenZ", get_Val_Z);
+    SmartDashboard.putNumber("LastSeenRot", april_tag_rotation);
+    SmartDashboard.putNumber("initialGyroYaw", initial_gyro_yaw);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     swerve.stopMods();
+    phase1 = false;
+    phase2 = false;
+    seenTag = false;
     
   }
+
+
 
   // Returns true when the command should end.
   @Override
