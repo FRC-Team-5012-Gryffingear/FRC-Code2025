@@ -34,6 +34,10 @@ public class SwerveCom extends Command {
 
  //Auto
  private double initial_gyro_yaw, get_Val_X, get_Val_Z, april_tag_rotation, abs_final_Rot;
+
+ private double final_gyro_yaw, speedY, speedZ, rotspeed, store_auto_yaw;
+
+
  private boolean phase1, phase2, seenTag = false;
  private final PIDController xPID = new PIDController(0.1, 0, 0.0);
  private final PIDController yPID = new PIDController(0.6, 0, 0.0);
@@ -88,9 +92,9 @@ public class SwerveCom extends Command {
 
     //swerve.drive3(xSpeed, -ySpeed, -rotateSpeed*1.5, true);
     SmartDashboard.putBoolean("SeenTag", seenTag);
+    SmartDashboard.putBoolean("TelePhase1", phase1);
+    SmartDashboard.putBoolean("TelePhase2", phase2);
     if(controller2.b().getAsBoolean() && seenTag){
-      SmartDashboard.putBoolean("TelePhase1", phase1);
-      SmartDashboard.putBoolean("TelePhase2", phase2);
       if(phase1){
         phase1();
       }
@@ -99,16 +103,16 @@ public class SwerveCom extends Command {
       }
     
     } else{
+      resetValues();
       if(LimelightHelpers.getTV("")){
         seenTag = true;
         updateAprilTagValues();
-        resetPhases();
       } else{
-        resetPhases();
         seenTag = false;
       }
       swerve.drive3(xSpeed, -ySpeed, -rotateSpeed*1.5, true);
     }
+    getGlobalInfo();
 
     /* This is assuming we are storing data first then moving 
     if(button pressed/held){
@@ -142,23 +146,22 @@ public class SwerveCom extends Command {
 
 
   public void phase1(){
-    double final_gyro_yaw = Math.toDegrees(april_tag_rotation) + initial_gyro_yaw;
-    SmartDashboard.putNumber("TeleFinalGyro", final_gyro_yaw);
+    final_gyro_yaw = Math.toDegrees(april_tag_rotation) + initial_gyro_yaw;
     if(april_tag_rotation > 0){
       abs_final_Rot = Math.copySign(Math.abs(final_gyro_yaw-3), final_gyro_yaw);
     }
     else{
       abs_final_Rot = Math.copySign(Math.abs(final_gyro_yaw+10), final_gyro_yaw);
     }
-    double speed = MathUtil.clamp(rotPID.calculate(swerve.inv_get_Yaw(),abs_final_Rot), -.5, .5);
-    SmartDashboard.putNumber("TeleRotSpeedPhase1", speed);
-    if(Math.abs(speed) < 0.05){
-      speed = 0;
+    rotspeed = MathUtil.clamp(rotPID.calculate(swerve.inv_get_Yaw(),abs_final_Rot), -.5, .5);
+    if(Math.abs(rotspeed) < 0.05){
+      rotspeed = 0;
       phase1 = false;
       phase2 = true;
       swerve.resetPose();
+      return;
     }    
-    swerve.drive3(0, 0, -speed, false);
+    swerve.drive3(0, 0, -rotspeed, false);
   }
 
   public void phase2(){
@@ -173,13 +176,15 @@ public class SwerveCom extends Command {
         abs_final_Y = Math.copySign(Math.abs(get_Val_X) + (0.549 / get_Val_X ), -get_Val_X);
       }
 
-      double speedY = MathUtil.clamp(yPID.calculate(((swerve.odometry.getPoseMeters().getY()) / conversion), abs_final_Y) , -.04,.04); // -get_Val_X as setpoint
-      double speedZ = MathUtil.clamp(xPID.calculate((swerve.odometry.getPoseMeters().getX() / conversion)+(1.1 * get_Val_Z / 1.79),-get_Val_Z), -0.05, 0.05);// -.78
-      double store_auto_yaw = MathUtil.clamp(auto_yaw.calculate(swerve.inv_get_Yaw(),abs_final_Rot),-.2,.2);
+      speedY = MathUtil.clamp(yPID.calculate(((swerve.odometry.getPoseMeters().getY()) / conversion), abs_final_Y) , -.04,.04); // -get_Val_X as setpoint
+      speedZ = MathUtil.clamp(xPID.calculate((swerve.odometry.getPoseMeters().getX() / conversion)+(1.1 * get_Val_Z / 1.79),-get_Val_Z), -0.05, 0.05);// -.78
+      store_auto_yaw = MathUtil.clamp(auto_yaw.calculate(swerve.inv_get_Yaw(),abs_final_Rot),-.2,.2);
 
-      SmartDashboard.putNumber("TeleSideSpeedPhase2", speedY);
-      SmartDashboard.putNumber("TeleForwardSpeedPhase2", speedZ);
-      SmartDashboard.putNumber("TeleRotSpeedPhase2", store_auto_yaw);
+      SmartDashboard.putNumber("Current Side Position", ((swerve.odometry.getPoseMeters().getY()) / conversion));
+      SmartDashboard.putNumber("Current Forward Position", (swerve.odometry.getPoseMeters().getX() / conversion)+(1.1 * get_Val_Z / 1.79));
+      SmartDashboard.putNumber("Goal Side", abs_final_Y);
+      SmartDashboard.putNumber("Goal Forward", -get_Val_Z);
+
 
       if(Math.abs(speedZ) < 0.03 && Math.abs(speedY) < 0.01){
         speedZ = 0; 
@@ -205,19 +210,30 @@ public class SwerveCom extends Command {
     SmartDashboard.putNumber("initialGyroYaw", initial_gyro_yaw);
   }
 
-  public void resetPhases(){
+  public void resetValues(){
     phase1 = true;
     phase2 = false;
+    final_gyro_yaw = 0;
+    speedY = 0;
+    speedZ = 0;
+    rotspeed = 0;
+    store_auto_yaw = 0;
+  }
+
+  public void getGlobalInfo(){
+    SmartDashboard.putNumber("TeleSideSpeedPhase2", -speedY);
+    SmartDashboard.putNumber("TeleForwardSpeedPhase2", -speedZ);
+    SmartDashboard.putNumber("TeleRotSpeedPhase2", -store_auto_yaw);
+    SmartDashboard.putNumber("TeleFinalGyro", final_gyro_yaw);
+    SmartDashboard.putNumber("TeleRotSpeedPhase1", rotspeed);
+    SmartDashboard.putNumber("SwerveYawTeleOp", swerve.inv_get_Yaw());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     swerve.stopMods();
-    phase1 = false;
-    phase2 = false;
-    seenTag = false;
-    
+    resetValues();
   }
 
 
