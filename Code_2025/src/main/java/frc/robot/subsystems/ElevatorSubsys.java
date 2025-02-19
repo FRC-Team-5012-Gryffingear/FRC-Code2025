@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
@@ -30,6 +31,7 @@ public class ElevatorSubsys extends SubsystemBase {
     public ElevatorSubsys() {
         elevatorTalon.configFactoryDefault();
         
+        elevatorTalon.setInverted(InvertType.InvertMotorOutput);
         elevatorTalon.setNeutralMode(NeutralMode.Brake);
         
         CANcoderConfiguration config = new CANcoderConfiguration();
@@ -44,15 +46,13 @@ public class ElevatorSubsys extends SubsystemBase {
     public void elevMovement(double goal){ // each call of this function will have a different goal value
         double currentPosition = elevEncoder.getPosition().getValueAsDouble();
         double percent = MathUtil.clamp(elevHold.calculate(currentPosition,goal),-1,1);
-        if(Math.abs(currentPosition) > 9.78){
-          percent = 0;
-        }
-        
         elevatorTalon.set(ControlMode.PercentOutput, percent);
     }
 
+
+
     public void elevUpAndDown(double power){
-      if(elevEncoder.getPosition().getValueAsDouble() > 9.78 && power > 0){
+      if(elevEncoder.getPosition().getValueAsDouble() > 10.2 && power > 0){
         power = 0;
       }
       else if(elevEncoder.getPosition().getValueAsDouble() < 0 && power < 0){

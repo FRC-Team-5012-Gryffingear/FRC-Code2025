@@ -5,47 +5,48 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.ElevatorSubsys;
-import frc.robot.subsystems.ExampleSubsystem;
-
-import java.util.function.BooleanSupplier;
-
+import frc.robot.subsystems.IntakeSubsys;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 /** An example command that uses an example subsystem. */
-public class ElevatorCom extends Command {
+public class IntakeElevCom extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final ElevatorSubsys elev;
-  private final double goal;
-  private final CommandXboxController controller2;
-
-  
+  private final IntakeSubsys intake;
+  private final ElevatorSubsys elevator;
+  private final CommandXboxController xbox;
 
   /**
-   * Creates a new ElevatorCom.
+   * Creates a new IntakeElevCom.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ElevatorCom(ElevatorSubsys subsystem,CommandXboxController controller,double goal) {
-    elev = subsystem;
-    this.goal = goal;
-    controller2 = controller;
-    // controller2 = controller;
+  public IntakeElevCom(IntakeSubsys subsystem, ElevatorSubsys elev, CommandXboxController x) {
+    intake = subsystem;
+    elevator = elev;
+    xbox = x;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    // elev.resetEncoderPos();
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // elev.elevMovement(goal);
-    elev.elevUpAndDown(controller2.getRightTriggerAxis() - controller2.getLeftTriggerAxis());
+    // Open/Close
+
+    // if(xbox.rightBumper().getAsBoolean()){
+    //     intake.up(true, false);
+    //     elevator.elevMovement(0);
+    // }
+    // if(xbox.leftBumper().getAsBoolean()){
+    //     intake.up(false, true);
+    //     elevator.elevMovement(0); 
+    // }
+
   }
 
   // Called once the command ends or is interrupted.
