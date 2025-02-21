@@ -170,10 +170,13 @@ public class SwerveCom extends Command {
       
 //may not work
       if( (-get_Val_X) > 0){
-       abs_final_Y = Math.copySign((Math.abs(get_Val_X) + (0.196 / get_Val_X)), -get_Val_X);
+      //  abs_final_Y = Math.copySign((Math.abs(get_Val_X) + (0.196 / get_Val_X)), -get_Val_X);
+        abs_final_Y = Math.copySign((Math.abs(get_Val_X) + (1.1 * get_Val_X / 1.79)), -get_Val_X);// -0.02 or remove all mods
+
       }
       else{
-        abs_final_Y = Math.copySign(Math.abs(get_Val_X) + (0.549 / get_Val_X ), -get_Val_X);
+        // abs_final_Y = Math.copySign(Math.abs(get_Val_X) + (0.549 / get_Val_X ), -get_Val_X);
+        abs_final_Y = Math.copySign((Math.abs(get_Val_X) + (1.1 * get_Val_X / 1.79)), -get_Val_X);// -0.02 or remove all mods
       }
 
       speedY = MathUtil.clamp(yPID.calculate(((swerve.odometry.getPoseMeters().getY()) / conversion), abs_final_Y) , -.04,.04); // -get_Val_X as setpoint

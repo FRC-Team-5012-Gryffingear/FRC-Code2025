@@ -265,10 +265,12 @@ public class AlignAprilTag extends Command {
       if( (-get_Val_X) > 0){
         // -.02 makes it full front
         abs_final_Y = Math.copySign((Math.abs(get_Val_X) + (0.196 / get_Val_X)), -get_Val_X);// -0.02 or remove all mods
+        // abs_final_Y = Math.copySign((Math.abs(get_Val_X) + (1.1 * get_Val_X / 1.79)), -get_Val_X);// -0.02 or remove all mods
         // abs_final = Math.copySign(Math.abs(final_gyro_yaw-3), final_gyro_yaw);
       }
       else{
         abs_final_Y = Math.copySign(Math.abs(get_Val_X) + (0.549 / get_Val_X ), -get_Val_X); // +.17 or add .4
+        // abs_final_Y = Math.copySign(Math.abs(get_Val_X) + (1.1 * get_Val_X / 1.79 ), -get_Val_X); // +.17 or add .4
         // abs_final = Math.copySign(Math.abs(final_gyro_yaw+10), final_gyro_yaw);
       }
     

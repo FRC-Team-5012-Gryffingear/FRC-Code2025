@@ -11,6 +11,7 @@ import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /** An example command that uses an example subsystem. */
 public class ElevatorCom extends Command {
@@ -38,13 +39,18 @@ public class ElevatorCom extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+
     // elev.resetEncoderPos();
+  
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    // use this one for the stages
     // elev.elevMovement(goal);
+
+    // temp since we need to move it around
     elev.elevUpAndDown(controller2.getRightTriggerAxis() - controller2.getLeftTriggerAxis());
   }
 

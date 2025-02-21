@@ -6,7 +6,6 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AlignAprilTag;
-import frc.robot.commands.Autos;
 import frc.robot.commands.ElevatorCom;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.SwerveCom;
@@ -79,13 +78,11 @@ public class RobotContainer {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
     // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-
-
     
     // operatorController.leftStick().toggleOnTrue(new ElevatorCom(elev, 0)); //1st default position
-    // operatorController.a().toggleOnTrue(new ElevatorCom(elev, 0)); // 2st level
-    // operatorController.b().toggleOnTrue(new ElevatorCom(elev, 4.8)); // 3nd level
-    // operatorController.x().toggleOnTrue(new ElevatorCom(elev, 0)); // 4rd level
+    // operatorController.a().toggleOnTrue(new ElevatorCom(elev, 5.1)); // 2st level
+    // operatorController.b().toggleOnTrue(new ElevatorCom(elev, 0)); // 3nd level
+    // operatorController.x().toggleOnTrue(new ElevatorCom(elev, 10.2)); // 4rd level
     // operatorController.y().toggleOnTrue(new ElevatorCom(elev, 0)); // Human player station
   }
 

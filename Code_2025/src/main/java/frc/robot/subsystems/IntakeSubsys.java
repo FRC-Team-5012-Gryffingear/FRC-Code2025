@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class IntakeSubsys extends SubsystemBase {
     private TalonSRX intakeTalon = new TalonSRX(202020);
     private TalonSRX intakeTalon2 = new TalonSRX(202012);
+    private TalonSRX intakeTalon3 = new TalonSRX(102023021);
     
 
     private double num = 0;
@@ -23,11 +24,14 @@ public class IntakeSubsys extends SubsystemBase {
 
         intakeTalon.configFactoryDefault();
         intakeTalon2.configFactoryDefault();
+        intakeTalon3.configFactoryDefault();
         
         intakeTalon.setNeutralMode(NeutralMode.Brake);
         intakeTalon2.setNeutralMode(NeutralMode.Brake);
+        intakeTalon3.setNeutralMode(NeutralMode.Brake);
 
         intakeTalon2.follow(intakeTalon);
+        intakeTalon3.follow(intakeTalon);
         
     }
 
@@ -39,9 +43,11 @@ public class IntakeSubsys extends SubsystemBase {
         else if(b){
             num = -1;
         }
-        else if(!a && !b){
-          num = 0;
-        }
+        /*
+         * else if(a && b){
+         *  num = 0;
+         * }
+         */
         System.out.println("This is the value of intake movement: " + num);
         intakeTalon.set(ControlMode.PercentOutput, num);
     }
