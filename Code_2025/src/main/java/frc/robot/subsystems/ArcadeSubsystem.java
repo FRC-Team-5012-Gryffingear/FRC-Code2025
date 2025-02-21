@@ -63,6 +63,7 @@ public class ArcadeSubsystem extends SubsystemBase {
     FLM.set(ControlMode.PercentOutput, (power + turn));
     FRM.set(ControlMode.PercentOutput, (power - turn));
   }
+
   /* When a button is pressed/held the motor outtakes the coral
    * when released power is 0
    */

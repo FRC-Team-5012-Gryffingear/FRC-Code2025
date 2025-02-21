@@ -55,7 +55,7 @@ public class ArcadeCommand extends Command {
   public void execute() {
     SmartDashboard.putNumber("Volt", m_subsystem.getVoltage());
     //If the correction button is pressed and it has not been held down yet, then it is set as held down / resetting the yaw to 0.
-    
+
     // if(Math.abs(TT.getAsDouble()) < 0.1){
     //   PIDController control = new PIDController(0.01, 0, 0);
     //   double speed = control.calculate(m_subsystem.getYaw(), storeYawValue);
@@ -66,7 +66,7 @@ public class ArcadeCommand extends Command {
 
     //   storeYawValue = m_subsystem.getYaw();
     // }
-    // m_subsystem.moveAndTurn(RT.getAsDouble()-LT.getAsDouble(), TT.getAsDouble());
+    m_subsystem.moveAndTurn(RT.getAsDouble()-LT.getAsDouble(), TT.getAsDouble());
 
     m_subsystem.coralouttake(AT.getAsBoolean());
     SmartDashboard.putNumber("Stored yaw", storeYawValue);
