@@ -5,48 +5,40 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.ElevatorSubsys;
-import frc.robot.subsystems.IntakeSubsys;
+import frc.robot.subsystems.IntakeSubsysCoral;
+import frc.robot.subsystems.IntakeSubsysLift;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 /** An example command that uses an example subsystem. */
-public class IntakeElevCom extends Command {
+public class IntakeUp extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final IntakeSubsys intake;
-  private final ElevatorSubsys elevator;
-  private final CommandXboxController xbox;
-
+  private final IntakeSubsysLift intake;
+  private double pow;
+  
   /**
    * Creates a new IntakeElevCom.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public IntakeElevCom(IntakeSubsys subsystem, ElevatorSubsys elev, CommandXboxController x) {
+  public IntakeUp(IntakeSubsysLift subsystem, double pow) {
     intake = subsystem;
-    elevator = elev;
-    xbox = x;
+    this.pow = pow;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    intake.up(0);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // Open/Close
-
-    // if(xbox.rightBumper().getAsBoolean()){
-    //     intake.up(true, false);
-    //     elevator.elevMovement(0);
-    // }
-    // if(xbox.leftBumper().getAsBoolean()){
-    //     intake.up(false, true);
-    //     elevator.elevMovement(0); 
-    // }
-
+    // lift and lower intake angle
+    intake.up(pow);
   }
 
   // Called once the command ends or is interrupted.

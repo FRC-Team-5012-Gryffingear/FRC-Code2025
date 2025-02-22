@@ -8,11 +8,13 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AlignAprilTag;
 import frc.robot.commands.ElevatorCom;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.IntakeUp;
 import frc.robot.commands.SwerveCom;
-import frc.robot.commands.intakeCom;
+import frc.robot.commands.intakeCoral;
 import frc.robot.subsystems.ElevatorSubsys;
 import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.IntakeSubsys;
+import frc.robot.subsystems.IntakeSubsysCoral;
+import frc.robot.subsystems.IntakeSubsysLift;
 import frc.robot.subsystems.SwerveSubsys;
 import frc.robot.subsystems.limeyImproved;
 import edu.wpi.first.wpilibj.XboxController;
@@ -33,10 +35,12 @@ public class RobotContainer {
 
   private final limeyImproved limeI = new limeyImproved();
   private final SwerveSubsys swerve = new SwerveSubsys();
-  private final IntakeSubsys intake = new IntakeSubsys();
+  private final IntakeSubsysCoral intakeCor = new IntakeSubsysCoral();
+  private final IntakeSubsysLift intakeLift = new IntakeSubsysLift();
+
   private final ElevatorSubsys elev = new ElevatorSubsys();
 
-  private final AlignAprilTag tagMove = new AlignAprilTag(swerve, limeI);
+  private final AlignAprilTag tagMove = new AlignAprilTag(swerve, limeI,elev,intakeCor,intakeLift);
 
 
 
@@ -56,6 +60,7 @@ public class RobotContainer {
      swerve.setDefaultCommand(new SwerveCom(
       swerve, 
       driverController,
+      elev,
       () -> driverController.a().getAsBoolean()));
 
       //Testing uses only, temporary
@@ -63,9 +68,6 @@ public class RobotContainer {
       operatorController,
       0));
 
-    //  intake.setDefaultCommand(new intakeCom(intake, 
-    //  () -> operatorController.leftBumper().getAsBoolean(), 
-    //  () -> operatorController.rightBumper().getAsBoolean()));
 
     configureBindings();
   }
@@ -78,12 +80,26 @@ public class RobotContainer {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
     // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-    
-    // operatorController.leftStick().toggleOnTrue(new ElevatorCom(elev, 0)); //1st default position
-    // operatorController.a().toggleOnTrue(new ElevatorCom(elev, 5.1)); // 2st level
-    // operatorController.b().toggleOnTrue(new ElevatorCom(elev, 0)); // 3nd level
-    // operatorController.x().toggleOnTrue(new ElevatorCom(elev, 10.2)); // 4rd level
-    // operatorController.y().toggleOnTrue(new ElevatorCom(elev, 0)); // Human player station
+
+    // Command open_Intake = new intakeCoral(intakeCor, 1);
+    // Command close_Intake = new intakeCoral(intakeCor, -1);
+
+    // intakeCor.setDefaultCommand(close_Intake);
+    // operatorController.leftBumper().toggleOnTrue(open_Intake);
+
+
+    // Command lift_Intake = new IntakeUp(intakeLift,1);
+    // Command lower_intake = new IntakeUp(intakeLift, -1);
+
+    // intakeLift.setDefaultCommand(lower_intake);
+    // operatorController.rightBumper().toggleOnTrue(lift_Intake);
+
+
+    // operatorController.leftStick().toggleOnTrue(new ElevatorCom(elev, 0.75)); //1st level 
+    // operatorController.a().toggleOnTrue(new ElevatorCom(elev, 2.41)); // 2st level
+    // operatorController.b().toggleOnTrue(new ElevatorCom(elev, 5.2)); // 3nd level
+    // operatorController.x().toggleOnTrue(new ElevatorCom(elev, 9.65)); // 4rd level
+    // operatorController.y().toggleOnTrue(new ElevatorCom(elev, 1.2)); // Human player station
   }
 
   /**

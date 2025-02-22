@@ -25,14 +25,20 @@ public class ElevatorSubsys extends SubsystemBase {
     private CANcoder elevEncoder = new CANcoder(Constants.elev_Encoder);
     private double offset = Constants.elevOffset;
 
+    private TalonSRX elevClimb = new TalonSRX(Constants.elev_climb);
+
 
     private PIDController elevHold = new PIDController(.01, 0, 0); // might not work because of gravity variable not taken into count
 
     public ElevatorSubsys() {
         elevatorTalon.configFactoryDefault();
+        elevClimb.configFactoryDefault();
         
         elevatorTalon.setInverted(InvertType.InvertMotorOutput);
         elevatorTalon.setNeutralMode(NeutralMode.Brake);
+
+        elevClimb.setNeutralMode(NeutralMode.Brake);
+        //elevClimb.setInverted(InvertType.InvertMotorOutput);
         
         CANcoderConfiguration config = new CANcoderConfiguration();
         config.MagnetSensor.MagnetOffset = offset;
@@ -47,6 +53,10 @@ public class ElevatorSubsys extends SubsystemBase {
         double currentPosition = elevEncoder.getPosition().getValueAsDouble();
         double percent = MathUtil.clamp(elevHold.calculate(currentPosition,goal),-1,1);
         elevatorTalon.set(ControlMode.PercentOutput, percent);
+    }
+
+    public void elevClimbMove(double power){
+        elevClimb.set(ControlMode.PercentOutput, power);
     }
 
 

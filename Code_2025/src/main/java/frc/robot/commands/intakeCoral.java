@@ -5,39 +5,35 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.IntakeSubsys;
+import frc.robot.subsystems.IntakeSubsysCoral;
 
 import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */
-public class intakeCom extends Command {
+public class intakeCoral extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final IntakeSubsys intake;
-  private final BooleanSupplier a,b;
+  private final IntakeSubsysCoral intake;
+  private double pow;
 
-  public intakeCom(IntakeSubsys subsystem, BooleanSupplier a, BooleanSupplier b) {
+  public intakeCoral(IntakeSubsysCoral subsystem,double pow) {
     intake = subsystem;
-    this.a = a;
-    this.b = b;
+    this.pow = pow;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    intake.coralIntake(0);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(a.getAsBoolean()){
-        intake.up(true, false);
-    }
-    else if(b.getAsBoolean()){
-        intake.up(false, true);
-    }
+    intake.coralIntake(pow);
   }
 
   // Called once the command ends or is interrupted.

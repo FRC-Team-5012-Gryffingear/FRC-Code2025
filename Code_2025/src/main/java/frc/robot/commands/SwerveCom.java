@@ -7,6 +7,7 @@ package frc.robot.commands;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.subsystems.ElevatorSubsys;
 import frc.robot.subsystems.ExampleSubsystem;
 //import frc.robot.subsystems.LedSubsystem;
 // import frc.robot.subsystems.VisionSub;
@@ -31,6 +32,8 @@ public class SwerveCom extends Command {
   private final SwerveSubsys swerve;
  private final CommandXboxController controller2;
  private final BooleanSupplier yaw;
+ private final ElevatorSubsys elev;
+ // add both intake subsystems and make it work >:(
 
  //Auto
  private double initial_gyro_yaw, get_Val_X, get_Val_Z, april_tag_rotation, abs_final_Rot;
@@ -53,12 +56,11 @@ public class SwerveCom extends Command {
 
  
   
-  public SwerveCom(SwerveSubsys subsystem, CommandXboxController controller, BooleanSupplier yaw) {
+  public SwerveCom(SwerveSubsys subsystem, CommandXboxController controller, ElevatorSubsys elev,BooleanSupplier yaw) {
     swerve = subsystem;
     controller2 = controller;
     this.yaw = yaw;
-    
-  
+    this.elev = elev;
   
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
@@ -84,6 +86,11 @@ public class SwerveCom extends Command {
     double ySpeed = MathUtil.applyDeadband(controller2.getLeftX(), OperatorConstants.Deadband) * 0.4;
     double rotateSpeed = MathUtil.applyDeadband(controller2.getRightX(), OperatorConstants.Deadband) * 0.4;
     SmartDashboard.putNumber("YAW YAW YAW", swerve.getYaw());
+
+    
+    elev.elevClimbMove(controller2.getRightTriggerAxis() - controller2.getLeftTriggerAxis());
+
+
     if(yaw.getAsBoolean()){
       swerve.resetHeading();
     }

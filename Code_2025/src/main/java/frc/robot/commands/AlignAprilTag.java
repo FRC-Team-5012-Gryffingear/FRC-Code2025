@@ -6,6 +6,9 @@ package frc.robot.commands;
 
 import frc.robot.LimelightHelpers;
 import frc.robot.LimelightHelpers.RawFiducial;
+import frc.robot.subsystems.ElevatorSubsys;
+import frc.robot.subsystems.IntakeSubsysCoral;
+import frc.robot.subsystems.IntakeSubsysLift;
 import frc.robot.subsystems.SwerveMod;
 import frc.robot.subsystems.SwerveSubsys;
 import frc.robot.subsystems.limeyImproved;
@@ -30,6 +33,9 @@ public class AlignAprilTag extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final SwerveSubsys swerve;
   private final limeyImproved limelight;
+  private final ElevatorSubsys elev;
+  private final IntakeSubsysCoral intakeCor;
+  private final IntakeSubsysLift intakeLift;
   // private final String limeName = "";
 
   //Change PID values to tune the PID loop
@@ -66,9 +72,12 @@ public class AlignAprilTag extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public AlignAprilTag(SwerveSubsys subsystem, limeyImproved lime) {
+  public AlignAprilTag(SwerveSubsys subsystem, limeyImproved lime, ElevatorSubsys elev, IntakeSubsysCoral intakeCor, IntakeSubsysLift intakeLift) {
     swerve = subsystem;
     limelight = lime;
+    this.elev = elev;
+    this.intakeCor = intakeCor;
+    this.intakeLift = intakeLift;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem, lime);
   }
@@ -124,7 +133,8 @@ public class AlignAprilTag extends Command {
       swerve.drive3(0, 0, 0, false);
     }
     else{
-
+    
+      elev.elevMovement(10.2);
     // if(Math.round(swerve.inv_get_Yaw()) == Math.round(detectedID.getRotation().getY())){    }
       // SmartDashboard.putBoolean(, check)
     if(phase1){
@@ -324,6 +334,13 @@ public class AlignAprilTag extends Command {
       // swerve.drive3(0, 0, -store_auto_yaw,false);
       SmartDashboard.putNumber("FWD SPEED AFTER", -speedZ);
      }
+
+     /*
+      * if (!phase1 && !phase2){
+          intakeCor open up
+          intake lift lower down
+        }
+      */
 
 
     //  if(!moving_fwd && moving_side){

@@ -10,46 +10,28 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
-public class IntakeSubsys extends SubsystemBase {
-    private TalonSRX intakeTalon = new TalonSRX(202020);
-    private TalonSRX intakeTalon2 = new TalonSRX(202012);
-    private TalonSRX intakeTalon3 = new TalonSRX(102023021);
+public class IntakeSubsysCoral extends SubsystemBase {
+    private TalonSRX intakeTalon2 = new TalonSRX(Constants.intakeHook);
+    private TalonSRX intakeTalon3 = new TalonSRX(Constants.intakeCoral);
     
-
-    private double num = 0;
-
-    public IntakeSubsys() {
-        num = 0;
-
-        intakeTalon.configFactoryDefault();
+    
+    public IntakeSubsysCoral() {
+        
         intakeTalon2.configFactoryDefault();
         intakeTalon3.configFactoryDefault();
         
-        intakeTalon.setNeutralMode(NeutralMode.Brake);
         intakeTalon2.setNeutralMode(NeutralMode.Brake);
         intakeTalon3.setNeutralMode(NeutralMode.Brake);
 
-        intakeTalon2.follow(intakeTalon);
-        intakeTalon3.follow(intakeTalon);
+        
+        intakeTalon3.follow(intakeTalon2);
         
     }
 
-
-    public void up(boolean a, boolean b){
-        if(a){
-            num = 1;
-        }
-        else if(b){
-            num = -1;
-        }
-        /*
-         * else if(a && b){
-         *  num = 0;
-         * }
-         */
-        System.out.println("This is the value of intake movement: " + num);
-        intakeTalon.set(ControlMode.PercentOutput, num);
+    public void coralIntake(double power){
+      intakeTalon2.set(ControlMode.PercentOutput, power);
     }
 
 
