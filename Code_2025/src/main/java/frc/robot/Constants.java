@@ -51,7 +51,7 @@ public final class Constants {
   public static final double BackLeftOffset = -0.26196890625;
   public static final double BackRightOffset = -0.382080078125;
 
-  public static final double elevOffset = -0.30224609375;
+  public static final double elevOffset = -0.928955078125;
 
   // True inverses motors
   public static final boolean FrontLeftInv = false;
@@ -63,11 +63,12 @@ public final class Constants {
 
   public static final int elev_Encoder = 14;
   public static final int elev_Motor = 13;
+
   public static final int elev_climb = 18;
 
-  public static final int intakeLift = 15;
-  public static final int intakeHook = 16;
-  public static final int intakeCoral = 17;
+  public static final int intakeLift = 16;
+  public static final int intakeHook = 17;
+  public static final int intakeCoral = 15;
   
 
   // Gives position of modules on a 2d plane

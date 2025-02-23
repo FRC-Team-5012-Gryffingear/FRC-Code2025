@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.ElevatorSubsys;
 import frc.robot.subsystems.IntakeSubsysCoral;
 import frc.robot.subsystems.IntakeSubsysLift;
@@ -15,7 +16,9 @@ public class IntakeUp extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final IntakeSubsysLift intake;
   private double pow;
-  
+  private final CommandXboxController operator = new CommandXboxController(OperatorConstants.OperatorContrlPort);
+  private boolean toggle = false;
+
   /**
    * Creates a new IntakeElevCom.
    *
@@ -31,7 +34,6 @@ public class IntakeUp extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    intake.up(0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

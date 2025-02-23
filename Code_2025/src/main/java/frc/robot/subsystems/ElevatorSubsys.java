@@ -28,7 +28,7 @@ public class ElevatorSubsys extends SubsystemBase {
     private TalonSRX elevClimb = new TalonSRX(Constants.elev_climb);
 
 
-    private PIDController elevHold = new PIDController(.01, 0, 0); // might not work because of gravity variable not taken into count
+    private PIDController elevHold = new PIDController(2, 0, 0); // might not work because of gravity variable not taken into count
 
     public ElevatorSubsys() {
         elevatorTalon.configFactoryDefault();
@@ -43,9 +43,9 @@ public class ElevatorSubsys extends SubsystemBase {
         CANcoderConfiguration config = new CANcoderConfiguration();
         config.MagnetSensor.MagnetOffset = offset;
         config.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 1;
-        config.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
+        config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
 
-        elevEncoder.getConfigurator().apply(config);     
+        elevEncoder.getConfigurator().apply(config); 
     }
     
     //Gather data and determine what value and unit we are using to determine our movement
@@ -53,10 +53,12 @@ public class ElevatorSubsys extends SubsystemBase {
         double currentPosition = elevEncoder.getPosition().getValueAsDouble();
         double percent = MathUtil.clamp(elevHold.calculate(currentPosition,goal),-1,1);
         elevatorTalon.set(ControlMode.PercentOutput, percent);
+        SmartDashboard.putNumber("Power of elevator", percent);
+
     }
 
     public void elevClimbMove(double power){
-        elevClimb.set(ControlMode.PercentOutput, power);
+        elevClimb.set(ControlMode.PercentOutput, power*0.8);
     }
 
 
@@ -65,7 +67,7 @@ public class ElevatorSubsys extends SubsystemBase {
       if(elevEncoder.getPosition().getValueAsDouble() > 10.2 && power > 0){
         power = 0;
       }
-      else if(elevEncoder.getPosition().getValueAsDouble() < 0 && power < 0){
+      else if(elevEncoder.getPosition().getValueAsDouble() < 0.3 && power < 0){
         power = 0;
       }
       elevatorTalon.set(ControlMode.PercentOutput, power);

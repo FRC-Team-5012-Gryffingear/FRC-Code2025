@@ -15,17 +15,21 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class IntakeSubsysLift extends SubsystemBase {
-    private TalonSRX intakeTalon = new TalonSRX(Constants.intakeLift);
+    private TalonSRX intakeTalon = new TalonSRX(Constants.intakeHook);
+    private TalonSRX intakeLift = new TalonSRX(Constants.intakeLift);
 
     public IntakeSubsysLift() {
         intakeTalon.configFactoryDefault();
-        
+        intakeLift.configFactoryDefault();
+
+        intakeLift.setNeutralMode(NeutralMode.Brake);
         intakeTalon.setNeutralMode(NeutralMode.Brake);
     }
 
 
+
     public void up(double num){
-        System.out.println("This is the value of intake movement: " + num);
+        System.out.println("This is the value of intake ho: " + num);
         intakeTalon.set(ControlMode.PercentOutput, num);
     }
   @Override

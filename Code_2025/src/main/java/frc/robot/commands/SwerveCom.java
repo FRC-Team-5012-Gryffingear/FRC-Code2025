@@ -87,9 +87,10 @@ public class SwerveCom extends Command {
     double rotateSpeed = MathUtil.applyDeadband(controller2.getRightX(), OperatorConstants.Deadband) * 0.4;
     SmartDashboard.putNumber("YAW YAW YAW", swerve.getYaw());
 
-    
+
     elev.elevClimbMove(controller2.getRightTriggerAxis() - controller2.getLeftTriggerAxis());
 
+   
 
     if(yaw.getAsBoolean()){
       swerve.resetHeading();
@@ -111,13 +112,22 @@ public class SwerveCom extends Command {
     
     } else{
       resetValues();
+
       if(LimelightHelpers.getTV("")){
         seenTag = true;
         updateAprilTagValues();
-      } else{
+      }else{
         seenTag = false;
       }
-      swerve.drive3(xSpeed, -ySpeed, -rotateSpeed*1.5, true);
+
+
+      if(controller2.leftBumper().getAsBoolean()){
+        swerve.drive3(xSpeed/4, -ySpeed/4, -(rotateSpeed*1.5)/4, true);
+      }else{
+        swerve.drive3(xSpeed, -ySpeed, -rotateSpeed*1.5, true);
+      }
+  
+      
     }
     getGlobalInfo();
 
