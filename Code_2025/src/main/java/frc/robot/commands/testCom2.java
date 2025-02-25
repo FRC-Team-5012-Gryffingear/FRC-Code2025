@@ -12,19 +12,15 @@ import frc.robot.subsystems.test;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 /** An example command that uses an example subsystem. */
-public class testCom extends Command {
+public class testCom2 extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final test m_subsystem;
-  private boolean toggle, aButtonPreviouslyPressed = false;
-  private final CommandXboxController controller2;
+  private boolean toggle = true;
 //   private final BooleanSupplier a,b;
-  private double pow = -1;
+  private double pow;
 
   private RobotContainer c;
   /**
@@ -32,10 +28,9 @@ public class testCom extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public testCom(test subsystem, CommandXboxController controller) {
+  public testCom2(test subsystem, double pow) {
     m_subsystem = subsystem;
-    // this.pow = pow;
-    controller2 = controller;
+    this.pow = pow;
     // this.a = a;
     // this.b = b;
     // Use addRequirements() here to declare subsystem dependencies.
@@ -43,7 +38,7 @@ public class testCom extends Command {
   }
 
   public void setTogggle(){
-    pow = pow == setPower() ? -1 : 1;
+    toggle = !toggle;
   }
 
   public double setPower(){
@@ -69,39 +64,7 @@ public class testCom extends Command {
     // else if(b.getAsBoolean()){
     //     m_subsystem.tester(false, true);
     // }
-    // m_subsystem.tester(pow);
-    boolean buttonPressed = controller2.a().getAsBoolean();
-    if (buttonPressed && !aButtonPreviouslyPressed) {
-        setTogggle();
-    }
-    
-    aButtonPreviouslyPressed = buttonPressed;
-
-    
-    // if(controller2.a().getAsBoolean() && toggle){
-    //   while(controller2.a().getAsBoolean()){
-    //     toggle = false;
-    //   }
-    // }
-    // if(controller2.a().getAsBoolean() && !toggle){
-    //   while(controller2.a().getAsBoolean()){
-    //     toggle = true;
-    //   }
-    // }
-    // pow = toggle ? 1 : -1;
-    // m_subsystem.tester(pow);
-    // double triggerPower = controller2.getRightTriggerAxis() - controller2.getLeftTriggerAxis();
-    // if(Math.abs(triggerPower) < 0.1){
-    //   m_subsystem.tester(triggerPower);
-    // }
-    // if(triggerPower < 0){
-    //   pow = -1;
-    // } else{
-    //   pow = 1;
-    // }
-    SmartDashboard.putBoolean("POWER", toggle);
-    SmartDashboard.putBoolean("ButtonPressed", buttonPressed);
-    SmartDashboard.putBoolean("ButtonPreviouslyPressed", aButtonPreviouslyPressed);
+    m_subsystem.tester(pow);
   }
 
   // Called once the command ends or is interrupted.

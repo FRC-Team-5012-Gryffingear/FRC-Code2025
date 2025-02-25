@@ -8,8 +8,10 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.testCom;
+import frc.robot.commands.testCom2;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.test;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -26,7 +28,9 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final test t = new test();
-  private final testCom tCom = new testCom(t, 0);
+  private boolean toggle = true;
+  // private final testCom tCom = new testCom(t, 0);
+  
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
@@ -39,6 +43,11 @@ public class RobotContainer {
 
   }
 
+  public void setTogggle(){
+    toggle = !toggle;
+  }
+
+  
 
 
   private void configureBindings() {
@@ -46,13 +55,22 @@ public class RobotContainer {
     // new Trigger(m_exampleSubsystem::exampleCondition)
     //     .onTrue(new ExampleCommand(m_exampleSubsystem));
 
-    testCom first = new testCom(t, 1);
-    testCom second = new testCom(t, -1);
+    testCom first = new testCom(t, m_driverController);
+    testCom2 second = new testCom2(t, -1);
 
-    t.setDefaultCommand(first);
+    // t.setDefaultCommand(first);
+    t.setDefaultCommand(new testCom(t, m_driverController));
+    // t.setDefaultCommand();
 
-    m_driverController.a().toggleOnTrue(second);
+    
 
+
+    SmartDashboard.putBoolean("boolean", toggle);
+    
+
+
+    // m_driverController.a().toggleOnTrue(second);
+    // m_driverController.a().toggleOnTrue(toggle ? new testCom(t, 1) : new testCom(t, -1));
 
     // Trigger te = m_driverController.a().toggleOnTrue(new InstantCommand(() -> tCom.setTogggle()));
     // System.out.println(te.getAsBoolean());
