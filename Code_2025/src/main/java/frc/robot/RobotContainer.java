@@ -7,6 +7,8 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.hookCom;
+import frc.robot.commands.reverseHookCom;
 import frc.robot.commands.testCom;
 import frc.robot.commands.testCom2;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -27,6 +29,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+
   private final test t = new test();
   private boolean toggle = true;
   // private final testCom tCom = new testCom(t, 0);
@@ -43,9 +46,9 @@ public class RobotContainer {
 
   }
 
-  public void setTogggle(){
-    toggle = !toggle;
-  }
+  // public void setTogggle(){
+  //   toggle = !toggle;
+  // }
 
   
 
@@ -59,8 +62,10 @@ public class RobotContainer {
     testCom2 second = new testCom2(t, -1);
 
     // t.setDefaultCommand(first);
-    t.setDefaultCommand(new testCom(t, m_driverController));
+    // t.setDefaultCommand(new testCom(t, m_driverController));
     // t.setDefaultCommand();
+    m_driverController.leftBumper().onTrue(new hookCom(t));
+    m_driverController.rightBumper().onTrue(new reverseHookCom(t));
 
     
 
