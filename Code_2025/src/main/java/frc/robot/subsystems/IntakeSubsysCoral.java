@@ -43,7 +43,7 @@ public class IntakeSubsysCoral extends SubsystemBase {
       // negative pow makes it close
       // global = power;
       //    intakeTalon2.set(ControlMode.PercentOutput, -power);
-         intakeTalon3.set(ControlMode.PercentOutput, -power);
+         intakeTalon3.set(ControlMode.PercentOutput, power);
           intakeTalon.set(ControlMode.PercentOutput, power);
 
     }

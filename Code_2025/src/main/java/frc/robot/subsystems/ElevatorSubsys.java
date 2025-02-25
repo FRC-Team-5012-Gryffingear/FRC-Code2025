@@ -64,12 +64,12 @@ public class ElevatorSubsys extends SubsystemBase {
 
 
     public void elevUpAndDown(double power){
-      if(elevEncoder.getPosition().getValueAsDouble() > 10.2 && power > 0){
-        power = 0;
-      }
-      else if(elevEncoder.getPosition().getValueAsDouble() < 0.3 && power < 0){
-        power = 0;
-      }
+      // if(elevEncoder.getPosition().getValueAsDouble() > 10.2 && power > 0){
+      //   power = 0;
+      // }
+      // else if(elevEncoder.getPosition().getValueAsDouble() < 0.3 && power < 0){
+      //   power = 0;
+      // }
       elevatorTalon.set(ControlMode.PercentOutput, power);
     }
     

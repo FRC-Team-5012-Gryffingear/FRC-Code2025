@@ -55,19 +55,19 @@ public class ElevatorCom extends Command {
   public void execute() {
     // use this one for the stages
     if(controller2.a().getAsBoolean()){
-      elev.elevMovement(0.3);
+      elev.elevMovement(0);
     }
     else if(controller2.b().getAsBoolean()){
       elev.elevMovement(2.7);
     }
     else if(controller2.x().getAsBoolean()){
-      elev.elevMovement(5.55);
+      elev.elevMovement(5.69);
     }
     else if(controller2.y().getAsBoolean()){
-      elev.elevMovement(9.57); 
+      elev.elevMovement(9.8); 
     }
     else if(controller2.leftStick().getAsBoolean()){
-      elev.elevMovement(1.53); 
+      elev.elevMovement(1.16); 
     }
     else if(controller2.rightStick().getAsBoolean()){
       elev.resetEncoderPos();
