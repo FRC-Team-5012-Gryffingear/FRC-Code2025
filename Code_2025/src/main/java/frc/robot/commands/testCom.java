@@ -21,7 +21,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 public class testCom extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final test m_subsystem;
-  private boolean toggle, aButtonPreviouslyPressed = false;
+  // private boolean toggle = false; 
+  private boolean aButtonPreviouslyPressed = false;
   private final CommandXboxController controller2;
 //   private final BooleanSupplier a,b;
   private double pow = -1;
@@ -43,16 +44,16 @@ public class testCom extends Command {
   }
 
   public void setTogggle(){
-    pow = pow == setPower() ? -1 : 1;
+    pow = pow == 1 ? -1 : 1;
   }
 
-  public double setPower(){
-    if(toggle){
-      return 1;
-    } else{
-      return -1;
-    }
-  }
+  // public double setPower(){
+  //   if(toggle){
+  //     return 1;
+  //   } else{
+  //     return -1;
+  //   }
+  // }
 
   // Called when the command is initially scheduled.
   @Override
@@ -76,7 +77,7 @@ public class testCom extends Command {
     }
     
     aButtonPreviouslyPressed = buttonPressed;
-
+    m_subsystem.tester(pow);
     
     // if(controller2.a().getAsBoolean() && toggle){
     //   while(controller2.a().getAsBoolean()){
@@ -89,7 +90,6 @@ public class testCom extends Command {
     //   }
     // }
     // pow = toggle ? 1 : -1;
-    // m_subsystem.tester(pow);
     // double triggerPower = controller2.getRightTriggerAxis() - controller2.getLeftTriggerAxis();
     // if(Math.abs(triggerPower) < 0.1){
     //   m_subsystem.tester(triggerPower);
@@ -99,7 +99,7 @@ public class testCom extends Command {
     // } else{
     //   pow = 1;
     // }
-    SmartDashboard.putBoolean("POWER", toggle);
+    // SmartDashboard.putBoolean("POWER", toggle);
     SmartDashboard.putBoolean("ButtonPressed", buttonPressed);
     SmartDashboard.putBoolean("ButtonPreviouslyPressed", aButtonPreviouslyPressed);
   }
