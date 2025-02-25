@@ -77,7 +77,7 @@ public class testCom extends Command {
     }
     
     aButtonPreviouslyPressed = buttonPressed;
-    m_subsystem.tester(pow);
+    // m_subsystem.tester(pow);
     
     // if(controller2.a().getAsBoolean() && toggle){
     //   while(controller2.a().getAsBoolean()){

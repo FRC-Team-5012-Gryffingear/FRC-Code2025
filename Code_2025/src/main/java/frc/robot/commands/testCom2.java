@@ -64,7 +64,7 @@ public class testCom2 extends Command {
     // else if(b.getAsBoolean()){
     //     m_subsystem.tester(false, true);
     // }
-    m_subsystem.tester(pow);
+    // m_subsystem.tester(pow);
   }
 
   // Called once the command ends or is interrupted.
