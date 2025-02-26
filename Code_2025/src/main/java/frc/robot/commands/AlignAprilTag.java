@@ -85,6 +85,7 @@ public class AlignAprilTag extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    elev.resetEncoderPos();
     // xPID.setTolerance(0.1);
     // yPID.setTolerance(0.1);
     // rotPID.setTolerance(3);
@@ -133,8 +134,12 @@ public class AlignAprilTag extends Command {
       swerve.drive3(0, 0, 0, false);
     }
     else{
+
+
+    // @ELEV MOVEMENT HERE MAKE SURE TO UNCOMMENT IF WANT TO TEST
+    //elev.elevMovement(2.7);
+
     
-      elev.elevMovement(10.2);
     // if(Math.round(swerve.inv_get_Yaw()) == Math.round(detectedID.getRotation().getY())){    }
       // SmartDashboard.putBoolean(, check)
     if(phase1){
@@ -279,6 +284,7 @@ public class AlignAprilTag extends Command {
         // abs_final = Math.copySign(Math.abs(final_gyro_yaw-3), final_gyro_yaw);
       }
       else{
+        // Values: .549 Slight overshoot , .525 great overshoot , .575 kinda overshoot , .565 middle or undershoot
         abs_final_Y = Math.copySign(Math.abs(get_Val_X) + (0.549 / get_Val_X ), -get_Val_X); // +.17 or add .4
         // abs_final_Y = Math.copySign(Math.abs(get_Val_X) + (1.1 * get_Val_X / 1.79 ), -get_Val_X); // +.17 or add .4
         // abs_final = Math.copySign(Math.abs(final_gyro_yaw+10), final_gyro_yaw);
@@ -335,12 +341,10 @@ public class AlignAprilTag extends Command {
       SmartDashboard.putNumber("FWD SPEED AFTER", -speedZ);
      }
 
-     /*
-      * if (!phase1 && !phase2){
-          intakeCor open up
-          intake lift lower down
-        }
-      */
+
+    //  if(!phase1 && !phase2){
+
+    //  }
 
 
     //  if(!moving_fwd && moving_side){

@@ -11,11 +11,14 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.IntakeUp;
 import frc.robot.commands.SwerveCom;
 import frc.robot.commands.intakeCoral;
+import frc.robot.commands.intakeState1;
+import frc.robot.commands.intakeState2;
 import frc.robot.subsystems.ElevatorSubsys;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.IntakeSubsysCoral;
 import frc.robot.subsystems.IntakeSubsysLift;
 import frc.robot.subsystems.SwerveSubsys;
+import frc.robot.subsystems.intakeCombined;
 import frc.robot.subsystems.limeyImproved;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -38,6 +41,7 @@ public class RobotContainer {
   private final SwerveSubsys swerve = new SwerveSubsys();
   private final IntakeSubsysCoral intakeCor = new IntakeSubsysCoral();
   private final IntakeSubsysLift intakeLift = new IntakeSubsysLift();
+  private final intakeCombined combined = new intakeCombined();
 
   private final ElevatorSubsys elev = new ElevatorSubsys();
 
@@ -80,20 +84,25 @@ public class RobotContainer {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
     // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-    double pow = 1;
-    Command hook_move1 = new IntakeUp(intakeLift, 1);
-    Command hook_move2 = new IntakeUp(intakeLift, -1);
 
-    intakeLift.setDefaultCommand(hook_move1);
-    operatorController.rightBumper().toggleOnTrue(hook_move2);
+    operatorController.leftBumper().onTrue(new intakeState1(combined));
+    operatorController.rightBumper().onTrue(new intakeState2(combined));
 
 
+    // double pow = 1;
+    // Command hook_move1 = new IntakeUp(intakeLift, 1);
+    // Command hook_move2 = new IntakeUp(intakeLift, -1);
 
-    Command open_Intake = new intakeCoral(intakeCor, pow);
-    Command close_Intake = new intakeCoral(intakeCor, -pow);
+    // intakeLift.setDefaultCommand(hook_move1);
+    // operatorController.rightBumper().toggleOnTrue(hook_move2);
 
-    intakeCor.setDefaultCommand(close_Intake);
-    operatorController.leftBumper().toggleOnTrue(open_Intake);
+
+
+    // Command open_Intake = new intakeCoral(intakeCor, pow);
+    // Command close_Intake = new intakeCoral(intakeCor, -pow);
+
+    // intakeCor.setDefaultCommand(close_Intake);
+    // operatorController.leftBumper().toggleOnTrue(open_Intake);
 
 
     
