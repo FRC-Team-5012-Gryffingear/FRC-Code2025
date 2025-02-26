@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.concurrent.Semaphore;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -12,6 +14,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.drive.RobotDriveBase;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
@@ -20,14 +23,17 @@ public class test extends SubsystemBase {
   /** Creates a new test. */
   private final TalonSRX potent = new TalonSRX(15); // Set CAN ID
   private final TalonSRX intake = new TalonSRX(12);
-    private boolean toggleState = false; // Tracks last state (true = open, false = closed)
-    private double motorPower = -1; // Initially closed
-    private boolean manuallyReversed = false; // Tracks if Button 2 reversed the direction
+    // private boolean toggleState = false; // Tracks last state (true = open, false = closed)
+    private double motorPower = 1; // Initially closed
+    // private boolean manuallyReversed = false; // Tracks if Button 2 reversed the direction
+    private double absoluteState = -1;
   public test() {
     potent.configFactoryDefault();
     potent.setNeutralMode(NeutralMode.Brake);
 
-    potent.set(ControlMode.PercentOutput, motorPower);
+    potent.set(ControlMode.PercentOutput, -1);
+    intake.set(ControlMode.PercentOutput, -1);
+
   }
 
 //   public void toggleHook() {
@@ -48,12 +54,20 @@ public class test extends SubsystemBase {
 // }
 
 public void toggleHook(){
-  motorPower = (motorPower == 1)? -1: 1;
-  potent.set(ControlMode.PercentOutput, motorPower);
-  intake.set(ControlMode.PercentOutput, motorPower);
+  absoluteState *= -1;
+  motorPower = 1;
+
+  potent.set(ControlMode.PercentOutput, absoluteState);
+  intake.set(ControlMode.PercentOutput, absoluteState);
 }
+
 public void reverseHook(){
-  motorPower = -motorPower;
+  if(motorPower != absoluteState){
+    motorPower = absoluteState * -1;
+  }else{
+    motorPower *= -1;
+  }
+  
   potent.set(ControlMode.PercentOutput, motorPower);
 }
 
@@ -71,6 +85,8 @@ public double getMotorPower() {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Current Motor Power", motorPower);
+    SmartDashboard.putNumber("Current Absolute State", absoluteState);
   }
 
   @Override
