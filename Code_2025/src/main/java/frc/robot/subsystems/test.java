@@ -19,6 +19,7 @@ import frc.robot.RobotContainer;
 public class test extends SubsystemBase {
   /** Creates a new test. */
   private final TalonSRX potent = new TalonSRX(15); // Set CAN ID
+  private final TalonSRX intake = new TalonSRX(12);
     private boolean toggleState = false; // Tracks last state (true = open, false = closed)
     private double motorPower = -1; // Initially closed
     private boolean manuallyReversed = false; // Tracks if Button 2 reversed the direction
@@ -29,20 +30,30 @@ public class test extends SubsystemBase {
     potent.set(ControlMode.PercentOutput, motorPower);
   }
 
-  public void toggleHook() {
-    if (manuallyReversed) {
-        manuallyReversed = false; // Reset manual reverse so Button 1 has authority
-        return; // Don't allow toggle if it was manually reversed
-    }
+//   public void toggleHook() {
+//     if (manuallyReversed) {
+//         manuallyReversed = false; // Reset manual reverse so Button 1 has authority
+//         return; // Don't allow toggle if it was manually reversed
+//     }
 
-    toggleState = !toggleState; // Flip toggle state
-    motorPower = toggleState ? 1 : -1; // 1 for open, -1 for closed
-    potent.set(ControlMode.PercentOutput, motorPower);
+//     toggleState = !toggleState; // Flip toggle state
+//     motorPower = toggleState ? 1 : -1; // 1 for open, -1 for closed
+//     potent.set(ControlMode.PercentOutput, motorPower);
+// }
+
+// public void reverseHook() {
+//   motorPower = -motorPower; // Reverse the current motor direction
+//   manuallyReversed = true; // Flag that a manual override happened
+//   potent.set(ControlMode.PercentOutput, motorPower);
+// }
+
+public void toggleHook(){
+  motorPower = (motorPower == 1)? -1: 1;
+  potent.set(ControlMode.PercentOutput, motorPower);
+  intake.set(ControlMode.PercentOutput, motorPower);
 }
-
-public void reverseHook() {
-  motorPower = -motorPower; // Reverse the current motor direction
-  manuallyReversed = true; // Flag that a manual override happened
+public void reverseHook(){
+  motorPower = -motorPower;
   potent.set(ControlMode.PercentOutput, motorPower);
 }
 
