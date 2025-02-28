@@ -136,8 +136,6 @@ public class AlignAprilTag extends Command {
     else{
 
 
-    // @ELEV MOVEMENT HERE MAKE SURE TO UNCOMMENT IF WANT TO TEST
-    //elev.elevMovement(2.7);
 
     
     // if(Math.round(swerve.inv_get_Yaw()) == Math.round(detectedID.getRotation().getY())){    }
@@ -265,7 +263,8 @@ public class AlignAprilTag extends Command {
 
 
      if(phase2){
-      
+      double rot_offset = swerve.odometry.getPoseMeters().getY();
+
       System.out.println("WORKING PHASE 2");
      SmartDashboard.putBoolean("Phase 2 IF STATEMENT", phase2);
      SmartDashboard.putBoolean("Boolean forward", moving_fwd);
@@ -275,20 +274,35 @@ public class AlignAprilTag extends Command {
         check = true;
       }
       double abs_final_Y = 0;
-      
 
-      if( (-get_Val_X) > 0){
-        // -.02 makes it full front
-        abs_final_Y = Math.copySign((Math.abs(get_Val_X) + (0.196 / get_Val_X)), -get_Val_X);// -0.02 or remove all mods
-        // abs_final_Y = Math.copySign((Math.abs(get_Val_X) + (1.1 * get_Val_X / 1.79)), -get_Val_X);// -0.02 or remove all mods
-        // abs_final = Math.copySign(Math.abs(final_gyro_yaw-3), final_gyro_yaw);
+      if(Math.abs(get_Val_X) < .4){
+        // Getting rid of the constant/x distance since when straight causes major movement that overshoots
+        // abs_final_Y = Math.copySign((Math.abs(get_Val_X) + .22), -get_Val_X);
+        abs_final_Y = Math.copySign((Math.abs(get_Val_X) * 1.2), -get_Val_X);
+      }else{
+        if( (-get_Val_X) > 0){
+          // -.02 makes it full front 
+          // abs_final_Y = Math.copySign((Math.abs(get_Val_X ) - Math.abs(get_Val_X/5.15)), -get_Val_X);// -0.02 or remove all mods, .196/get_Val_X
+          
+          //testing new values
+          abs_final_Y = Math.copySign((Math.abs(get_Val_X) + Math.abs(get_Val_X * .15)), -get_Val_X);
+
+          // abs_final_Y = Math.copySign((Math.abs(get_Val_X) + (1.1 * get_Val_X / 1.79)), -get_Val_X);// -0.02 or remove all mods
+          // abs_final = Math.copySign(Math.abs(final_gyro_yaw-3), final_gyro_yaw);
+        }
+        else{
+          // Values: .549 Slight overshoot , .525 great overshoot , .575 kinda overshoot , .565 middle or undershoot
+         
+          //testing new methods
+          abs_final_Y = Math.copySign(Math.abs(get_Val_X) + (.3 / Math.max(Math.abs(get_Val_X), .5)), -get_Val_X); // +.17 or add .4
+         
+         
+          // abs_final_Y = Math.copySign(Math.abs(get_Val_X) + (1.1 * get_Val_X / 1.79 ), -get_Val_X); // +.17 or add .4
+          // abs_final = Math.copySign(Math.abs(final_gyro_yaw+10), final_gyro_yaw);
+        }
       }
-      else{
-        // Values: .549 Slight overshoot , .525 great overshoot , .575 kinda overshoot , .565 middle or undershoot
-        abs_final_Y = Math.copySign(Math.abs(get_Val_X) + (0.549 / get_Val_X ), -get_Val_X); // +.17 or add .4
-        // abs_final_Y = Math.copySign(Math.abs(get_Val_X) + (1.1 * get_Val_X / 1.79 ), -get_Val_X); // +.17 or add .4
-        // abs_final = Math.copySign(Math.abs(final_gyro_yaw+10), final_gyro_yaw);
-      }
+
+     
     
       double speedY = MathUtil.clamp(yPID.calculate(((swerve.odometry.getPoseMeters().getY()) / conversion), abs_final_Y) , -.04,.04); // -get_Val_X as setpoint
 
@@ -343,6 +357,8 @@ public class AlignAprilTag extends Command {
 
 
     //  if(!phase1 && !phase2){
+    //       // @ELEV MOVEMENT HERE MAKE SURE TO UNCOMMENT IF WANT TO TEST
+    //    elev.elevMovement(2.7);
 
     //  }
 
