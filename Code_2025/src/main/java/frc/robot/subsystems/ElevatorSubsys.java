@@ -43,7 +43,7 @@ public class ElevatorSubsys extends SubsystemBase {
         CANcoderConfiguration config = new CANcoderConfiguration();
         config.MagnetSensor.MagnetOffset = offset;
         config.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 1;
-        config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+        config.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
 
         elevEncoder.getConfigurator().apply(config); 
     }
@@ -73,6 +73,9 @@ public class ElevatorSubsys extends SubsystemBase {
       elevatorTalon.set(ControlMode.PercentOutput, power);
     }
     
+    public double getEncoderPos(){
+      return elevEncoder.getPosition().getValueAsDouble();
+    }
 
 
     public void resetEncoderPos(){

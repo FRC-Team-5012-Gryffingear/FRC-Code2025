@@ -7,10 +7,11 @@ package frc.robot.commands;
 import frc.robot.LimelightHelpers;
 import frc.robot.LimelightHelpers.RawFiducial;
 import frc.robot.subsystems.ElevatorSubsys;
-import frc.robot.subsystems.IntakeSubsysCoral;
-import frc.robot.subsystems.IntakeSubsysLift;
+// import frc.robot.subsystems.IntakeSubsysCoral;
+// import frc.robot.subsystems.IntakeSubsysLift;
 import frc.robot.subsystems.SwerveMod;
 import frc.robot.subsystems.SwerveSubsys;
+import frc.robot.subsystems.intakeCombined;
 import frc.robot.subsystems.limeyImproved;
 
 import java.util.concurrent.Semaphore;
@@ -34,8 +35,9 @@ public class AlignAprilTag extends Command {
   private final SwerveSubsys swerve;
   private final limeyImproved limelight;
   private final ElevatorSubsys elev;
-  private final IntakeSubsysCoral intakeCor;
-  private final IntakeSubsysLift intakeLift;
+  private final intakeCombined intake;
+  // private final IntakeSubsysCoral intakeCor;
+  // private final IntakeSubsysLift intakeLift;
   // private final String limeName = "";
 
   //Change PID values to tune the PID loop
@@ -72,12 +74,13 @@ public class AlignAprilTag extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public AlignAprilTag(SwerveSubsys subsystem, limeyImproved lime, ElevatorSubsys elev, IntakeSubsysCoral intakeCor, IntakeSubsysLift intakeLift) {
+  public AlignAprilTag(SwerveSubsys subsystem, limeyImproved lime, ElevatorSubsys elev, intakeCombined intake) {
     swerve = subsystem;
     limelight = lime;
     this.elev = elev;
-    this.intakeCor = intakeCor;
-    this.intakeLift = intakeLift;
+    this.intake = intake;
+    // this.intakeCor = intakeCor;
+    // this.intakeLift = intakeLift;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem, lime);
   }
@@ -275,6 +278,7 @@ public class AlignAprilTag extends Command {
       }
       double abs_final_Y = 0;
 
+
       if(Math.abs(get_Val_X) < .4){
         // Getting rid of the constant/x distance since when straight causes major movement that overshoots
         // abs_final_Y = Math.copySign((Math.abs(get_Val_X) + .22), -get_Val_X);
@@ -285,7 +289,10 @@ public class AlignAprilTag extends Command {
           // abs_final_Y = Math.copySign((Math.abs(get_Val_X ) - Math.abs(get_Val_X/5.15)), -get_Val_X);// -0.02 or remove all mods, .196/get_Val_X
           
           //testing new values
-          abs_final_Y = Math.copySign((Math.abs(get_Val_X) + Math.abs(get_Val_X * .15)), -get_Val_X);
+          double offval = .1936/get_Val_X;
+          abs_final_Y = Math.copySign((Math.abs(get_Val_X) + Math.abs(get_Val_X * offval)) - .25, -get_Val_X); 
+
+
 
           // abs_final_Y = Math.copySign((Math.abs(get_Val_X) + (1.1 * get_Val_X / 1.79)), -get_Val_X);// -0.02 or remove all mods
           // abs_final = Math.copySign(Math.abs(final_gyro_yaw-3), final_gyro_yaw);
@@ -294,7 +301,10 @@ public class AlignAprilTag extends Command {
           // Values: .549 Slight overshoot , .525 great overshoot , .575 kinda overshoot , .565 middle or undershoot
          
           //testing new methods
-          abs_final_Y = Math.copySign(Math.abs(get_Val_X) + (.3 / Math.max(Math.abs(get_Val_X), .5)), -get_Val_X); // +.17 or add .4
+          abs_final_Y = Math.copySign(Math.abs(get_Val_X) + (.569 / Math.max(Math.abs(get_Val_X), .5)), -get_Val_X); // +.17 or add .4
+          
+          // abs_final_Y = Math.copySign((Math.abs(get_Val_X) + Math.abs(get_Val_X * .13)) - .25, -get_Val_X); 
+
          
          
           // abs_final_Y = Math.copySign(Math.abs(get_Val_X) + (1.1 * get_Val_X / 1.79 ), -get_Val_X); // +.17 or add .4
@@ -313,7 +323,7 @@ public class AlignAprilTag extends Command {
            
 
       //-0.9 instead
-      double speedZ = MathUtil.clamp(xPID.calculate((swerve.odometry.getPoseMeters().getX() / conversion)+(1.1 * get_Val_Z / 1.79),-get_Val_Z), -0.05, 0.05);// -.78
+      double speedZ = MathUtil.clamp(xPID.calculate((swerve.odometry.getPoseMeters().getX() / conversion)+(1.34 * get_Val_Z / 1.79),-get_Val_Z), -0.05, 0.05);// -.78
 
       double store_auto_yaw = MathUtil.clamp(auto_yaw.calculate(swerve.inv_get_Yaw(),abs_final),-.2,.2);
       SmartDashboard.putNumber("Auto yaw value ", store_auto_yaw);
@@ -356,13 +366,6 @@ public class AlignAprilTag extends Command {
      }
 
 
-    //  if(!phase1 && !phase2){
-    //       // @ELEV MOVEMENT HERE MAKE SURE TO UNCOMMENT IF WANT TO TEST
-    //    elev.elevMovement(2.7);
-
-    //  }
-
-
     //  if(!moving_fwd && moving_side){
 
       
@@ -393,6 +396,24 @@ public class AlignAprilTag extends Command {
     //  }
     
      }
+
+     
+
+    //  if(!phase1 && !phase2){
+    //   // @ELEV MOVEMENT HERE MAKE SURE TO UNCOMMENT IF WANT TO TEST
+  
+    //   // elev.elevMovement(2.7);
+    //   if(elev.getEncoderPos() <= 2.479){
+    //     elev.elevUpAndDown(1);
+    //   }else{
+    //     elev.elevUpAndDown(0);
+    //   }
+    //   System.out.println("Elevator Code Activated");
+    // }
+
+
+
+
     }
   }
 
@@ -414,6 +435,6 @@ public class AlignAprilTag extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return !phase1 && !phase2;
+    return false;
   }
 }

@@ -8,15 +8,15 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AlignAprilTag;
 import frc.robot.commands.ElevatorCom;
 import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.IntakeUp;
+// import frc.robot.commands.IntakeUp;
 import frc.robot.commands.SwerveCom;
-import frc.robot.commands.intakeCoral;
+// import frc.robot.commands.intakeCoral;
 import frc.robot.commands.intakeState1;
 import frc.robot.commands.intakeState2;
 import frc.robot.subsystems.ElevatorSubsys;
 import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.IntakeSubsysCoral;
-import frc.robot.subsystems.IntakeSubsysLift;
+// import frc.robot.subsystems.IntakeSubsysCoral;
+// import frc.robot.subsystems.IntakeSubsysLift;
 import frc.robot.subsystems.SwerveSubsys;
 import frc.robot.subsystems.intakeCombined;
 import frc.robot.subsystems.limeyImproved;
@@ -39,13 +39,13 @@ public class RobotContainer {
 
   private final limeyImproved limeI = new limeyImproved();
   private final SwerveSubsys swerve = new SwerveSubsys();
-  private final IntakeSubsysCoral intakeCor = new IntakeSubsysCoral();
-  private final IntakeSubsysLift intakeLift = new IntakeSubsysLift();
+  // private final IntakeSubsysCoral intakeCor = new IntakeSubsysCoral();
+  // private final IntakeSubsysLift intakeLift = new IntakeSubsysLift();
   private final intakeCombined combined = new intakeCombined();
 
   private final ElevatorSubsys elev = new ElevatorSubsys();
 
-  private final AlignAprilTag tagMove = new AlignAprilTag(swerve, limeI,elev,intakeCor,intakeLift);
+  private final AlignAprilTag tagMove = new AlignAprilTag(swerve, limeI,elev, combined);
 
 
 

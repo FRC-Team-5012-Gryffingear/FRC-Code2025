@@ -11,6 +11,7 @@ import frc.robot.subsystems.ExampleSubsystem;
 import java.lang.management.OperatingSystemMXBean;
 import java.util.function.BooleanSupplier;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -58,22 +59,24 @@ public class ElevatorCom extends Command {
       elev.elevMovement(0);
     }
     else if(controller2.b().getAsBoolean()){
-      elev.elevMovement(2.7);
+      elev.elevMovement(2.479);
     }
     else if(controller2.x().getAsBoolean()){
-      elev.elevMovement(5.69);
+      elev.elevMovement(5.25);
     }
     else if(controller2.y().getAsBoolean()){
-      elev.elevMovement(9.8); 
+      elev.elevMovement(9.19); 
     }
     else if(controller2.leftStick().getAsBoolean()){
-      elev.elevMovement(1.16); 
+      elev.elevMovement(.65); 
     }
     else if(controller2.rightStick().getAsBoolean()){
       elev.resetEncoderPos();
     }
     else{
-      elev.elevUpAndDown(controller2.getRightTriggerAxis() - controller2.getLeftTriggerAxis());
+      if(!DriverStation.isAutonomous()){
+        elev.elevUpAndDown(controller2.getRightTriggerAxis() - controller2.getLeftTriggerAxis());
+      }
     }
     // elev.elevUpAndDown(controller2.getRightTriggerAxis() - controller2.getLeftTriggerAxis());
     
