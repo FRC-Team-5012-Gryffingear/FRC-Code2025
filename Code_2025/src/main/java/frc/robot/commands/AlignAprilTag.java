@@ -299,9 +299,12 @@ public class AlignAprilTag extends Command {
         }
         else{
           // Values: .549 Slight overshoot , .525 great overshoot , .575 kinda overshoot , .565 middle or undershoot
+
+          // Values that "work": 0.596,  
          
           //testing new methods
-          abs_final_Y = Math.copySign(Math.abs(get_Val_X) + (.569 / Math.max(Math.abs(get_Val_X), .5)), -get_Val_X); // +.17 or add .4
+          //b = .5 changed to .41 since it will never reach .4 due to if statement
+          abs_final_Y = Math.copySign(Math.abs(get_Val_X) + (.569 / Math.max(Math.abs(get_Val_X), .41)), -get_Val_X); // +.17 or add .4
           
           // abs_final_Y = Math.copySign((Math.abs(get_Val_X) + Math.abs(get_Val_X * .13)) - .25, -get_Val_X); 
 
@@ -407,6 +410,7 @@ public class AlignAprilTag extends Command {
     //     elev.elevUpAndDown(1);
     //   }else{
     //     elev.elevUpAndDown(0);
+//          //   intake.reverseHook();
     //   }
     //   System.out.println("Elevator Code Activated");
     // }

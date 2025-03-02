@@ -88,7 +88,7 @@ public class SwerveCom extends Command {
     SmartDashboard.putNumber("YAW YAW YAW", swerve.getYaw());
 
 
-    elev.elevClimbMove(controller2.getRightTriggerAxis() - controller2.getLeftTriggerAxis());
+    elev.elevClimbMove(controller2.getLeftTriggerAxis() - controller2.getRightTriggerAxis());
 
    
 
