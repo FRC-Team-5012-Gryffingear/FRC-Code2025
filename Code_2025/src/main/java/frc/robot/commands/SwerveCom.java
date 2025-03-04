@@ -113,7 +113,7 @@ public class SwerveCom extends Command {
     } else{
       resetValues();
 
-      if(LimelightHelpers.getTV("")){
+      if(LimelightHelpers.getTV("limelight-senior")){
         seenTag = true;
         updateAprilTagValues();
       }else{
@@ -156,7 +156,7 @@ public class SwerveCom extends Command {
 
 
 
-    SmartDashboard.putNumber("getXXValue", LimelightHelpers.getCameraPose3d_TargetSpace("").getX());
+    SmartDashboard.putNumber("getXXValue", LimelightHelpers.getCameraPose3d_TargetSpace("limelight-senior").getX());
     SmartDashboard.putNumber("side value", (swerve.odometry.getPoseMeters().getY()/14.968) -.2);
     SmartDashboard.putNumber("fwd value", (swerve.odometry.getPoseMeters().getX()/14.968) -.2);
   }
@@ -218,7 +218,7 @@ public class SwerveCom extends Command {
   }
 
   public void updateAprilTagValues(){
-    Pose3d detectedID = LimelightHelpers.getCameraPose3d_TargetSpace("");
+    Pose3d detectedID = LimelightHelpers.getCameraPose3d_TargetSpace("limelight-senior");
     initial_gyro_yaw = swerve.getYaw();
     get_Val_Z = detectedID.getZ();
     get_Val_X = detectedID.getX();

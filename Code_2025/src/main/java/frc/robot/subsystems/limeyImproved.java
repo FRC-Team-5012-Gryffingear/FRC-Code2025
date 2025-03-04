@@ -22,8 +22,8 @@ public class limeyImproved extends SubsystemBase {
   @Override
   //Attempt at getting the raw fiducials from the limelight, aka the raw data from each individual apriltag
   public void periodic() {
-    fiducials = LimelightHelpers.getRawFiducials("");
-    apriltagsDetected = LimelightHelpers.getCameraPose3d_TargetSpace("");
+    fiducials = LimelightHelpers.getRawFiducials("limelight-senior");
+    apriltagsDetected = LimelightHelpers.getCameraPose3d_TargetSpace("limelight-senior");
   }
 
   public RawFiducial getFiducial(int id) {

@@ -65,7 +65,7 @@ public class ElevatorCom extends Command {
       elev.elevMovement(5.38);
     }
     else if(controller2.y().getAsBoolean()){
-      elev.elevMovement(9.28); 
+      elev.elevMovement(9.38); 
     }
     else if(controller2.leftStick().getAsBoolean()){
       elev.elevMovement(1.40); 
@@ -76,7 +76,7 @@ public class ElevatorCom extends Command {
     else{
       if(!DriverStation.isAutonomous()){
         elev.elevUpAndDown(controller2.getRightTriggerAxis() - controller2.getLeftTriggerAxis());
-      }
+      } 
     }
     // elev.elevUpAndDown(controller2.getRightTriggerAxis() - controller2.getLeftTriggerAxis());
     

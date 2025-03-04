@@ -60,6 +60,7 @@ public class RobotContainer {
     // Configure the trigger bindings
     // lime.setDefaultCommand(new limeyCom(lime));
 
+    // SmartDashboard.putString("Senior view", "limelight-senior/stream.mjpg");
     // limeI.setDefaultCommand(new AlignAprilTag(swerve, limeI));
 
      swerve.setDefaultCommand(new SwerveCom(

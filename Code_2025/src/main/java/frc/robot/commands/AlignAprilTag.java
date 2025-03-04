@@ -128,9 +128,9 @@ public class AlignAprilTag extends Command {
 
     SmartDashboard.putNumber("REAL TIME APRIL TAG", Math.toDegrees(detectedID.getRotation().getY()));
 
-    if(LimelightHelpers.getTV("")){
+    if(LimelightHelpers.getTV("limelight-senior")){
       target_seen = true;
-      current_id = LimelightHelpers.getFiducialID("");
+      current_id = LimelightHelpers.getFiducialID("limelight-senior");
     }
     
     if(!target_seen){
@@ -148,7 +148,7 @@ public class AlignAprilTag extends Command {
     
       // LimelightHelpers.setLEDMode_ForceOff("");
       needs_rotate = true;
-      SmartDashboard.putNumber("LIVE FEED APRIL TAG", LimelightHelpers.getCameraPose3d_TargetSpace("").getY());
+      SmartDashboard.putNumber("LIVE FEED APRIL TAG", LimelightHelpers.getCameraPose3d_TargetSpace("limelight-senior").getY());
       SmartDashboard.putBoolean("needs rotate", needs_rotate);
 
       if(needs_rotate && initial_gyro_yaw == -10000){ //  && april_tag_rotation == -10000
@@ -159,7 +159,7 @@ public class AlignAprilTag extends Command {
         get_Val_X = detectedID.getX();
         april_tag_rotation = detectedID.getRotation().getY();
 
-        first_tag_id = LimelightHelpers.getFiducialID("");
+        first_tag_id = LimelightHelpers.getFiducialID("limelight-senior");
         // final_gyro_yaw = Math.toDegrees(april_tag_rotation) + initial_gyro_yaw;
         
 
@@ -304,7 +304,10 @@ public class AlignAprilTag extends Command {
          
           //testing new methods
           //b = .5 changed to .41 since it will never reach .4 due to if statement
-          abs_final_Y = Math.copySign(Math.abs(get_Val_X) + (.569 / Math.max(Math.abs(get_Val_X), .41)), -get_Val_X); // +.17 or add .4
+
+          double xOffset = .6658;
+          //.574 actually kinda worked
+          abs_final_Y = Math.copySign(Math.abs(get_Val_X) + (xOffset / Math.max(Math.abs(get_Val_X), .41)), -get_Val_X); // +.17 or add .4
           
           // abs_final_Y = Math.copySign((Math.abs(get_Val_X) + Math.abs(get_Val_X * .13)) - .25, -get_Val_X); 
 
