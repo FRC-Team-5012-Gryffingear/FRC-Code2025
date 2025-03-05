@@ -5,17 +5,52 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.SwerveSubsys;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 
-public final class Autos {
-  /** Example static factory for an autonomous command. */
-  public static Command exampleAuto(ExampleSubsystem subsystem) {
-    // return Commands.sequence(subsystem.exampleMethodCommand(), new ExampleCommand(subsystem));
-    return null;
+/** An example command that uses an example subsystem. */
+public class Autos extends Command {
+  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
+  private final SwerveSubsys m_subsystem;
+  private Timer time = new Timer();
+
+  
+  public Autos(SwerveSubsys subsystem) {
+    m_subsystem = subsystem;
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(subsystem);
   }
 
-  private Autos() {
-    throw new UnsupportedOperationException("This is a utility class!");
+  // Called when the command is initially scheduled.
+  @Override
+  public void initialize() {
+    time.stop();
+    time.reset();
+  }
+
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() {
+    time.start();
+    if(time.get() > 4 && time.get() < 6){
+      m_subsystem.drive3(-1, 0, 0, true);
+    }
+    else if(time.get() > 6){
+      m_subsystem.drive3(0, 0, 0, true);
+    }
+  }
+
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {
+    
+  }
+
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished() {
+    time.stop();
+    return false;
   }
 }

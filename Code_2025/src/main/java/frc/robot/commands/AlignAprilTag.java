@@ -25,6 +25,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.kinematics.Odometry;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -61,6 +62,8 @@ public class AlignAprilTag extends Command {
   // private static double snap = 0;
   private static double abs_final = 0;
 
+  private static Timer time = new Timer();
+
 
   private static double first_tag_id = -1;
   private static double current_id = -1;
@@ -89,6 +92,8 @@ public class AlignAprilTag extends Command {
   @Override
   public void initialize() {
     elev.resetEncoderPos();
+    time.stop();
+    time.reset();
     // xPID.setTolerance(0.1);
     // yPID.setTolerance(0.1);
     // rotPID.setTolerance(3);
@@ -115,6 +120,7 @@ public class AlignAprilTag extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    time.start();
     // double real_wheel_rotation = swerve.odometry.getPoseMeters().getX();
     System.out.println("WE ARE EXECUTING");
 
@@ -134,16 +140,23 @@ public class AlignAprilTag extends Command {
     }
     
     if(!target_seen){
-      swerve.drive3(0, 0, 0, false);
+
+      if(time.get() > 4 && time.get() < 6){
+        swerve.drive3(-1, 0, 0, true);
+      }
+      else if(time.get() > 6){
+        swerve.drive3(0, 0, 0, true);
+      }
+  
     }
     else{
-
-
+    time.stop();
 
     
     // if(Math.round(swerve.inv_get_Yaw()) == Math.round(detectedID.getRotation().getY())){    }
       // SmartDashboard.putBoolean(, check)
     if(phase1){
+      time.stop();
 
     
       // LimelightHelpers.setLEDMode_ForceOff("");
@@ -266,6 +279,8 @@ public class AlignAprilTag extends Command {
 
 
      if(phase2){
+      time.stop();
+
       double rot_offset = swerve.odometry.getPoseMeters().getY();
 
       System.out.println("WORKING PHASE 2");
@@ -405,18 +420,18 @@ public class AlignAprilTag extends Command {
 
      
 
-    //  if(!phase1 && !phase2){
-    //   // @ELEV MOVEMENT HERE MAKE SURE TO UNCOMMENT IF WANT TO TEST
+     if(!phase1 && !phase2){
+      // @ELEV MOVEMENT HERE MAKE SURE TO UNCOMMENT IF WANT TO TEST
   
-    //   // elev.elevMovement(2.7);
-    //   if(elev.getEncoderPos() <= 2.479){
-    //     elev.elevUpAndDown(1);
-    //   }else{
-    //     elev.elevUpAndDown(0);
-//          //   intake.reverseHook();
-    //   }
-    //   System.out.println("Elevator Code Activated");
-    // }
+      // elev.elevMovement(2.7);
+      if(elev.getEncoderPos() <= 2.479){
+        elev.elevUpAndDown(1);
+      }else{
+        elev.elevUpAndDown(0);
+        intake.reverseHook();
+      }
+      System.out.println("Elevator Code Activated");
+    }
 
 
 
