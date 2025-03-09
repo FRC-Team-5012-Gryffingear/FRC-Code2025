@@ -63,7 +63,7 @@ public class AlignAprilTag extends Command {
   private static double abs_final = 0;
 
   private static Timer time = new Timer();
-
+  private static Timer force_Timer = new Timer();
 
   private static double first_tag_id = -1;
   private static double current_id = -1;
@@ -94,6 +94,8 @@ public class AlignAprilTag extends Command {
     elev.resetEncoderPos();
     time.stop();
     time.reset();
+    force_Timer.stop();
+    force_Timer.reset();
     // xPID.setTolerance(0.1);
     // yPID.setTolerance(0.1);
     // rotPID.setTolerance(3);
@@ -121,6 +123,7 @@ public class AlignAprilTag extends Command {
   @Override
   public void execute() {
     time.start();
+    force_Timer.start();
     // double real_wheel_rotation = swerve.odometry.getPoseMeters().getX();
     System.out.println("WE ARE EXECUTING");
 
@@ -142,7 +145,7 @@ public class AlignAprilTag extends Command {
     if(!target_seen){
 
       if(time.get() > 4 && time.get() < 6){
-        swerve.drive3(-1, 0, 0, true);
+        swerve.drive3(-.25, 0, 0, true);
       }
       else if(time.get() > 6){
         swerve.drive3(0, 0, 0, true);
@@ -304,7 +307,8 @@ public class AlignAprilTag extends Command {
           // abs_final_Y = Math.copySign((Math.abs(get_Val_X ) - Math.abs(get_Val_X/5.15)), -get_Val_X);// -0.02 or remove all mods, .196/get_Val_X
           
           //testing new values
-          double offval = .1936/get_Val_X;
+          //.1936
+          double offval = .185/get_Val_X;
           abs_final_Y = Math.copySign((Math.abs(get_Val_X) + Math.abs(get_Val_X * offval)) - .25, -get_Val_X); 
 
 
@@ -320,7 +324,8 @@ public class AlignAprilTag extends Command {
           //testing new methods
           //b = .5 changed to .41 since it will never reach .4 due to if statement
 
-          double xOffset = .6658;
+          //.6658
+          double xOffset = .65;
           //.574 actually kinda worked
           abs_final_Y = Math.copySign(Math.abs(get_Val_X) + (xOffset / Math.max(Math.abs(get_Val_X), .41)), -get_Val_X); // +.17 or add .4
           
@@ -420,11 +425,11 @@ public class AlignAprilTag extends Command {
 
      
 
-     if(!phase1 && !phase2){
+     if((!phase1 && !phase2) || force_Timer.get() >= 7){
       // @ELEV MOVEMENT HERE MAKE SURE TO UNCOMMENT IF WANT TO TEST
   
       // elev.elevMovement(2.7);
-      if(elev.getEncoderPos() <= 2.479){
+      if(elev.getEncoderPos() <= 9.761693){
         elev.elevUpAndDown(1);
       }else{
         elev.elevUpAndDown(0);

@@ -15,12 +15,15 @@ import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class ElevatorSubsys extends SubsystemBase {
+    private intakeCombined intakeSubsys = new intakeCombined();
+
     private TalonSRX elevatorTalon = new TalonSRX(Constants.elev_Motor);
     private CANcoder elevEncoder = new CANcoder(Constants.elev_Encoder);
     private double offset = Constants.elevOffset;
@@ -51,14 +54,20 @@ public class ElevatorSubsys extends SubsystemBase {
     //Gather data and determine what value and unit we are using to determine our movement
     public void elevMovement(double goal){ // each call of this function will have a different goal value
         double currentPosition = elevEncoder.getPosition().getValueAsDouble();
-        double percent = MathUtil.clamp(elevHold.calculate(currentPosition,goal),-1,1);
+        double percent = MathUtil.clamp(elevHold.calculate(currentPosition,goal),-.75,.75);
         elevatorTalon.set(ControlMode.PercentOutput, percent);
         SmartDashboard.putNumber("Power of elevator", percent);
 
     }
 
     public void elevClimbMove(double power){
-        elevClimb.set(ControlMode.PercentOutput, power*0.8);
+      if(intakeSubsys.getAbsolutePower() != 1){
+        elevClimb.set(ControlMode.PercentOutput, power*0.75);
+      }
+      else{
+        elevClimb.set(ControlMode.PercentOutput, 0);
+      }
+      
     }
 
 
@@ -70,7 +79,15 @@ public class ElevatorSubsys extends SubsystemBase {
       // else if(elevEncoder.getPosition().getValueAsDouble() < 0.3 && power < 0){
       //   power = 0;
       // }
-      elevatorTalon.set(ControlMode.PercentOutput, power);
+      if(Math.abs(power) > 0.2){
+        elevatorTalon.set(ControlMode.PercentOutput, power*.75);
+      }
+      else{
+        if(!DriverStation.isAutonomous()){
+          elevatorTalon.set(ControlMode.PercentOutput, 0.1);
+        }
+      }
+      
     }
     
     public double getEncoderPos(){

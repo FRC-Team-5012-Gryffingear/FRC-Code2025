@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -57,7 +58,10 @@ public class intakeCombined extends SubsystemBase {
     
     intakeTalon2.set(ControlMode.PercentOutput, motorPower);
   }
-  
+  public double getAbsolutePower(){
+    return absoluteState;
+  }
+
   public double getMotorPower() {
     return motorPower;
   }
@@ -68,6 +72,7 @@ public class intakeCombined extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("ABSOLUTE INTAKE POSITION POWER", getAbsolutePower());
   }
 
   @Override
