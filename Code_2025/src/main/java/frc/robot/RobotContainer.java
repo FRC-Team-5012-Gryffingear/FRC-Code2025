@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AlignAprilTag;
+import frc.robot.commands.Autos;
 import frc.robot.commands.ElevatorCom;
 import frc.robot.commands.ExampleCommand;
 // import frc.robot.commands.IntakeUp;
@@ -48,6 +49,7 @@ public class RobotContainer {
   private final AlignAprilTag tagMove = new AlignAprilTag(swerve, limeI,elev, combined);
 
 
+  private final Autos auto2 = new Autos(swerve);
 
   // private final limeyImproved limeI = new limeyImproved();
   private final CommandXboxController driverController = new CommandXboxController(OperatorConstants.DriverContrlPort);

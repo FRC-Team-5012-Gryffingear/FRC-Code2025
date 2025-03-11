@@ -65,7 +65,7 @@ public class ElevatorCom extends Command {
       elev.elevMovement(6.198);
     }
     else if(controller2.y().getAsBoolean()){
-      elev.elevMovement(10.25); 
+      elev.elevMovement(9.8); 
     }
     else if(controller2.leftStick().getAsBoolean()){
       elev.elevMovement(1.420); 

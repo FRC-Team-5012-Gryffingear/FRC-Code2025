@@ -123,7 +123,6 @@ public class AlignAprilTag extends Command {
   @Override
   public void execute() {
     time.start();
-    force_Timer.start();
     // double real_wheel_rotation = swerve.odometry.getPoseMeters().getX();
     System.out.println("WE ARE EXECUTING");
 
@@ -154,6 +153,8 @@ public class AlignAprilTag extends Command {
     }
     else{
     time.stop();
+    force_Timer.start();
+
 
     
     // if(Math.round(swerve.inv_get_Yaw()) == Math.round(detectedID.getRotation().getY())){    }
@@ -325,7 +326,7 @@ public class AlignAprilTag extends Command {
           //b = .5 changed to .41 since it will never reach .4 due to if statement
 
           //.6658
-          double xOffset = .65;
+          double xOffset = .6585;
           //.574 actually kinda worked
           abs_final_Y = Math.copySign(Math.abs(get_Val_X) + (xOffset / Math.max(Math.abs(get_Val_X), .41)), -get_Val_X); // +.17 or add .4
           
@@ -425,12 +426,13 @@ public class AlignAprilTag extends Command {
 
      
 
-     if((!phase1 && !phase2) || force_Timer.get() >= 7){
+     if((!phase1 && !phase2) || force_Timer.get() >= 5){
+      swerve.drive3(0, 0, 0, true);
       // @ELEV MOVEMENT HERE MAKE SURE TO UNCOMMENT IF WANT TO TEST
   
       // elev.elevMovement(2.7);
-      if(elev.getEncoderPos() <= 9.761693){
-        elev.elevUpAndDown(1);
+      if(elev.getEncoderPos() <= 9.82){
+        elev.elevMovement(9.82);
       }else{
         elev.elevUpAndDown(0);
         intake.reverseHook();

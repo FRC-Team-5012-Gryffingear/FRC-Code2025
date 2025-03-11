@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 // import frc.robot.subsystems.limey;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /** An example command that uses an example subsystem. */
 public class SwerveCom extends Command {
@@ -90,13 +91,10 @@ public class SwerveCom extends Command {
 
     elev.elevClimbMove(controller2.getLeftTriggerAxis() - controller2.getRightTriggerAxis());
 
-   
-
     if(yaw.getAsBoolean()){
       swerve.resetHeading();
     }
-
-
+    
 
     //swerve.drive3(xSpeed, -ySpeed, -rotateSpeed*1.5, true);
     SmartDashboard.putBoolean("SeenTag", seenTag);
