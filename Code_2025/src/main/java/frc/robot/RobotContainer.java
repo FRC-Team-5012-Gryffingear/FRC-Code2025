@@ -49,7 +49,7 @@ public class RobotContainer {
   }
 
   // public void setTogggle(){
-  //   toggle = !toggle;
+  //   toggle = !toggle;  
   // }
 
   
@@ -60,19 +60,19 @@ public class RobotContainer {
     // new Trigger(m_exampleSubsystem::exampleCondition)
     //     .onTrue(new ExampleCommand(m_exampleSubsystem));
 
-    testCom first = new testCom(t, m_driverController);
-    testCom2 second = new testCom2(t, -1);
+    // testCom first = new testCom(t, m_driverController);
+    // testCom2 second = new testCom2(t, -1);
 
-    // t.setDefaultCommand(first);
-    // t.setDefaultCommand(new testCom(t, m_driverController));
-    // t.setDefaultCommand();
-    m_driverController.leftBumper().onTrue(new hookCom(t));
-    m_driverController.rightBumper().onTrue(new reverseHookCom(t));
+    // // t.setDefaultCommand(first);
+    // // t.setDefaultCommand(new testCom(t, m_driverController));
+    // // t.setDefaultCommand();
+    // m_driverController.leftBumper().onTrue(new hookCom(t));
+    // m_driverController.rightBumper().onTrue(new reverseHookCom(t));
 
     
 
 
-    SmartDashboard.putBoolean("boolean", toggle);
+    // SmartDashboard.putBoolean("boolean", toggle);
     
 
 
