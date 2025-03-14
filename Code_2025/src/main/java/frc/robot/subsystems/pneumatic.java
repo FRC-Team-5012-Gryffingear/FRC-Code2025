@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.drive.RobotDriveBase;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
@@ -23,7 +24,7 @@ public class pneumatic extends SubsystemBase {
   DoubleSolenoid test2 = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 1, 6);
 
   Value absoluteval = Value.kReverse;
-  Value hookSolenoid = Value.kForward;
+  private boolean canReverse = true;
 
   Timer time = new Timer();
 
@@ -32,32 +33,55 @@ public class pneumatic extends SubsystemBase {
     test2.set(Value.kReverse);
   }
 
-
   public void toggle(){
-    absoluteval = test2.get();
+    absoluteval = (absoluteval == Value.kForward) ? Value.kReverse : Value.kForward;
+    hooktest1.set(absoluteval);
+    test2.set(absoluteval);
+    canReverse = true;
   }
 
-
-  public void pneumaticMove(boolean a,boolean b){
-    if(a){
-        if(test2.get() == Value.kReverse){
-            hooktest1.set(Value.kForward);
-            test2.set(Value.kForward);
-            
-        }else if(test2.get() == Value.kForward){
-            hooktest1.set(Value.kReverse);
-            test2.set(Value.kReverse);
-        }
-    }else if(b){
-        hooktest1.toggle();
+  public void reverseHook(){
+    if(canReverse){
+      hooktest1.toggle();
+      canReverse = false;
     }
   }
+
+  public Value getSolenoidState(){
+    return absoluteval;
+  }
+  
+  public Value getHookState(){
+    return hooktest1.get();
+  }
+
+  // public void toggle(){
+  //   absoluteval = test2.get();
+  // }
+
+
+  // public void pneumaticMove(boolean a,boolean b){
+  //   if(a){
+  //       if(test2.get() == Value.kReverse){
+  //           hooktest1.set(Value.kForward);
+  //           test2.set(Value.kForward);
+            
+  //       }else if(test2.get() == Value.kForward){
+  //           hooktest1.set(Value.kReverse);
+  //           test2.set(Value.kReverse);
+  //       }
+  //   }else if(b){
+  //       hooktest1.toggle();
+  //   }
+  // }
 
 
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putString("Solenoid State", getSolenoidState().toString());
+    SmartDashboard.putString("Hook State", getHookState().toString());
   }
 
   @Override

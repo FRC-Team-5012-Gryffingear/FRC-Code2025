@@ -9,6 +9,7 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.autos1;
 import frc.robot.commands.hookCom;
+import frc.robot.commands.pneumatiCom2;
 import frc.robot.commands.pneumaticCom;
 import frc.robot.commands.reverseHookCom;
 import frc.robot.commands.testCom;
@@ -60,9 +61,12 @@ public class RobotContainer {
 
   private void configureBindings() {
 
-    pneu.setDefaultCommand(new pneumaticCom(pneu,
-    () -> m_driverController.a().getAsBoolean(),
-     () -> m_driverController.b().getAsBoolean()));
+    m_driverController.a().onTrue(new pneumaticCom(pneu));
+    m_driverController.b().onTrue(new pneumatiCom2(pneu));
+
+    // pneu.setDefaultCommand(new pneumaticCom(pneu,
+    // () -> m_driverController.a().getAsBoolean(),
+    //  () -> m_driverController.b().getAsBoolean()));
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     // new Trigger(m_exampleSubsystem::exampleCondition)
     //     .onTrue(new ExampleCommand(m_exampleSubsystem));
