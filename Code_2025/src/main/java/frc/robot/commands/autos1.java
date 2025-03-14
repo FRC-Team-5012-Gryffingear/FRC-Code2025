@@ -5,20 +5,23 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.pneumatic;
 import frc.robot.subsystems.test;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */
 public class autos1 extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final test m_subsystem;
+  private final pneumatic m_subsystem;
 
+  private Timer time = new Timer();
   /**
    * Creates a new autos1.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public autos1(test subsystem) {
+  public autos1(pneumatic subsystem) {
     m_subsystem = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
@@ -26,12 +29,21 @@ public class autos1 extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    time.stop();
+    time.reset();
+  }
 
+
+  
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.reverseHook();
+    // m_subsystem.reverseHook();
+    time.start();
+    if(time.get() > 2){
+      m_subsystem.reverseHook();
+    }
   }
 
   // Called once the command ends or is interrupted.
