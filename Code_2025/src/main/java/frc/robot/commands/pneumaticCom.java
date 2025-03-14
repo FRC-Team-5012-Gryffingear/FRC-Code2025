@@ -6,6 +6,9 @@ package frc.robot.commands;
 
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.pneumatic;
+
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */
@@ -13,14 +16,17 @@ public class pneumaticCom extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 //   private final ExampleSubsystem m_subsystem;
     private final pneumatic pneu;
+    private final BooleanSupplier a, b;
 
   /**
    * Creates a new pneumaticCom.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public pneumaticCom(pneumatic subsystem) {
+  public pneumaticCom(pneumatic subsystem, BooleanSupplier A, BooleanSupplier B) {
     pneu = subsystem;
+    a = A;
+    b = B;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
@@ -31,7 +37,9 @@ public class pneumaticCom extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    pneu.pneumaticMove(a.getAsBoolean(), b.getAsBoolean());
+  }
 
   // Called once the command ends or is interrupted.
   @Override

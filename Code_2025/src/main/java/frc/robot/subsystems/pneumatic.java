@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.drive.RobotDriveBase;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -18,12 +19,22 @@ import frc.robot.RobotContainer;
 public class pneumatic extends SubsystemBase {
   /** Creates a new pneumatic. */
 
-  DoubleSolenoid hooktest1 = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 0);
-  DoubleSolenoid test2 = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 0);
+  DoubleSolenoid hooktest1 = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 7);
+  DoubleSolenoid test2 = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 1, 6);
+
+  Value absoluteval = Value.kReverse;
+  Value hookSolenoid = Value.kForward;
+
+  Timer time = new Timer();
 
   public pneumatic() {
     hooktest1.set(Value.kReverse);
     test2.set(Value.kReverse);
+  }
+
+
+  public void toggle(){
+    absoluteval = test2.get();
   }
 
 
@@ -32,6 +43,7 @@ public class pneumatic extends SubsystemBase {
         if(test2.get() == Value.kReverse){
             hooktest1.set(Value.kForward);
             test2.set(Value.kForward);
+            
         }else if(test2.get() == Value.kForward){
             hooktest1.set(Value.kReverse);
             test2.set(Value.kReverse);
