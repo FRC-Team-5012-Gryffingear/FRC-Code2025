@@ -297,6 +297,8 @@ public class AlignAprilTag extends Command {
       }
       double abs_final_Y = 0;
 
+      double offval = 0;
+      double xOffset = 0;
 
       if(Math.abs(get_Val_X) < .4){
         // Getting rid of the constant/x distance since when straight causes major movement that overshoots
@@ -306,10 +308,38 @@ public class AlignAprilTag extends Command {
         if( (-get_Val_X) > 0){
           // -.02 makes it full front 
           // abs_final_Y = Math.copySign((Math.abs(get_Val_X ) - Math.abs(get_Val_X/5.15)), -get_Val_X);// -0.02 or remove all mods, .196/get_Val_X
+
+          //Section 1 Values and NUmbers to
+          if(Math.abs(get_Val_X) >= 1 && Math.abs(get_Val_Z) > 1){
+
+            //edit the number on top to make more accurate or something
+            if(Math.abs(final_gyro_yaw) > 10){
+              offval = .9/get_Val_X;
+              System.out.println("Section 1, part 1");
+            }
+            else{
+              offval = .2/get_Val_X;
+              System.out.println("Section 1, part 2");
+            }
+
+          }
+          else{
+            
+            //edit values later
+            if(Math.abs(final_gyro_yaw) > 10){
+              offval = .9/get_Val_X;
+              System.out.println("Section 1, part 3");
+            }
+            else{
+              offval = .2/get_Val_X;
+              System.out.println("Section 1, part 4");
+            }
+          }
           
+
           //testing new values
           //.1936
-          double offval = .185/get_Val_X;
+          
           abs_final_Y = Math.copySign((Math.abs(get_Val_X) + Math.abs(get_Val_X * offval)) - .25, -get_Val_X); 
 
 
@@ -325,9 +355,36 @@ public class AlignAprilTag extends Command {
           //testing new methods
           //b = .5 changed to .41 since it will never reach .4 due to if statement
 
+          if(Math.abs(get_Val_X) >= 1 && Math.abs(get_Val_Z) > 1){
+
+            //edit the number on top to make more accurate or something
+            if(Math.abs(final_gyro_yaw) > 10){
+              xOffset = 2;
+              System.out.println("Section 2, part 1");
+            }
+            else{
+              xOffset = 1;
+              System.out.println("Section 2, part 2");
+            }
+
+          }
+          else{
+            
+            //edit values later
+            if(Math.abs(final_gyro_yaw) > 10){
+              xOffset = .9;
+              System.out.println("Section 2, part 3");
+            }
+            else{
+              xOffset = .4;
+              System.out.println("Section 2, part 4");
+            }
+          }
+          
           //.6658
-          double xOffset = .6585;
+          // xOffset = .6585;
           //.574 actually kinda worked
+
           abs_final_Y = Math.copySign(Math.abs(get_Val_X) + (xOffset / Math.max(Math.abs(get_Val_X), .41)), -get_Val_X); // +.17 or add .4
           
           // abs_final_Y = Math.copySign((Math.abs(get_Val_X) + Math.abs(get_Val_X * .13)) - .25, -get_Val_X); 
