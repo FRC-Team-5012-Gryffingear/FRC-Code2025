@@ -305,32 +305,39 @@ public class AlignAprilTag extends Command {
         // abs_final_Y = Math.copySign((Math.abs(get_Val_X) + .22), -get_Val_X);
         abs_final_Y = Math.copySign((Math.abs(get_Val_X) * 1.2), -get_Val_X);
       }else{
+        
+        // Checks if the robot is to the left of the robot
         if( (-get_Val_X) > 0){
+
           // -.02 makes it full front 
           // abs_final_Y = Math.copySign((Math.abs(get_Val_X ) - Math.abs(get_Val_X/5.15)), -get_Val_X);// -0.02 or remove all mods, .196/get_Val_X
 
-          //Section 1 Values and NUmbers to
+           // If we are a certain distance away we enter a new section
           if(Math.abs(get_Val_X) >= 1 && Math.abs(get_Val_Z) > 1){
 
-            //edit the number on top to make more accurate or something
+      			// If there is big rotation gap we want to increase the goal size
             if(Math.abs(final_gyro_yaw) > 10){
               offval = .9/get_Val_X;
               System.out.println("Section 1, part 1");
             }
             else{
+              // make goal smaller incase the rotation is not big
               offval = .2/get_Val_X;
               System.out.println("Section 1, part 2");
             }
 
           }
+
+          // if we are NOT a certain distance away and are relatively "Close"
           else{
             
-            //edit values later
+            // We check if we have big rotation and increase goal if so
             if(Math.abs(final_gyro_yaw) > 10){
               offval = .9/get_Val_X;
               System.out.println("Section 1, part 3");
             }
             else{
+              // make goal smaller incase the rotation is not big
               offval = .2/get_Val_X;
               System.out.println("Section 1, part 4");
             }
@@ -340,6 +347,7 @@ public class AlignAprilTag extends Command {
           //testing new values
           //.1936
           
+          // Once we do the scaling, apply the configs to the math
           abs_final_Y = Math.copySign((Math.abs(get_Val_X) + Math.abs(get_Val_X * offval)) - .25, -get_Val_X); 
 
 
@@ -348,21 +356,17 @@ public class AlignAprilTag extends Command {
           // abs_final = Math.copySign(Math.abs(final_gyro_yaw-3), final_gyro_yaw);
         }
         else{
-          // Values: .549 Slight overshoot , .525 great overshoot , .575 kinda overshoot , .565 middle or undershoot
-
-          // Values that "work": 0.596,  
-         
-          //testing new methods
-          //b = .5 changed to .41 since it will never reach .4 due to if statement
-
+        
+          // if the robot is to the right of the apriltag. Also check if we are a certain distance away to enter different section	
           if(Math.abs(get_Val_X) >= 1 && Math.abs(get_Val_Z) > 1){
 
-            //edit the number on top to make more accurate or something
+            // Check if rotation big
             if(Math.abs(final_gyro_yaw) > 10){
               xOffset = 2;
               System.out.println("Section 2, part 1");
             }
             else{
+              // if small make goal smaller
               xOffset = 1;
               System.out.println("Section 2, part 2");
             }
@@ -370,21 +374,24 @@ public class AlignAprilTag extends Command {
           }
           else{
             
-            //edit values later
+            // NOT certain distance, check if rotation big
             if(Math.abs(final_gyro_yaw) > 10){
               xOffset = .9;
               System.out.println("Section 2, part 3");
             }
             else{
+              // if low rot then make goal small
               xOffset = .4;
               System.out.println("Section 2, part 4");
             }
+
           }
           
           //.6658
           // xOffset = .6585;
           //.574 actually kinda worked
 
+          // apply the equation afterward
           abs_final_Y = Math.copySign(Math.abs(get_Val_X) + (xOffset / Math.max(Math.abs(get_Val_X), .41)), -get_Val_X); // +.17 or add .4
           
           // abs_final_Y = Math.copySign((Math.abs(get_Val_X) + Math.abs(get_Val_X * .13)) - .25, -get_Val_X); 
@@ -392,7 +399,6 @@ public class AlignAprilTag extends Command {
          
          
           // abs_final_Y = Math.copySign(Math.abs(get_Val_X) + (1.1 * get_Val_X / 1.79 ), -get_Val_X); // +.17 or add .4
-          // abs_final = Math.copySign(Math.abs(final_gyro_yaw+10), final_gyro_yaw);
         }
       }
 
