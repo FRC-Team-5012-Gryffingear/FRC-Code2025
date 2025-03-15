@@ -99,6 +99,15 @@ private Field2d fieldMaker = new Field2d();
   public double inv_get_Yaw(){
     return pigeon.getAngle() % 360;
   }
+  
+  public SwerveModulePosition[] getswerveModPos(){
+    return new SwerveModulePosition[] {
+      frontLeftMod.getModPos(),
+      frontRightMod.getModPos(),
+      backLeftMod.getModPos(),
+      backRightMod.getModPos()
+  };
+  }
 
   public void resetHeading(){
     //resets Gyro heading on field
@@ -144,12 +153,12 @@ private Field2d fieldMaker = new Field2d();
   }
 
   //Gets Mods states 
-  private ChassisSpeeds getRobotRelativeSpeeds(){
+  public ChassisSpeeds getRobotRelativeSpeeds(){
     return Constants.kinematics.toChassisSpeeds(frontLeftMod.getModState(),frontRightMod.getModState(),backLeftMod.getModState(),backRightMod.getModState());
   }
 
   //Drive that converts the speeds into robot orientation
-  private void drive1(ChassisSpeeds chassisSpeeds){
+  public void drive1(ChassisSpeeds chassisSpeeds){
     drive3(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond, chassisSpeeds.omegaRadiansPerSecond, false);
   }
 

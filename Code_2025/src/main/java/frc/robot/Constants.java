@@ -5,6 +5,9 @@
 package frc.robot;
 
 import edu.wpi.first.units.Unit;
+
+import com.pathplanner.lib.config.RobotConfig;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
@@ -18,6 +21,15 @@ import edu.wpi.first.math.util.Units;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+
+  public static RobotConfig config;{
+    try{
+      config = RobotConfig.fromGUISettings();
+  } catch (Exception e) {
+    // Handle exception as needed
+    e.printStackTrace();
+  };
+}
   // TRACKWIDTH is the distance between front 2 modules
   // WHEELBASE IS THE DISTANCE BETWEEN FRONT TO THE BACK MODULES
   public static final double trackWidth = Units.inchesToMeters(22.13);
@@ -70,7 +82,6 @@ public final class Constants {
   public static final int intakeHook = 17;
   public static final int intakeCoral = 15;
   
-
   // Gives position of modules on a 2d plane
   public static final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
     new Translation2d(wheelBase/2, -trackWidth/2), // FR
