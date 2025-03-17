@@ -1,18 +1,19 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.subsystems.intakeCombined;
+// import frc.robot.subsystems.intakeCombined;
+import frc.robot.subsystems.intakePneumatics;
 
 public class intakeState1 extends InstantCommand {
-    private final intakeCombined hookSubsystem;
+    private final intakePneumatics hookSubsystem;
 
-    public intakeState1(intakeCombined hookSubsystem) {
+    public intakeState1(intakePneumatics hookSubsystem) {
         this.hookSubsystem = hookSubsystem;
         addRequirements(hookSubsystem);
     }
 
     @Override
     public void initialize() {
-        hookSubsystem.toggleHook();
+        hookSubsystem.toggle();
     }
 }

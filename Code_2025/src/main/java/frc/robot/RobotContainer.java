@@ -19,7 +19,8 @@ import frc.robot.subsystems.ExampleSubsystem;
 // import frc.robot.subsystems.IntakeSubsysCoral;
 // import frc.robot.subsystems.IntakeSubsysLift;
 import frc.robot.subsystems.SwerveSubsys;
-import frc.robot.subsystems.intakeCombined;
+// import frc.robot.subsystems.intakeCombined;
+import frc.robot.subsystems.intakePneumatics;
 import frc.robot.subsystems.limeyImproved;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -42,11 +43,13 @@ public class RobotContainer {
   private final SwerveSubsys swerve = new SwerveSubsys();
   // private final IntakeSubsysCoral intakeCor = new IntakeSubsysCoral();
   // private final IntakeSubsysLift intakeLift = new IntakeSubsysLift();
-  private final intakeCombined combined = new intakeCombined();
+  // private final intakeCombined combined = new intakeCombined();
+
+  private final intakePneumatics intakePneu = new intakePneumatics();
 
   private final ElevatorSubsys elev = new ElevatorSubsys();
 
-  private final AlignAprilTag tagMove = new AlignAprilTag(swerve, limeI,elev, combined);
+  private final AlignAprilTag tagMove = new AlignAprilTag(swerve, limeI,elev, intakePneu);
 
 
   private final Autos auto2 = new Autos(swerve);
@@ -81,43 +84,12 @@ public class RobotContainer {
 
  
   private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    // new Trigger(m_exampleSubsystem::exampleCondition)
-    //     .toggleOnTrue(new ExampleCommand(m_exampleSubsystem));
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
-    // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+   
+    // operatorController.leftBumper().onTrue(new intakeState1(combined));
+    // operatorController.rightBumper().onTrue(new intakeState2(combined));
 
-    operatorController.leftBumper().onTrue(new intakeState1(combined));
-    operatorController.rightBumper().onTrue(new intakeState2(combined));
-
-
-    // double pow = 1;
-    // Command hook_move1 = new IntakeUp(intakeLift, 1);
-    // Command hook_move2 = new IntakeUp(intakeLift, -1);
-
-    // intakeLift.setDefaultCommand(hook_move1);
-    // operatorController.rightBumper().toggleOnTrue(hook_move2);
-
-
-
-    // Command open_Intake = new intakeCoral(intakeCor, pow);
-    // Command close_Intake = new intakeCoral(intakeCor, -pow);
-
-    // intakeCor.setDefaultCommand(close_Intake);
-    // operatorController.leftBumper().toggleOnTrue(open_Intake);
-
-
-    
-    // Bad naming it controls individually the hooks
-    
-    // operatorController.rightBumper;
-
-    // Command lift_Intake = new IntakeUp(intakeLift,-1);
-    // Command lower_intake = new IntakeUp(intakeLift, 1);
-
-    // intakeLift.setDefaultCommand(lower_intake);
-    // operatorController.rightBumper().toggleOnTrue(lift_Intake);
+    operatorController.leftBumper().onTrue(new intakeState1(intakePneu));
+    operatorController.rightBumper().onTrue(new intakeState2(intakePneu));
 
 
     operatorController.y().whileTrue(new ElevatorCom(elev, operatorController)); //1st level 0.75

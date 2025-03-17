@@ -66,9 +66,9 @@ public final class Constants {
 
   public static final int elev_climb = 18;
 
-  public static final int intakeLift = 16;
-  public static final int intakeHook = 17;
-  public static final int intakeCoral = 15;
+  // public static final int intakeLift = 16;
+  // public static final int intakeHook = 17;
+  // public static final int intakeCoral = 15;
   
 
   // Gives position of modules on a 2d plane

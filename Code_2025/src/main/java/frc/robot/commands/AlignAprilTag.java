@@ -11,7 +11,8 @@ import frc.robot.subsystems.ElevatorSubsys;
 // import frc.robot.subsystems.IntakeSubsysLift;
 import frc.robot.subsystems.SwerveMod;
 import frc.robot.subsystems.SwerveSubsys;
-import frc.robot.subsystems.intakeCombined;
+import frc.robot.subsystems.intakePneumatics;
+// import frc.robot.subsystems.intakeCombined;
 import frc.robot.subsystems.limeyImproved;
 
 import java.util.concurrent.Semaphore;
@@ -36,7 +37,8 @@ public class AlignAprilTag extends Command {
   private final SwerveSubsys swerve;
   private final limeyImproved limelight;
   private final ElevatorSubsys elev;
-  private final intakeCombined intake;
+  // private final intakeCombined intake;
+  private final intakePneumatics intake;
   // private final IntakeSubsysCoral intakeCor;
   // private final IntakeSubsysLift intakeLift;
   // private final String limeName = "";
@@ -77,7 +79,7 @@ public class AlignAprilTag extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public AlignAprilTag(SwerveSubsys subsystem, limeyImproved lime, ElevatorSubsys elev, intakeCombined intake) {
+  public AlignAprilTag(SwerveSubsys subsystem, limeyImproved lime, ElevatorSubsys elev, intakePneumatics intake) {
     swerve = subsystem;
     limelight = lime;
     this.elev = elev;
@@ -300,16 +302,18 @@ public class AlignAprilTag extends Command {
       double offval = 0;
       double xOffset = 0;
 
-      if(Math.abs(get_Val_X) < .4){
-        // Getting rid of the constant/x distance since when straight causes major movement that overshoots
-        // abs_final_Y = Math.copySign((Math.abs(get_Val_X) + .22), -get_Val_X);
-        abs_final_Y = Math.copySign((Math.abs(get_Val_X) * 1.2), -get_Val_X);
-      }else{
+      // if(Math.abs(get_Val_X) < .4){
+      //   // Getting rid of the constant/x distance since when straight causes major movement that overshoots
+      //   // abs_final_Y = Math.copySign((Math.abs(get_Val_X) + .22), -get_Val_X);
+      //   abs_final_Y = Math.copySign((Math.abs(get_Val_X) * 1.2), -get_Val_X);
+      // }else{
         
         // Checks if the robot is to the left of the robot
         if( (-get_Val_X) > 0){
 
-          // -.02 makes it full front 
+          // offval was 0.185/get_Val_X
+          
+
           // abs_final_Y = Math.copySign((Math.abs(get_Val_X ) - Math.abs(get_Val_X/5.15)), -get_Val_X);// -0.02 or remove all mods, .196/get_Val_X
 
            // If we are a certain distance away we enter a new section
@@ -330,6 +334,8 @@ public class AlignAprilTag extends Command {
 
           // if we are NOT a certain distance away and are relatively "Close"
           else{
+            //xOffset was .6585
+            
             
             // We check if we have big rotation and increase goal if so
             if(Math.abs(final_gyro_yaw) > 10){
@@ -356,6 +362,8 @@ public class AlignAprilTag extends Command {
           // abs_final = Math.copySign(Math.abs(final_gyro_yaw-3), final_gyro_yaw);
         }
         else{
+
+          //
         
           // if the robot is to the right of the apriltag. Also check if we are a certain distance away to enter different section	
           if(Math.abs(get_Val_X) >= 1 && Math.abs(get_Val_Z) > 1){
@@ -400,7 +408,7 @@ public class AlignAprilTag extends Command {
          
           // abs_final_Y = Math.copySign(Math.abs(get_Val_X) + (1.1 * get_Val_X / 1.79 ), -get_Val_X); // +.17 or add .4
         }
-      }
+      // }
 
      
     
@@ -449,9 +457,10 @@ public class AlignAprilTag extends Command {
 
       // swerve.drive3(0,-speedY, 0, false);
 
-      swerve.drive3(-speedZ, -speedY, -store_auto_yaw, false);
+      // swerve.drive3(-speedZ, -speedY, -store_auto_yaw, false);
 
-      // swerve.drive3(0, 0, -store_auto_yaw,false);
+      swerve.drive3(0, 0, -store_auto_yaw,false);
+
       SmartDashboard.putNumber("FWD SPEED AFTER", -speedZ);
      }
 
