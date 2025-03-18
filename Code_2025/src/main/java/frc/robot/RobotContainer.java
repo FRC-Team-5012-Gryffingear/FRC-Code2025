@@ -56,7 +56,7 @@ public class RobotContainer {
   // private final IntakeSubsysLift intakeLift = new IntakeSubsysLift();
   private final intakePneumatics combined = new intakePneumatics();
 
-  private final ElevatorSubsys elev = new ElevatorSubsys();
+  private final ElevatorSubsys elev = new ElevatorSubsys(combined);
 
   private final PoseEstimatorSubsystem poseEst = new PoseEstimatorSubsystem(swerve, lime);
 
