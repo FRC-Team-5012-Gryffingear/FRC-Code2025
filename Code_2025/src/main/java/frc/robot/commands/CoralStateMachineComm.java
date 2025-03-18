@@ -8,7 +8,7 @@ import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.SwerveSubsys;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
 import frc.robot.subsystems.limelightSubsystem;
-import frc.robot.subsystems.intakeCombined;
+import frc.robot.subsystems.intakePneumatics;
 import frc.robot.subsystems.ElevatorSubsys;
 
 import frc.robot.commands.AprilTagAlignment;
@@ -22,7 +22,7 @@ public class CoralStateMachineComm extends Command {
     private final SwerveSubsys swerve;
     private final PoseEstimatorSubsystem poseEstimator;
     private final limelightSubsystem limelight;
-    private final intakeCombined intake;
+    private final intakePneumatics intake;
     private final ElevatorSubsys elevator;
 
     private static final double scoring_X_Offset = 0.5;
@@ -57,7 +57,7 @@ public class CoralStateMachineComm extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public CoralStateMachineComm(SwerveSubsys swervesubsys, PoseEstimatorSubsystem estimatorSubsys, limelightSubsystem limelightSubsys, intakeCombined intakeSubsys, ElevatorSubsys elevatorSubsys) {
+  public CoralStateMachineComm(SwerveSubsys swervesubsys, PoseEstimatorSubsystem estimatorSubsys, limelightSubsystem limelightSubsys, intakePneumatics intakeSubsys, ElevatorSubsys elevatorSubsys) {
     swerve = swervesubsys;
     poseEstimator = estimatorSubsys;
     limelight = limelightSubsys;

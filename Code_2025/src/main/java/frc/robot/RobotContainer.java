@@ -19,7 +19,7 @@ import frc.robot.subsystems.PoseEstimatorSubsystem;
 // import frc.robot.subsystems.IntakeSubsysCoral;
 // import frc.robot.subsystems.IntakeSubsysLift;
 import frc.robot.subsystems.SwerveSubsys;
-import frc.robot.subsystems.intakeCombined;
+import frc.robot.subsystems.intakePneumatics;
 import frc.robot.subsystems.limelightSubsystem;
 import frc.robot.subsystems.limeyImproved;
 
@@ -54,7 +54,7 @@ public class RobotContainer {
   private final SwerveSubsys swerve = new SwerveSubsys();
   // private final IntakeSubsysCoral intakeCor = new IntakeSubsysCoral();
   // private final IntakeSubsysLift intakeLift = new IntakeSubsysLift();
-  private final intakeCombined combined = new intakeCombined();
+  private final intakePneumatics combined = new intakePneumatics();
 
   private final ElevatorSubsys elev = new ElevatorSubsys();
 
@@ -62,7 +62,7 @@ public class RobotContainer {
 
   private final AlignAprilTag tagMove = new AlignAprilTag(swerve, limeI,elev, combined);
 
-  private final SendableChooser<Command> autoChooser = new SendableChooser<>();
+  private final SendableChooser<Command> autoChooser;
 
 
   // private final limeyImproved limeI = new limeyImproved();
@@ -78,6 +78,8 @@ public class RobotContainer {
 
     // SmartDashboard.putString("Senior view", "limelight-senior/stream.mjpg");
     // limeI.setDefaultCommand(new AlignAprilTag(swerve, limeI));
+     AutoBuilderconfigure();
+     autoChooser = AutoBuilder.buildAutoChooser();
 
      swerve.setDefaultCommand(new SwerveCom(
       swerve, 
@@ -92,7 +94,6 @@ public class RobotContainer {
 
     configureBindings();
     autoChooserConfig();
-    AutoBuilderconfigure();
   }
 
  
@@ -145,6 +146,7 @@ public class RobotContainer {
 
 
   private void autoChooserConfig(){
+    autoChooser.addOption("Option 1", new PathPlannerAuto("Auto Path"));
     SmartDashboard.putData("AutoChooser", autoChooser);
 
   }
@@ -194,6 +196,8 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return autoChooser.getSelected();// Autos.exampleAuto(m_exampleSubsystem);
+   
+      return new PathPlannerAuto("Test Auto");// Autos.exampleAuto(m_exampleSubsystem);
+  
   }
 }

@@ -21,7 +21,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
-import frc.robot.subsystems.intakeCombined;
+import frc.robot.subsystems.intakePneumatics;
 import frc.robot.subsystems.ElevatorSubsys;
 import frc.robot.subsystems.SwerveSubsys;
 import frc.robot.subsystems.limelightSubsystem;
@@ -39,7 +39,7 @@ public class AprilTagAlignment extends SequentialCommandGroup {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public AprilTagAlignment(SwerveSubsys swerve, intakeCombined intake, ElevatorSubsys elev, limelightSubsystem lime, double xOffset) {
+  public AprilTagAlignment(SwerveSubsys swerve, intakePneumatics intake, ElevatorSubsys elev, limelightSubsystem lime, double xOffset) {
     if(lime.aprilTagsExist()){
         Pose2d targetpose = lime.getAprilTagPoseWOffset(xOffset, 0);
         Command pathCommand = AutoBuilder.pathfindToPose(targetpose, new PathConstraints(16.497, 3, 2378.027, 720.000));

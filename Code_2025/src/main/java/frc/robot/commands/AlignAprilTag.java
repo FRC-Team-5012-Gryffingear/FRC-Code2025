@@ -11,7 +11,7 @@ import frc.robot.subsystems.ElevatorSubsys;
 // import frc.robot.subsystems.IntakeSubsysLift;
 import frc.robot.subsystems.SwerveMod;
 import frc.robot.subsystems.SwerveSubsys;
-import frc.robot.subsystems.intakeCombined;
+import frc.robot.subsystems.intakePneumatics;
 import frc.robot.subsystems.limeyImproved;
 
 import java.util.concurrent.Semaphore;
@@ -36,7 +36,7 @@ public class AlignAprilTag extends Command {
   private final SwerveSubsys swerve;
   private final limeyImproved limelight;
   private final ElevatorSubsys elev;
-  private final intakeCombined intake;
+  private final intakePneumatics intake;
   // private final IntakeSubsysCoral intakeCor;
   // private final IntakeSubsysLift intakeLift;
   // private final String limeName = "";
@@ -77,7 +77,7 @@ public class AlignAprilTag extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public AlignAprilTag(SwerveSubsys subsystem, limeyImproved lime, ElevatorSubsys elev, intakeCombined intake) {
+  public AlignAprilTag(SwerveSubsys subsystem, limeyImproved lime, ElevatorSubsys elev, intakePneumatics intake) {
     swerve = subsystem;
     limelight = lime;
     this.elev = elev;
