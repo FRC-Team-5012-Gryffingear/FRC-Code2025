@@ -47,7 +47,7 @@ public class RobotContainer {
 
   private final intakePneumatics intakePneu = new intakePneumatics();
 
-  private final ElevatorSubsys elev = new ElevatorSubsys();
+  private final ElevatorSubsys elev = new ElevatorSubsys(intakePneu);
 
   private final AlignAprilTag tagMove = new AlignAprilTag(swerve, limeI,elev, intakePneu);
 

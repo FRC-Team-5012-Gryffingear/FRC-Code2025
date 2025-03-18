@@ -12,6 +12,7 @@ import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
+import com.fasterxml.jackson.databind.jsontype.PolymorphicTypeValidator.Validity;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -24,7 +25,7 @@ import frc.robot.Constants;
 
 public class ElevatorSubsys extends SubsystemBase {
     // private intakeCombined intakeSubsys = new intakeCombined();
-    private intakePneumatics intakePneu = new intakePneumatics();
+    private intakePneumatics intakePneu;
 
     private TalonSRX elevatorTalon = new TalonSRX(Constants.elev_Motor);
     private CANcoder elevEncoder = new CANcoder(Constants.elev_Encoder);
@@ -35,7 +36,9 @@ public class ElevatorSubsys extends SubsystemBase {
 
     private PIDController elevHold = new PIDController(2, 0, 0); // might not work because of gravity variable not taken into count
 
-    public ElevatorSubsys() {
+    public ElevatorSubsys(intakePneumatics intakePneu) {
+        this.intakePneu = intakePneu; 
+        
         elevatorTalon.configFactoryDefault();
         elevClimb.configFactoryDefault();
         
