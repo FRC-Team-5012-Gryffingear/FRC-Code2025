@@ -10,6 +10,8 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
 
+import choreo.trajectory.SwerveSample;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -42,6 +44,11 @@ private final SwerveMod backRightMod = new SwerveMod(
 // Pigeon object that determines the yaw,roll,pitch
 private final Pigeon2 pigeon = new Pigeon2(Constants.PigeonID);
 
+private final PIDController xController = new PIDController(10.0, 0.0, 0.0);
+private final PIDController yController = new PIDController(10.0, 0.0, 0.0);
+private final PIDController headingController = new PIDController(7.5, 0.0, 0.0);
+
+
 //  FL, FR, BL,
 // Determines robots position and heading on field
 public final SwerveDriveOdometry odometry = new SwerveDriveOdometry(Constants.kinematics, getHeading(), new SwerveModulePosition[] {
@@ -57,6 +64,7 @@ public final SwerveDriveOdometry odometry = new SwerveDriveOdometry(Constants.ki
 private Field2d fieldMaker = new Field2d();
 
   public SwerveSubsys() {
+    headingController.enableContinuousInput(-Math.PI, Math.PI);
   }
 
   @Override
@@ -180,6 +188,21 @@ private Field2d fieldMaker = new Field2d();
     setModStates(states);
     
   }
+
+  public void followTrajectory(SwerveSample sample) {
+        // Get the current pose of the robot
+        Pose2d pose = getPose();
+
+        // Generate the next speeds for the robot
+        ChassisSpeeds speeds = new ChassisSpeeds(
+            sample.vx + xController.calculate(pose.getX(), sample.x),
+            sample.vy + yController.calculate(pose.getY(), sample.y),
+            sample.omega + headingController.calculate(pose.getRotation().getRadians(), sample.heading)
+        );
+
+        // Apply the generated speeds
+        drive1(speeds);
+    }
 
   
   public void setModStates(SwerveModuleState[] states){

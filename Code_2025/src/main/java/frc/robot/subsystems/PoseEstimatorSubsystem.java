@@ -33,7 +33,7 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
 
     poseEstimator = new SwerveDrivePoseEstimator(Constants.kinematics, swerve.getHeading(), swerve.getswerveModPos(), initialPose);
 
-    SmartDashboard.putData(field);
+    SmartDashboard.putData("Field", field);
 
   }
 
@@ -70,7 +70,6 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
 
         // double latencySeconds = limelight.getBotPoseBlue()[6] / 1000;
         // Instant timePoint = Instant.now().minus(Duration.ofSeconds((long) latencySeconds));
-
         poseEstimator.addVisionMeasurement(cameraPose, Timer.getFPGATimestamp());
 
     }

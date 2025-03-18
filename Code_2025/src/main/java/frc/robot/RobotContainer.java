@@ -28,12 +28,13 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-import com.pathplanner.lib.controllers.PPLTVController;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -61,6 +62,7 @@ public class RobotContainer {
 
   private final AlignAprilTag tagMove = new AlignAprilTag(swerve, limeI,elev, combined);
 
+  private final SendableChooser<Command> autoChooser = new SendableChooser<>();
 
 
   // private final limeyImproved limeI = new limeyImproved();
@@ -89,6 +91,8 @@ public class RobotContainer {
 
 
     configureBindings();
+    autoChooserConfig();
+    AutoBuilderconfigure();
   }
 
  
@@ -139,11 +143,20 @@ public class RobotContainer {
     operatorController.leftStick().whileTrue(new ElevatorCom(elev, operatorController)); // Human player station  1.2
   }
 
-  public void configure(){
-    RobotConfig config = Constants.config;
 
-    // Configure AutoBuilder last
-    AutoBuilder.configure(
+  private void autoChooserConfig(){
+    SmartDashboard.putData("AutoChooser", autoChooser);
+
+  }
+  
+  private void AutoBuilderconfigure(){
+    RobotConfig config;
+
+    try{
+      config = RobotConfig.fromGUISettings();
+    
+      // Configure AutoBuilder last
+      AutoBuilder.configure(
             poseEst::getCurrentPose, // Robot pose supplier
             poseEst::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
             swerve::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
@@ -165,10 +178,14 @@ public class RobotContainer {
               return false;
             },
             swerve // Reference to this subsystem to set requirements
-    );
+        );
 
-   
+      } catch (Exception e) {
+        // Handle exception as needed
+        e.printStackTrace();
+      };
   }
+  
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -177,6 +194,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return new PathPlannerAuto("Test Auto");// Autos.exampleAuto(m_exampleSubsystem);
+    return autoChooser.getSelected();// Autos.exampleAuto(m_exampleSubsystem);
   }
 }

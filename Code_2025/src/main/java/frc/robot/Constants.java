@@ -22,14 +22,7 @@ import edu.wpi.first.math.util.Units;
  */
 public final class Constants {
 
-  public static RobotConfig config;{
-    try{
-      config = RobotConfig.fromGUISettings();
-  } catch (Exception e) {
-    // Handle exception as needed
-    e.printStackTrace();
-  };
-}
+  
   // TRACKWIDTH is the distance between front 2 modules
   // WHEELBASE IS THE DISTANCE BETWEEN FRONT TO THE BACK MODULES
   public static final double trackWidth = Units.inchesToMeters(22.13);
