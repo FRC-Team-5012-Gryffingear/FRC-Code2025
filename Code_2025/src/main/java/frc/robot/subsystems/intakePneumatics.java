@@ -14,14 +14,17 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class intakePneumatics extends SubsystemBase {
-  DoubleSolenoid hookPiston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 2, 1);
-  DoubleSolenoid liftPiston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 3, 4);
-  DoubleSolenoid flapPiston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 6,7);
+  DoubleSolenoid hookPiston;
+  DoubleSolenoid liftPiston;
+  DoubleSolenoid flapPiston;
 
   private Value absoluteVal = Value.kReverse;
   private boolean canReverse = true; 
 
   public intakePneumatics() {
+    hookPiston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 2, 1);
+    liftPiston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 3, 4);
+    flapPiston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 6, 7);
 
     hookPiston.set(Value.kReverse);
     liftPiston.set(Value.kReverse);

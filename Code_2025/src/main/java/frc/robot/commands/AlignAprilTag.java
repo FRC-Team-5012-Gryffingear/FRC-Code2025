@@ -538,6 +538,6 @@ public class AlignAprilTag extends Command {
   @Override
   public boolean isFinished() {
     // return false if code somehow dont work
-    return true;
+    return false;
   }
 }

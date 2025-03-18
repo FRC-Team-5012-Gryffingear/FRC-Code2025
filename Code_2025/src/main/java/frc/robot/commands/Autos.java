@@ -17,9 +17,9 @@ public class Autos extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final SwerveSubsys m_subsystem;
   private Timer time = new Timer();
-  private final ElevatorSubsys elev = new ElevatorSubsys();
-  // private final intakeCombined intake = new intakeCombined();
-  private final intakePneumatics intake = new intakePneumatics();
+  // private final ElevatorSubsys elev = new ElevatorSubsys();
+  // // private final intakeCombined intake = new intakeCombined();
+  // private final intakePneumatics intake = new intakePneumatics();
 
   
   public Autos(SwerveSubsys subsystem) {
