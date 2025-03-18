@@ -335,7 +335,7 @@ public class AlignAprilTag extends Command {
           // if we are NOT a certain distance away and are relatively "Close"
           else{
             //xOffset was .6585
-            
+
             
             // We check if we have big rotation and increase goal if so
             if(Math.abs(final_gyro_yaw) > 10){
@@ -498,19 +498,20 @@ public class AlignAprilTag extends Command {
 
      
 
-     if((!phase1 && !phase2) || force_Timer.get() >= 5){
-      swerve.drive3(0, 0, 0, true);
-      // @ELEV MOVEMENT HERE MAKE SURE TO UNCOMMENT IF WANT TO TEST
+
+    //  if((!phase1 && !phase2) || force_Timer.get() >= 5){
+    //   swerve.drive3(0, 0, 0, true);
+    //   // @ELEV MOVEMENT HERE MAKE SURE TO UNCOMMENT IF WANT TO TEST
   
-      // elev.elevMovement(2.7);
-      if(elev.getEncoderPos() <= 9.82){
-        elev.elevMovement(9.82);
-      }else{
-        elev.elevUpAndDown(0);
-        intake.reverseHook();
-      }
-      System.out.println("Elevator Code Activated");
-    }
+    //   // elev.elevMovement(2.7);
+    //   if(elev.getEncoderPos() <= 9.82){
+    //     elev.elevMovement(9.82);
+    //   }else{
+    //     elev.elevUpAndDown(0);
+    //     intake.reverseHook();
+    //   }
+    //   System.out.println("Elevator Code Activated");
+    // }
 
 
 
@@ -536,6 +537,7 @@ public class AlignAprilTag extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    // return false if code somehow dont work
+    return true;
   }
 }
