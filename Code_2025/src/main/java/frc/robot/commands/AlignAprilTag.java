@@ -64,6 +64,7 @@ public class AlignAprilTag extends Command {
   // private static double snap = 0;
   private static double abs_final = 0;
 
+  private static double grabTX = 0;
   private static Timer time = new Timer();
   private static Timer force_Timer = new Timer();
 
@@ -101,6 +102,7 @@ public class AlignAprilTag extends Command {
     // xPID.setTolerance(0.1);
     // yPID.setTolerance(0.1);
     // rotPID.setTolerance(3);
+    grabTX = 0;
     check =false;
     abs_final = 0;
     moving_fwd = false;
@@ -173,6 +175,7 @@ public class AlignAprilTag extends Command {
       if(needs_rotate && initial_gyro_yaw == -10000){ //  && april_tag_rotation == -10000
         // april_tag_rotation = Math.toDegrees(LimelightHelpers.getCameraPose3d_TargetSpace("").getY());
         initial_gyro_yaw = swerve.getYaw();
+        grabTX = LimelightHelpers.getTX("limelight-senior");
         // get_Val_X = detectedID.getX();
         get_Val_Z = detectedID.getZ();
         get_Val_X = detectedID.getX();
@@ -187,6 +190,7 @@ public class AlignAprilTag extends Command {
       }
       if(needs_rotate){
 
+         SmartDashboard.putNumber("GRABBING TX VALUE FOR ANGLE", grabTX);
          SmartDashboard.putNumber(("GET X"), get_Val_X);
          SmartDashboard.putNumber("GET Z", get_Val_Z);
 
@@ -320,7 +324,7 @@ public class AlignAprilTag extends Command {
           if(Math.abs(get_Val_X) >= 1 && Math.abs(get_Val_Z) > 1){
 
       			// If there is big rotation gap we want to increase the goal size
-            if(Math.abs(final_gyro_yaw) > 10){
+            if(grabTX > 10){
               offval = .9/get_Val_X;
               System.out.println("Section 1, part 1");
             }
@@ -338,7 +342,7 @@ public class AlignAprilTag extends Command {
 
             
             // We check if we have big rotation and increase goal if so
-            if(Math.abs(final_gyro_yaw) > 10){
+            if(grabTX > 10){
               offval = .9/get_Val_X;
               System.out.println("Section 1, part 3");
             }
@@ -369,7 +373,7 @@ public class AlignAprilTag extends Command {
           if(Math.abs(get_Val_X) >= 1 && Math.abs(get_Val_Z) > 1){
 
             // Check if rotation big
-            if(Math.abs(final_gyro_yaw) > 10){
+            if(grabTX < 10){
               xOffset = 2;
               System.out.println("Section 2, part 1");
             }
@@ -383,7 +387,7 @@ public class AlignAprilTag extends Command {
           else{
             
             // NOT certain distance, check if rotation big
-            if(Math.abs(final_gyro_yaw) > 10){
+            if(grabTX < 10){
               xOffset = .9;
               System.out.println("Section 2, part 3");
             }

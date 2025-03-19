@@ -251,6 +251,7 @@ public class SwerveCom extends Command {
     store_auto_yaw = 0;
   }
 
+
   public void getGlobalInfo(){
     SmartDashboard.putNumber("TeleSideSpeedPhase2", -speedY);
     SmartDashboard.putNumber("TeleForwardSpeedPhase2", -speedZ);
@@ -258,6 +259,10 @@ public class SwerveCom extends Command {
     SmartDashboard.putNumber("TeleFinalGyro", final_gyro_yaw);
     SmartDashboard.putNumber("TeleRotSpeedPhase1", rotspeed);
     SmartDashboard.putNumber("SwerveYawTeleOp", swerve.inv_get_Yaw());
+
+    SmartDashboard.putNumber("test test test Telo TX grab camera", LimelightHelpers.getTX("limelight-senior"));
+
+    
   }
 
   // Called once the command ends or is interrupted.
