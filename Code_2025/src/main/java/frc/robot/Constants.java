@@ -62,7 +62,7 @@ public final class Constants {
   public static final int PigeonID = 20;
 
   public static final int elev_Encoder = 14;
-  public static final int elev_Motor = 13;
+  public static final int elev_Motor = 15;
 
   public static final int elev_climb = 18;
 
