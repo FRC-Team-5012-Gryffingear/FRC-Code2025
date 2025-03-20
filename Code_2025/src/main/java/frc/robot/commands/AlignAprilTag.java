@@ -321,16 +321,18 @@ public class AlignAprilTag extends Command {
           // abs_final_Y = Math.copySign((Math.abs(get_Val_X ) - Math.abs(get_Val_X/5.15)), -get_Val_X);// -0.02 or remove all mods, .196/get_Val_X
 
            // If we are a certain distance away we enter a new section
-          if(Math.abs(get_Val_X) >= 1 && Math.abs(get_Val_Z) > 1){
+          if(Math.abs(get_Val_X) >= 1 && Math.abs(get_Val_Z) >= 1){
+
+            // TX IS POSITIVE WHEN LEFT OF THE LIMELIGHT AND NEGATIVE WHEN TO THE RIGHT OF THE LIMELIGHT!
 
       			// If there is big rotation gap we want to increase the goal size
-            if(grabTX > 10){
-              offval = .9/get_Val_X;
+            if(grabTX > 1){
+              offval = .45/get_Val_X;
               System.out.println("Section 1, part 1");
             }
             else{
               // make goal smaller incase the rotation is not big
-              offval = .2/get_Val_X;
+              offval = .398/get_Val_X;
               System.out.println("Section 1, part 2");
             }
 
@@ -342,13 +344,13 @@ public class AlignAprilTag extends Command {
 
             
             // We check if we have big rotation and increase goal if so
-            if(grabTX > 10){
-              offval = .9/get_Val_X;
+            if(grabTX >= 1){
+              offval = .01/get_Val_X;
               System.out.println("Section 1, part 3");
             }
             else{
               // make goal smaller incase the rotation is not big
-              offval = .2/get_Val_X;
+              offval = .32/get_Val_X;
               System.out.println("Section 1, part 4");
             }
           }
@@ -461,9 +463,9 @@ public class AlignAprilTag extends Command {
 
       // swerve.drive3(0,-speedY, 0, false);
 
-      // swerve.drive3(-speedZ, -speedY, -store_auto_yaw, false);
+      swerve.drive3(-speedZ, -speedY, -store_auto_yaw, false);
 
-      swerve.drive3(0, 0, -store_auto_yaw,false);
+      // swerve.drive3(0, 0, -store_auto_yaw,false);
 
       SmartDashboard.putNumber("FWD SPEED AFTER", -speedZ);
      }

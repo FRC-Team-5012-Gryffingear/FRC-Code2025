@@ -59,16 +59,16 @@ public class ElevatorCom extends Command {
       elev.elevMovement(0);
     }
     else if(controller2.b().getAsBoolean()){
-      elev.elevMovement(3.47);
+      elev.elevMovement(2.34);
     }
     else if(controller2.x().getAsBoolean()){
-      elev.elevMovement(6.198);
+      elev.elevMovement(5.21);
     }
     else if(controller2.y().getAsBoolean()){
-      elev.elevMovement(9.8); 
+      elev.elevMovement(9.15); 
     }
     else if(controller2.leftStick().getAsBoolean()){
-      elev.elevMovement(1.420); 
+      elev.elevMovement(1.02); 
     }
     else if(controller2.rightStick().getAsBoolean()){
       elev.resetEncoderPos();

@@ -123,11 +123,7 @@ public class SwerveCom extends Command {
       }else if(controller2.rightBumper().getAsBoolean()){
         swerve.drive3(0, -.1, 0, false);
       }
-      // else{
-      //   swerve.drive3(xSpeed, -ySpeed, -(rotateSpeed*1.5), true);
-      // }
-
-      if(controller2.x().getAsBoolean()){
+      else if(controller2.x().getAsBoolean()){
         swerve.drive3(xSpeed/4, -ySpeed/4, -(rotateSpeed*1.5)/4, true);
       }else{
         if(elev.getEncoderPos() > 2){
@@ -137,6 +133,11 @@ public class SwerveCom extends Command {
         swerve.drive3(xSpeed, -ySpeed, -(rotateSpeed*1.5), true);
         }
       }
+      // else{
+      //   swerve.drive3(xSpeed, -ySpeed, -(rotateSpeed*1.5), true);
+      // }
+
+      
   
       
     }
