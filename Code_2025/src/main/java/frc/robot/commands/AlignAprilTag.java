@@ -326,7 +326,7 @@ public class AlignAprilTag extends Command {
             // TX IS POSITIVE WHEN LEFT OF THE LIMELIGHT AND NEGATIVE WHEN TO THE RIGHT OF THE LIMELIGHT!
 
       			// If there is big rotation gap we want to increase the goal size
-            if(grabTX > 1){
+            if(grabTX >= 1){
               offval = .45/get_Val_X;
               System.out.println("Section 1, part 1");
             }
@@ -375,7 +375,7 @@ public class AlignAprilTag extends Command {
           if(Math.abs(get_Val_X) >= 1 && Math.abs(get_Val_Z) > 1){
 
             // Check if rotation big
-            if(grabTX < 10){
+            if(grabTX >= 1){
               xOffset = 2;
               System.out.println("Section 2, part 1");
             }
@@ -389,7 +389,7 @@ public class AlignAprilTag extends Command {
           else{
             
             // NOT certain distance, check if rotation big
-            if(grabTX < 10){
+            if(grabTX >= 1){
               xOffset = .9;
               System.out.println("Section 2, part 3");
             }
