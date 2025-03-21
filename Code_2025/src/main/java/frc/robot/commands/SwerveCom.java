@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 // import frc.robot.subsystems.limey;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /** An example command that uses an example subsystem. */
 public class SwerveCom extends Command {
@@ -90,13 +91,10 @@ public class SwerveCom extends Command {
 
     elev.elevClimbMove(controller2.getLeftTriggerAxis() - controller2.getRightTriggerAxis());
 
-   
-
     if(yaw.getAsBoolean()){
       swerve.resetHeading();
     }
-
-
+    
 
     //swerve.drive3(xSpeed, -ySpeed, -rotateSpeed*1.5, true);
     SmartDashboard.putBoolean("SeenTag", seenTag);
@@ -120,11 +118,24 @@ public class SwerveCom extends Command {
         seenTag = false;
       }
 
-
       if(controller2.leftBumper().getAsBoolean()){
+        swerve.drive3(0, .1, 0, false);
+      }else if(controller2.rightBumper().getAsBoolean()){
+        swerve.drive3(0, -.1, 0, false);
+      }
+      else{
+        swerve.drive3(xSpeed, -ySpeed, -(rotateSpeed*1.5), true);
+      }
+
+      if(controller2.x().getAsBoolean()){
         swerve.drive3(xSpeed/4, -ySpeed/4, -(rotateSpeed*1.5)/4, true);
       }else{
-        swerve.drive3(xSpeed, -ySpeed, -rotateSpeed*1.5, true);
+        if(elev.getEncoderPos() > 2){
+          swerve.drive3(xSpeed/2, -ySpeed/2, -(rotateSpeed*1.5)/2, true);  
+        }
+        else{
+        swerve.drive3(xSpeed, -ySpeed, -(rotateSpeed*1.5), true);
+        }
       }
   
       
@@ -240,6 +251,7 @@ public class SwerveCom extends Command {
     store_auto_yaw = 0;
   }
 
+
   public void getGlobalInfo(){
     SmartDashboard.putNumber("TeleSideSpeedPhase2", -speedY);
     SmartDashboard.putNumber("TeleForwardSpeedPhase2", -speedZ);
@@ -247,6 +259,10 @@ public class SwerveCom extends Command {
     SmartDashboard.putNumber("TeleFinalGyro", final_gyro_yaw);
     SmartDashboard.putNumber("TeleRotSpeedPhase1", rotspeed);
     SmartDashboard.putNumber("SwerveYawTeleOp", swerve.inv_get_Yaw());
+
+    SmartDashboard.putNumber("test test test Telo TX grab camera", LimelightHelpers.getTX("limelight-senior"));
+
+    
   }
 
   // Called once the command ends or is interrupted.

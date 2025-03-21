@@ -164,8 +164,8 @@ public class RobotContainer {
             swerve::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
             (speeds, feedforwards) -> swerve.drive1(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
             new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
-                    new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-                    new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
+                    new PIDConstants(0.5, 0.0, 0.0), // Translation PID constants
+                    new PIDConstants(0.5, 0.0, 0.0) // Rotation PID constants
             ),
             config, // The robot configuration
             () -> {
@@ -196,8 +196,10 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-   
-      return new PathPlannerAuto("Test Auto");// Autos.exampleAuto(m_exampleSubsystem);
-  
+      if(autoChooser.getSelected() == null){
+        return new PathPlannerAuto("Test Auto");// Autos.exampleAuto(m_exampleSubsystem);
+      } else{
+        return autoChooser.getSelected();
+      }
   }
 }

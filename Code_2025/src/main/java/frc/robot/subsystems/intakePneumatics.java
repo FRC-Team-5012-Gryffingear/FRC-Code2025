@@ -22,9 +22,9 @@ public class intakePneumatics extends SubsystemBase {
   private boolean canReverse = true; 
 
   public intakePneumatics() {
-    hookPiston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 5, 1);
-    liftPiston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 3, 4);
-    flapPiston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 6, 7);
+    hookPiston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 2, 3);
+    liftPiston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
+    flapPiston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 5, 4);
 
     hookPiston.set(Value.kReverse);
     liftPiston.set(Value.kReverse);

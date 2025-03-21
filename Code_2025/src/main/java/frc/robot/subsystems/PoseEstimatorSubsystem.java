@@ -33,7 +33,7 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
 
     poseEstimator = new SwerveDrivePoseEstimator(Constants.kinematics, swerve.getHeading(), swerve.getswerveModPos(), initialPose);
 
-    SmartDashboard.putData("Field", field);
+    SmartDashboard.putData("PoseEsField", field);
 
   }
 
@@ -80,7 +80,11 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
 
 
   public Pose2d getCurrentPose(){
-    return poseEstimator.getEstimatedPosition();
+    Pose2d estPos = poseEstimator.getEstimatedPosition();
+    SmartDashboard.putNumber("XEstPos", estPos.getX());
+    SmartDashboard.putNumber("YEstPos", estPos.getY());
+    SmartDashboard.putNumber("EstYaw", estPos.getRotation().getDegrees());
+    return estPos;
   }
 
 
@@ -92,5 +96,7 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
   @Override
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
+    field.setRobotPose(getCurrentPose());
+    SmartDashboard.putData("PoseEsField",field);
   }
 }

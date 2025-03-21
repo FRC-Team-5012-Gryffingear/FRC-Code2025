@@ -423,14 +423,14 @@ public class AlignAprilTag extends Command {
      if(!phase1 && !phase2){
       // @ELEV MOVEMENT HERE MAKE SURE TO UNCOMMENT IF WANT TO TEST
   
-      // elev.elevMovement(2.7);
-      if(elev.getEncoderPos() <= 2.479){
-        elev.elevUpAndDown(1);
-      }else{
-        elev.elevUpAndDown(0);
-        intake.reverseHook();
-      }
-      System.out.println("Elevator Code Activated");
+      // // elev.elevMovement(2.7);
+      // if(elev.getEncoderPos() <= 2.479){
+      //   elev.elevUpAndDown(1);
+      // }else{
+      //   elev.elevUpAndDown(0);
+      //   intake.reverseHook();
+      // }
+      // System.out.println("Elevator Code Activated");
     }
 
 

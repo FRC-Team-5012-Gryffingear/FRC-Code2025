@@ -167,7 +167,7 @@ private Field2d fieldMaker = new Field2d();
 
   //Drive that converts the speeds into robot orientation
   public void drive1(ChassisSpeeds chassisSpeeds){
-    drive3(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond, chassisSpeeds.omegaRadiansPerSecond, false);
+    drive3(-chassisSpeeds.vxMetersPerSecond,0, chassisSpeeds.omegaRadiansPerSecond, false);
   }
 
   //if not using drive1 to convert it, then make the field relative false
@@ -236,5 +236,11 @@ private Field2d fieldMaker = new Field2d();
   @Override
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
+    odometry.update(getHeading(), new SwerveModulePosition[] {
+      frontLeftMod.getModPos(),
+      frontRightMod.getModPos(),
+      backLeftMod.getModPos(),
+      backRightMod.getModPos()
+  });
   }
 }
