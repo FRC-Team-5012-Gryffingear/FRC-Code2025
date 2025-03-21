@@ -8,6 +8,7 @@ import java.time.temporal.ValueRange;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -20,6 +21,7 @@ public class intakePneumatics extends SubsystemBase {
 
   private Value absoluteVal = Value.kReverse;
   private boolean canReverse = true; 
+ 
 
   public intakePneumatics() {
     hookPiston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 2, 3);
@@ -31,15 +33,19 @@ public class intakePneumatics extends SubsystemBase {
     flapPiston.set(Value.kReverse);
   }
 
+  
   public void toggle(){
     absoluteVal = (absoluteVal == Value.kForward) ? Value.kReverse : Value.kForward;
-
-    hookPiston.set(absoluteVal);
+    
     liftPiston.set(absoluteVal);
     flapPiston.set(absoluteVal);
-    
+
+    Timer.delay(.5);
+    hookPiston.set(absoluteVal);
+
     canReverse = true;
   }
+
 
   public void reverseHook(){
     if(canReverse){

@@ -372,16 +372,16 @@ public class AlignAprilTag extends Command {
           //
         
           // if the robot is to the right of the apriltag. Also check if we are a certain distance away to enter different section	
-          if(Math.abs(get_Val_X) >= 1 && Math.abs(get_Val_Z) > 1){
+          if(Math.abs(get_Val_X) >= 1 && Math.abs(get_Val_Z) >= 1){
 
             // Check if rotation big
             if(grabTX >= 1){
-              xOffset = 2;
+              xOffset = .39;
               System.out.println("Section 2, part 1");
             }
             else{
               // if small make goal smaller
-              xOffset = 1;
+              xOffset = .44;
               System.out.println("Section 2, part 2");
             }
 
@@ -390,12 +390,12 @@ public class AlignAprilTag extends Command {
             
             // NOT certain distance, check if rotation big
             if(grabTX >= 1){
-              xOffset = .9;
+              xOffset = -.1;
               System.out.println("Section 2, part 3");
             }
             else{
               // if low rot then make goal small
-              xOffset = .4;
+              xOffset = -.02;
               System.out.println("Section 2, part 4");
             }
 
@@ -406,7 +406,7 @@ public class AlignAprilTag extends Command {
           //.574 actually kinda worked
 
           // apply the equation afterward
-          abs_final_Y = Math.copySign(Math.abs(get_Val_X) + (xOffset / Math.max(Math.abs(get_Val_X), .41)), -get_Val_X); // +.17 or add .4
+          abs_final_Y = Math.copySign(Math.abs(get_Val_X) + (xOffset / Math.max(Math.abs(get_Val_X), .1)), -get_Val_X); // +.17 or add .4
           
           // abs_final_Y = Math.copySign((Math.abs(get_Val_X) + Math.abs(get_Val_X * .13)) - .25, -get_Val_X); 
 
@@ -505,19 +505,19 @@ public class AlignAprilTag extends Command {
      
 
 
-    //  if((!phase1 && !phase2) || force_Timer.get() >= 5){
-    //   swerve.drive3(0, 0, 0, true);
-    //   // @ELEV MOVEMENT HERE MAKE SURE TO UNCOMMENT IF WANT TO TEST
+     if((!phase1 && !phase2) || force_Timer.get() >= 5){
+      swerve.drive3(0, 0, 0, true);
+      // @ELEV MOVEMENT HERE MAKE SURE TO UNCOMMENT IF WANT TO TEST
   
-    //   // elev.elevMovement(2.7);
-    //   if(elev.getEncoderPos() <= 9.82){
-    //     elev.elevMovement(9.82);
-    //   }else{
-    //     elev.elevUpAndDown(0);
-    //     intake.reverseHook();
-    //   }
-    //   System.out.println("Elevator Code Activated");
-    // }
+      // //  elev.elevMovement(2.7);
+      // if(elev.getEncoderPos() <= 9.82){
+      //   elev.elevMovement(9.82);
+      // }else{
+      //   elev.elevUpAndDown(0);
+      //   intake.reverseHook();
+      // }
+      System.out.println("Elevator Code Activated");
+    }
 
 
 

@@ -59,7 +59,7 @@ public class ElevatorSubsys extends SubsystemBase {
     //Gather data and determine what value and unit we are using to determine our movement
     public void elevMovement(double goal){ // each call of this function will have a different goal value
         double currentPosition = elevEncoder.getPosition().getValueAsDouble();
-        double percent = MathUtil.clamp(elevHold.calculate(currentPosition,goal),-.75,.75);
+        double percent = MathUtil.clamp(elevHold.calculate(currentPosition,goal),-.65,.65);
         elevatorTalon.set(ControlMode.PercentOutput, percent);
         SmartDashboard.putNumber("Power of elevator", percent);
 
@@ -77,7 +77,7 @@ public class ElevatorSubsys extends SubsystemBase {
     
     public void elevClimbMove(double power){
       if(intakePneu.SolenoidState() != Value.kForward){
-        elevClimb.set(ControlMode.PercentOutput, power*0.75);
+        elevClimb.set(ControlMode.PercentOutput, power*0.65);
       }
       else{
         elevClimb.set(ControlMode.PercentOutput, 0);
