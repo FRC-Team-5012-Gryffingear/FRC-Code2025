@@ -126,7 +126,7 @@ public class SwerveCom extends Command {
       else if(controller2.x().getAsBoolean()){
         swerve.drive3(xSpeed/4, -ySpeed/4, -(rotateSpeed*1.5)/4, true);
       }else{
-        if(elev.getEncoderPos() > 2){
+        if(elev.getEncoderPos() > 4.5){
           swerve.drive3(xSpeed/2, -ySpeed/2, -(rotateSpeed*1.5)/2, true);  
         }
         else{

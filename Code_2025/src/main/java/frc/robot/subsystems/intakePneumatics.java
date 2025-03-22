@@ -37,11 +37,11 @@ public class intakePneumatics extends SubsystemBase {
   public void toggle(){
     absoluteVal = (absoluteVal == Value.kForward) ? Value.kReverse : Value.kForward;
     
-    liftPiston.set(absoluteVal);
+    hookPiston.set(absoluteVal);
     flapPiston.set(absoluteVal);
 
     Timer.delay(.5);
-    hookPiston.set(absoluteVal);
+    liftPiston.set(absoluteVal);
 
     canReverse = true;
   }
