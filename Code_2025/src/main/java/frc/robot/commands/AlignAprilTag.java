@@ -306,11 +306,21 @@ public class AlignAprilTag extends Command {
       double offval = 0;
       double xOffset = 0;
 
-      // if(Math.abs(get_Val_X) < .4){
-      //   // Getting rid of the constant/x distance since when straight causes major movement that overshoots
-      //   // abs_final_Y = Math.copySign((Math.abs(get_Val_X) + .22), -get_Val_X);
-      //   abs_final_Y = Math.copySign((Math.abs(get_Val_X) * 1.2), -get_Val_X);
-      // }else{
+      if(Math.abs(get_Val_X) < .4){
+        // Getting rid of the constant/x distance since when straight causes major movement that overshoots
+        // abs_final_Y = Math.copySign((Math.abs(get_Val_X) + .22), -get_Val_X);
+        System.out.println("Domain restriction area");
+        if(Math.abs(get_Val_X) < 0.1){
+          abs_final_Y = Math.copySign((Math.abs(get_Val_X) +.25), -get_Val_X); 
+          System.out.println("Domain restriction area111");
+
+        }else{
+          abs_final_Y = Math.copySign((Math.abs(get_Val_X) * 1.2), -get_Val_X);  
+          System.out.println("Domain restriction area222");
+
+        }
+        
+      }else{
         
         // Checks if the robot is to the left of the robot
         if( (-get_Val_X) > 0){
@@ -395,7 +405,7 @@ public class AlignAprilTag extends Command {
             }
             else{
               // if low rot then make goal small
-              xOffset = -.02;
+              xOffset = -0.02;
               System.out.println("Section 2, part 4");
             }
 
@@ -414,7 +424,7 @@ public class AlignAprilTag extends Command {
          
           // abs_final_Y = Math.copySign(Math.abs(get_Val_X) + (1.1 * get_Val_X / 1.79 ), -get_Val_X); // +.17 or add .4
         }
-      // }
+      }
 
      
     
@@ -427,7 +437,7 @@ public class AlignAprilTag extends Command {
            
 
       //-0.9 instead
-      double speedZ = MathUtil.clamp(xPID.calculate((swerve.odometry.getPoseMeters().getX() / conversion)+(1.34 * get_Val_Z / 1.79),-get_Val_Z), -0.05, 0.05);// -.78
+      double speedZ = MathUtil.clamp(xPID.calculate((swerve.odometry.getPoseMeters().getX() / conversion)+(1.34 * get_Val_Z / 1.79),-get_Val_Z), -0.04, 0.04);// -.78
 
       double store_auto_yaw = MathUtil.clamp(auto_yaw.calculate(swerve.inv_get_Yaw(),abs_final),-.2,.2);
       SmartDashboard.putNumber("Auto yaw value ", store_auto_yaw);
@@ -463,6 +473,7 @@ public class AlignAprilTag extends Command {
 
       // swerve.drive3(0,-speedY, 0, false);
 
+      // swerve.drive3(0, -speedY, -store_auto_yaw,false);
       swerve.drive3(-speedZ, -speedY, -store_auto_yaw, false);
 
       // swerve.drive3(0, 0, -store_auto_yaw,false);
@@ -509,13 +520,14 @@ public class AlignAprilTag extends Command {
       swerve.drive3(0, 0, 0, true);
       // @ELEV MOVEMENT HERE MAKE SURE TO UNCOMMENT IF WANT TO TEST
   
-      // //  elev.elevMovement(2.7);
-      // if(elev.getEncoderPos() <= 9.82){
-      //   elev.elevMovement(9.82);
-      // }else{
-      //   elev.elevUpAndDown(0);
-      //   intake.reverseHook();
-      // }
+      //  elev.elevMovement(2.7);
+      if(elev.getEncoderPos() <= 5.21){
+        elev.elevMovement(5.21);
+      }else{
+        elev.elevUpAndDown(0);
+        intake.autoHook();
+        System.out.println("realesaeaseaewas");
+      }
       System.out.println("Elevator Code Activated");
     }
 

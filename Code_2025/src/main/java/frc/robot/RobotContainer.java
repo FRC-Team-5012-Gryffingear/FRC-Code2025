@@ -52,7 +52,7 @@ public class RobotContainer {
   private final AlignAprilTag tagMove = new AlignAprilTag(swerve, limeI,elev, intakePneu);
 
 
-  private final Autos auto2 = new Autos(swerve);
+  private final Autos auto2 = new Autos(swerve,intakePneu);
 
   // private final limeyImproved limeI = new limeyImproved();
   private final CommandXboxController driverController = new CommandXboxController(OperatorConstants.DriverContrlPort);
@@ -106,6 +106,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return tagMove;// Autos.exampleAuto(m_exampleSubsystem);
+    return tagMove;
+    // return auto2;
   }
 }

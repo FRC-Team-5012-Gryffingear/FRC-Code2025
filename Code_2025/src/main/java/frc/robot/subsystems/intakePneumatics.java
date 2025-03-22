@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import java.time.temporal.ValueRange;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -48,10 +49,14 @@ public class intakePneumatics extends SubsystemBase {
 
 
   public void reverseHook(){
-    if(canReverse){
-        hookPiston.toggle();
-        canReverse = false;
+      if(canReverse){
+          hookPiston.toggle();
+         canReverse = false;
     }
+  }
+
+  public void autoHook(){
+    hookPiston.set(Value.kForward);
   }
 
   public Value SolenoidState(){

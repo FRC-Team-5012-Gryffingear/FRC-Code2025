@@ -19,11 +19,12 @@ public class Autos extends Command {
   private Timer time = new Timer();
   // private final ElevatorSubsys elev = new ElevatorSubsys();
   // // private final intakeCombined intake = new intakeCombined();
-  // private final intakePneumatics intake = new intakePneumatics();
+  private final intakePneumatics intake;
 
   
-  public Autos(SwerveSubsys subsystem) {
+  public Autos(SwerveSubsys subsystem, intakePneumatics intake) {
     m_subsystem = subsystem;
+    this.intake = intake;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
@@ -38,22 +39,25 @@ public class Autos extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    time.start();
-    if(time.get() > 4 && time.get() < 6){
-      m_subsystem.drive3(-1, 0, 0, true);
-    }
-    else if(time.get() > 6){
-      m_subsystem.drive3(0, 0, 0, true);
-    }
-    // if(time.get()>0){
-    //   if(elev.getEncoderPos() <= 9.8){
-    //     elev.elevMovement(9.8);
-    //   }else{
-    //     elev.elevUpAndDown(0);
-    //     intake.reverseHook();
-    //   }
+    // time.start();
+    // if(time.get() > 4 && time.get() < 6){
+    //   m_subsystem.drive3(-1, 0, 0, true);
     // }
-  }
+    // else if(time.get() > 6){
+    //   m_subsystem.drive3(0, 0, 0, true);
+    // }
+
+    if(time.get()>0){
+      intake.reverseHook();
+      // if(elev.getEncoderPos() <= 9.8){
+      //   elev.elevMovement(9.8);
+      // }else{
+      //   elev.elevUpAndDown(0);
+      //   intake.reverseHook();
+      // } 
+      }
+    }
+  
 
   // Called once the command ends or is interrupted.
   @Override
