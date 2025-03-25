@@ -39,10 +39,10 @@ public class AprilTagAlignment extends SequentialCommandGroup {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public AprilTagAlignment(SwerveSubsys swerve, intakePneumatics intake, ElevatorSubsys elev, limelightSubsystem lime, double xOffset) {
+  public AprilTagAlignment(SwerveSubsys swerve, intakePneumatics intake, ElevatorSubsys elev, limelightSubsystem lime, double xOffset, double yOffset) {
     if(lime.aprilTagsExist()){
-        Pose2d targetpose = lime.getAprilTagPoseWOffset(xOffset, 0);
-        Command pathCommand = AutoBuilder.pathfindToPose(targetpose, new PathConstraints(16.497, 3, 2378.027, 720.000));
+        Pose2d targetpose = lime.getAprilTagPoseWOffset(xOffset, yOffset);
+        Command pathCommand = AutoBuilder.pathfindToPose(targetpose, new PathConstraints(2, 0.5, 2378.027, 720.000));
         pathCommand.schedule();
     } 
   }

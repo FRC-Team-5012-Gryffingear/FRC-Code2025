@@ -167,7 +167,7 @@ private Field2d fieldMaker = new Field2d();
 
   //Drive that converts the speeds into robot orientation
   public void drive1(ChassisSpeeds chassisSpeeds){
-    drive3(-chassisSpeeds.vxMetersPerSecond,0, chassisSpeeds.omegaRadiansPerSecond, false);
+    drive3(-chassisSpeeds.vyMetersPerSecond, chassisSpeeds.vxMetersPerSecond, chassisSpeeds.omegaRadiansPerSecond, false);
   }
 
   //if not using drive1 to convert it, then make the field relative false

@@ -27,6 +27,7 @@ public class CoralStateMachineComm extends Command {
 
     private static final double scoring_X_Offset = 0.5;
     private static final double collection_X_Offset = 1;
+    private static final double y_Offset = -0.5;
     private int coralsScored = 0;
 
     private enum State{
@@ -95,7 +96,7 @@ public class CoralStateMachineComm extends Command {
 
   private void handleNavigationToCollection(){
     if (currentCommand == null || currentCommand.isFinished()){
-        currentCommand = new AprilTagAlignment(swerve, intake, elevator, limelight, scoring_X_Offset);
+        currentCommand = new AprilTagAlignment(swerve, intake, elevator, limelight, scoring_X_Offset, y_Offset);
     }
   }
 

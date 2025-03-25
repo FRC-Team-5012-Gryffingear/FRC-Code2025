@@ -10,6 +10,7 @@ import java.time.Instant;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -80,7 +81,10 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
 
 
   public Pose2d getCurrentPose(){
-    Pose2d estPos = poseEstimator.getEstimatedPosition();
+    Pose2d estPos = new Pose2d(
+      new Translation2d(poseEstimator.getEstimatedPosition().getX(), poseEstimator.getEstimatedPosition().getY()), 
+      poseEstimator.getEstimatedPosition().getRotation());
+    // Pose2d estPos = poseEstimator.getEstimatedPosition();
     SmartDashboard.putNumber("XEstPos", estPos.getX());
     SmartDashboard.putNumber("YEstPos", estPos.getY());
     SmartDashboard.putNumber("EstYaw", estPos.getRotation().getDegrees());

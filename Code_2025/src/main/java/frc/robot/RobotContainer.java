@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AlignAprilTag;
+import frc.robot.commands.AprilTagAlignment;
 import frc.robot.commands.ElevatorCom;
 import frc.robot.commands.ExampleCommand;
 // import frc.robot.commands.IntakeUp;
@@ -52,6 +53,7 @@ public class RobotContainer {
   private final limeyImproved limeI = new limeyImproved();
   private final limelightSubsystem lime = new limelightSubsystem();
   private final SwerveSubsys swerve = new SwerveSubsys();
+  private final boolean aligntoAprilTag = false;
   // private final IntakeSubsysCoral intakeCor = new IntakeSubsysCoral();
   // private final IntakeSubsysLift intakeLift = new IntakeSubsysLift();
   private final intakePneumatics combined = new intakePneumatics();
@@ -198,6 +200,8 @@ public class RobotContainer {
     // An example command will be run in autonomous
       if(autoChooser.getSelected() == null){
         return new PathPlannerAuto("Test Auto");// Autos.exampleAuto(m_exampleSubsystem);
+      } else if(aligntoAprilTag){
+        return new AprilTagAlignment(swerve, combined, elev, lime, -0.5, -0.5);
       } else{
         return autoChooser.getSelected();
       }
