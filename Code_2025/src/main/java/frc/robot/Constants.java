@@ -46,10 +46,10 @@ public final class Constants {
   public static final int BackRightEncoderID = 0;
 
   // Offset should be grabbed through tunerX
-  public static final double FrontLeftOffset = 0.49169921875;
-  public static final double FrontRightOffset = .020263671875;
-  public static final double BackLeftOffset = -0.26196890625;
-  public static final double BackRightOffset = -0.382080078125;
+  public static final double FrontLeftOffset = -.50732421875;
+  public static final double FrontRightOffset = -.96875;
+  public static final double BackLeftOffset = -.2744140625;
+  public static final double BackRightOffset = -.36279296875;
 
   public static final double elevOffset = -0.928955078125;
 
