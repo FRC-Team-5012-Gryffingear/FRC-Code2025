@@ -46,7 +46,7 @@ public class AlignAprilTag extends Command {
   //Change PID values to tune the PID loop
   private final PIDController xPID = new PIDController(0.1, 0, 0.0);
   private final PIDController yPID = new PIDController(0.6, 0, 0.0);
-  private final PIDController rotPID = new PIDController(0.01, 0, 0.0);
+  private final PIDController rotPID = new PIDController(0.001, 0, 0.0);
   private final PIDController auto_yaw = new PIDController(.01, 0, 0.0);
   //Following two are for the THIRD Version.
   // private boolean initialized = false;
@@ -200,10 +200,10 @@ public class AlignAprilTag extends Command {
         
         
         if(april_tag_rotation > 0){
-          abs_final = Math.copySign(Math.abs(final_gyro_yaw-3), final_gyro_yaw);
+          abs_final = Math.copySign(Math.abs(final_gyro_yaw-3), -final_gyro_yaw);
         }
         else{
-          abs_final = Math.copySign(Math.abs(final_gyro_yaw+10), final_gyro_yaw);
+          abs_final = Math.copySign(Math.abs(final_gyro_yaw+10), -final_gyro_yaw);
         }
 
 
@@ -306,63 +306,108 @@ public class AlignAprilTag extends Command {
       double offval = 0;
       double xOffset = 0;
 
-      if(Math.abs(get_Val_X) < .4){
-        // Getting rid of the constant/x distance since when straight causes major movement that overshoots
-        // abs_final_Y = Math.copySign((Math.abs(get_Val_X) + .22), -get_Val_X);
-        System.out.println("Domain restriction area");
-        if(Math.abs(get_Val_X) < 0.1){
-          abs_final_Y = Math.copySign((Math.abs(get_Val_X) +.25), -get_Val_X); 
-          System.out.println("Domain restriction area111");
+      // if(Math.abs(get_Val_X) < .4){
+      //   // Getting rid of the constant/x distance since when straight causes major movement that overshoots
+      //   // abs_final_Y = Math.copySign((Math.abs(get_Val_X) + .22), -get_Val_X);
+      //   System.out.println("Domain restriction area");
+      //   if(Math.abs(get_Val_X) < 0.1){
+      //     abs_final_Y = Math.copySign((Math.abs(get_Val_X) +.25), -get_Val_X); 
+      //     System.out.println("Domain restriction area111");
 
-        }else{
-          abs_final_Y = Math.copySign((Math.abs(get_Val_X) * 1.2), -get_Val_X);  
-          System.out.println("Domain restriction area222");
+      //   }else{
+      //     abs_final_Y = Math.copySign((Math.abs(get_Val_X) * 1.2), -get_Val_X);  
+      //     System.out.println("Domain restriction area222");
 
-        }
+      //   }
         
-      }else{
+      // }else{
         
-        // Checks if the robot is to the left of the robot
+        // Checks if the robot is to the left of the tag
          // offval was 0.185/get_Val_X
         if( (-get_Val_X) > 0){
           
-          if((0 < -get_Val_Z && -get_Val_Z < 1)){
-
-            if((0 < -get_Val_X && -get_Val_X < .4)){
-              offval = .185/get_Val_X; 
+          if((1 < -get_Val_Z && -get_Val_Z < 2)){
+            System.out.println("SECTION 1 ROW 1 ENTRANCE");
+            if((0 < -get_Val_X && -get_Val_X < .45)){
+              offval = -.2/get_Val_X; 
+              System.out.println("SECTION 1 ROW 1 BOX 1");
             }
-            else if((.4 < -get_Val_X && -get_Val_X < 1.3) ){
-              offval = .185/get_Val_X; 
+            else if((.45 < -get_Val_X && -get_Val_X < 1.15) ){
+              offval = .28/get_Val_X; 
+              System.out.println("SECTION 1 ROW 1 BOX 2");
             }
-            else if((1.3 < -get_Val_X && -get_Val_X < 2.2)){
-              offval = .185/get_Val_X; 
+            else if((1.15 < -get_Val_X && -get_Val_X < 2.25)){
+              offval = .4/get_Val_X; 
+              System.out.println("SECTION 1 ROW 1 BOX 3");
             }
+            else if((2.25 < -get_Val_X && -get_Val_X < 3.35)){
+              offval = .2/get_Val_X; 
+              System.out.println("SECTION 1 ROW 1 BOX 4");
+            }
+            // else if((3.35 < -get_Val_X && -get_Val_X < 4.45)){
+            //   offval = .185/get_Val_X; 
+            //   System.out.println("SECTION 1 ROW 1 BOX 5");
+            // }
+            // else if((4.45 < -get_Val_X && -get_Val_X < 5.55)){
+            //   offval = .185/get_Val_X; 
+            //   System.out.println("SECTION 1 ROW 1 BOX 6");
+            // }
           
           }
           
-          else if((1 < -get_Val_Z && -get_Val_Z < 1.5)){
-
-            if((0 < -get_Val_X && -get_Val_X < .4)){
+          else if((2 < -get_Val_Z && -get_Val_Z < 3)){
+            System.out.println("SECTION 1 ROW 2 ENTRANCE");
+            if((0 < -get_Val_X && -get_Val_X < .45)){
               offval = .185/get_Val_X; 
+              System.out.println("SECTION 1 ROW 2 BOX 1");
             }
-            else if((.4 < -get_Val_X && -get_Val_X < 1.3) ){
+            else if((.45 < -get_Val_X && -get_Val_X < 1.15) ){
               offval = .185/get_Val_X; 
+              System.out.println("SECTION 1 ROW 2 BOX 2");
             }
-            else if((1.3 < -get_Val_X && -get_Val_X < 2.2)){
+            else if((1.15 < -get_Val_X && -get_Val_X < 2.25)){
               offval = .185/get_Val_X; 
+              System.out.println("SECTION 1 ROW 2 BOX 3");
+            }
+            else if((2.25 < -get_Val_X && -get_Val_X < 3.35)){
+              offval = .185/get_Val_X; 
+              System.out.println("SECTION 1 ROW 2 BOX 4");
+            }
+            else if((3.35 < -get_Val_X && -get_Val_X < 4.45)){
+              offval = .185/get_Val_X; 
+              System.out.println("SECTION 1 ROW 2 BOX 5");
+            }
+            else if((4.45 < -get_Val_X && -get_Val_X < 5.55)){
+              offval = .185/get_Val_X; 
+              System.out.println("SECTION 1 ROW 2 BOX 6");
             }
           
           }
-          else if((1.5 < -get_Val_Z && -get_Val_Z < 2)){
-
-            if((0 < -get_Val_X && -get_Val_X < .4)){
+          else if((3 < -get_Val_Z && -get_Val_Z < 4)){
+            System.out.println("SECTION 1 ROW 3 ENTRANCE");
+            if((0 < -get_Val_X && -get_Val_X < .45)){
               offval = .185/get_Val_X; 
+              System.out.println("SECTION 1 ROW 3 BOX 1");
             }
-            else if((.4 < -get_Val_X && -get_Val_X < 1.3) ){
+            else if((.45 < -get_Val_X && -get_Val_X < 1.15) ){
               offval = .185/get_Val_X; 
+              System.out.println("SECTION 1 ROW 3 BOX 2");
             }
-            else if((1.3 < -get_Val_X && -get_Val_X < 2.2)){
+            else if((1.15 < -get_Val_X && -get_Val_X < 2.25)){
               offval = .185/get_Val_X; 
+              System.out.println("SECTION 1 ROW 3 BOX 3");
+            }
+            else if((2.25 < -get_Val_X && -get_Val_X < 3.35)){
+              offval = .185/get_Val_X; 
+              System.out.println("SECTION 1 ROW 3 BOX 4");
+            }
+            else if((3.35 < -get_Val_X && -get_Val_X < 4.45)){
+              offval = .185/get_Val_X; 
+              System.out.println("SECTION 1 ROW 3 BOX 5");
+            }
+            else if((4.45 < -get_Val_X && -get_Val_X < 5.55)){
+              offval = .185/get_Val_X; 
+              System.out.println("SECTION 1 ROW 3 BOX 6");
             }
           
           }
@@ -378,46 +423,90 @@ public class AlignAprilTag extends Command {
           // abs_final = Math.copySign(Math.abs(final_gyro_yaw-3), final_gyro_yaw);
         }
         else{
-
-
           
+          // To the right of the apriltag
+
           if((0 < -get_Val_Z && -get_Val_Z < 1)){
-
-            if((0 < get_Val_X && get_Val_X < .4)){
-              offval = .185/get_Val_X; 
+            System.out.println("SECTION 2 ROW 1 ENTRANCE");
+            if((0 < get_Val_X && get_Val_X < .45)){
+              xOffset = .574; 
+              System.out.println("SECTION 2 ROW 1 BOX 1");
             }
-            else if((.4 < get_Val_X && get_Val_X < 1.3) ){
-              offval = .185/get_Val_X; 
+            else if((.45 < get_Val_X && get_Val_X < 1.15) ){
+              xOffset = .574; 
+              System.out.println("SECTION 2 ROW 1 BOX 2");
             }
-            else if((1.3 < get_Val_X && get_Val_X < 2.2)){
-              offval = .185/get_Val_X; 
+            else if((1.15 < get_Val_X && get_Val_X < 2.25)){
+              xOffset = .574;
+              System.out.println("SECTION 2 ROW 1 BOX 3");
             }
-          
+            else if((2.25 < get_Val_X && get_Val_X < 3.35)){
+              xOffset = .574; 
+              System.out.println("SECTION 2 ROW 1 BOX 4");
+            }
+            else if((3.35 < get_Val_X && get_Val_X < 4.45)){
+              xOffset = .574; 
+              System.out.println("SECTION 2 ROW 1 BOX 5");
+            }
+            else if((4.45 < get_Val_X && get_Val_X < 5.55)){
+              xOffset = .574; 
+              System.out.println("SECTION 2 ROW 1 BOX 6");
+            }
           }
           
           else if((1 < -get_Val_Z && -get_Val_Z < 1.5)){
-
-            if((0 < get_Val_X && get_Val_X < .4)){
-              offval = .185/get_Val_X; 
+            System.out.println("SECTION 2 ROW 2 ENTRANCE");
+            if((0 < get_Val_X && get_Val_X < .45)){
+              xOffset = .574; 
+              System.out.println("SECTION 2 ROW 2 BOX 1");
             }
-            else if((.4 < get_Val_X && get_Val_X < 1.3) ){
-              offval = .185/get_Val_X; 
+            else if((.45 < get_Val_X && get_Val_X < 1.15) ){
+              xOffset = .574;
+              System.out.println("SECTION 2 ROW 2 BOX 2");
             }
-            else if((1.3 < get_Val_X && get_Val_X < 2.2)){
-              offval = .185/get_Val_X; 
+            else if((1.15 < get_Val_X && get_Val_X < 2.25)){
+              xOffset = .574; 
+              System.out.println("SECTION 2 ROW 2 BOX 3");
+            }
+            else if((2.25 < get_Val_X && get_Val_X < 3.35)){
+              xOffset = .574; 
+              System.out.println("SECTION 2 ROW 2 BOX 4");
+            }
+            else if((3.35 < get_Val_X && get_Val_X < 4.45)){
+              xOffset = .574; 
+              System.out.println("SECTION 2 ROW 2 BOX 5");
+            }
+            else if((4.45 < get_Val_X && get_Val_X < 5.55)){
+              xOffset = .574; 
+              System.out.println("SECTION 2 ROW 2 BOX 6");
             }
           
           }
           else if((1.5 < -get_Val_Z && -get_Val_Z < 2)){
-
-            if((0 < get_Val_X && get_Val_X < .4)){
-              offval = .185/get_Val_X; 
+            System.out.println("SECTION 2 ROW 3 ENTRANCE");
+            if((0 < get_Val_X && get_Val_X < .45)){
+              xOffset = .574; 
+              System.out.println("SECTION 2 ROW 3 BOX 1");
             }
-            else if((.4 < get_Val_X && get_Val_X < 1.3) ){
-              offval = .185/get_Val_X; 
+            else if((.45 < get_Val_X && get_Val_X < 1.15) ){
+              xOffset = .574; 
+              System.out.println("SECTION 2 ROW 3 BOX 2");
             }
-            else if((1.3 < get_Val_X && get_Val_X < 2.2)){
-              offval = .185/get_Val_X; 
+            else if((1.15 < get_Val_X && get_Val_X < 2.25)){
+              xOffset = .574;
+              System.out.println("SECTION 2 ROW 3 BOX 3");
+            }
+            else if((2.25 < get_Val_X && get_Val_X < 3.35)){
+              xOffset = .574; 
+              System.out.println("SECTION 2 ROW 3 BOX 4");
+            }
+            else if((3.35 < get_Val_X && get_Val_X < 4.45)){
+              xOffset = .574; 
+              System.out.println("SECTION 2 ROW 3 BOX 5");
+            }
+            else if((4.45 < get_Val_X && get_Val_X < 5.55)){
+              xOffset = .574; 
+              System.out.println("SECTION 2 ROW 3 BOX 6");
             }
           
           }
@@ -433,11 +522,11 @@ public class AlignAprilTag extends Command {
          
           // abs_final_Y = Math.copySign(Math.abs(get_Val_X) + (1.1 * get_Val_X / 1.79 ), -get_Val_X); // +.17 or add .4
         }
-      }
+      // }
 
      
     
-      double speedY = MathUtil.clamp(yPID.calculate(((swerve.odometry.getPoseMeters().getY()) / conversion), abs_final_Y) , -.04,.04); // -get_Val_X as setpoint
+      double speedY = MathUtil.clamp(yPID.calculate(((swerve.odometry.getPoseMeters().getY()) / conversion), abs_final_Y) , -.05,.05); // -get_Val_X as setpoint
 
       SmartDashboard.putNumber("Abs final side move", abs_final_Y);
 
@@ -446,7 +535,7 @@ public class AlignAprilTag extends Command {
            
 
       //-0.9 instead
-      double speedZ = MathUtil.clamp(xPID.calculate((swerve.odometry.getPoseMeters().getX() / conversion)+(1.34 * get_Val_Z / 1.79),-get_Val_Z), -0.04, 0.04);// -.78
+      double speedZ = MathUtil.clamp(xPID.calculate((swerve.odometry.getPoseMeters().getX() / conversion)+(1.34 * get_Val_Z / 1.79),-get_Val_Z), -0.00, 0.07);// -.78
 
       double store_auto_yaw = MathUtil.clamp(auto_yaw.calculate(swerve.inv_get_Yaw(),abs_final),-.2,.2);
       SmartDashboard.putNumber("Auto yaw value ", store_auto_yaw);
@@ -530,7 +619,7 @@ public class AlignAprilTag extends Command {
       // @ELEV MOVEMENT HERE MAKE SURE TO UNCOMMENT IF WANT TO TEST
   
       //  elev.elevMovement(2.7);
-      if(elev.getEncoderPos() <= 9.27){
+      if(elev.getEncoderPos() <= 9.23 && force_Timer.get() < 8.5){
         System.out.println("RUNNING THE ELEVATOR ");
         elev.elevMovement(9.32);
       }else{
