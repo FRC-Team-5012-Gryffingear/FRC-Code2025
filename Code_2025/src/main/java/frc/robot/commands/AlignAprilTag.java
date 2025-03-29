@@ -323,53 +323,53 @@ public class AlignAprilTag extends Command {
       }else{
         
         // Checks if the robot is to the left of the robot
+         // offval was 0.185/get_Val_X
         if( (-get_Val_X) > 0){
-
-          // offval was 0.185/get_Val_X
           
+          if((0 < -get_Val_Z && -get_Val_Z < 1)){
 
-          // abs_final_Y = Math.copySign((Math.abs(get_Val_X ) - Math.abs(get_Val_X/5.15)), -get_Val_X);// -0.02 or remove all mods, .196/get_Val_X
-
-           // If we are a certain distance away we enter a new section
-          if(Math.abs(get_Val_X) >= 1 && Math.abs(get_Val_Z) >= 1){
-
-            // TX IS POSITIVE WHEN LEFT OF THE LIMELIGHT AND NEGATIVE WHEN TO THE RIGHT OF THE LIMELIGHT!
-
-      			// If there is big rotation gap we want to increase the goal size
-            if(grabTX >= 1){
-              offval = .45/get_Val_X;
-              System.out.println("Section 1, part 1");
+            if((0 < -get_Val_X && -get_Val_X < .4)){
+              offval = .185/get_Val_X; 
             }
-            else{
-              // make goal smaller incase the rotation is not big
-              offval = .398/get_Val_X;
-              System.out.println("Section 1, part 2");
+            else if((.4 < -get_Val_X && -get_Val_X < 1.3) ){
+              offval = .185/get_Val_X; 
             }
-
-          }
-
-          // if we are NOT a certain distance away and are relatively "Close"
-          else{
-            //xOffset was .6585
-
-            
-            // We check if we have big rotation and increase goal if so
-            if(grabTX >= 1){
-              offval = .01/get_Val_X;
-              System.out.println("Section 1, part 3");
+            else if((1.3 < -get_Val_X && -get_Val_X < 2.2)){
+              offval = .185/get_Val_X; 
             }
-            else{
-              // make goal smaller incase the rotation is not big
-              offval = .32/get_Val_X;
-              System.out.println("Section 1, part 4");
-            }
+          
           }
           
+          else if((1 < -get_Val_Z && -get_Val_Z < 1.5)){
 
-          //testing new values
-          //.1936
+            if((0 < -get_Val_X && -get_Val_X < .4)){
+              offval = .185/get_Val_X; 
+            }
+            else if((.4 < -get_Val_X && -get_Val_X < 1.3) ){
+              offval = .185/get_Val_X; 
+            }
+            else if((1.3 < -get_Val_X && -get_Val_X < 2.2)){
+              offval = .185/get_Val_X; 
+            }
           
-          // Once we do the scaling, apply the configs to the math
+          }
+          else if((1.5 < -get_Val_Z && -get_Val_Z < 2)){
+
+            if((0 < -get_Val_X && -get_Val_X < .4)){
+              offval = .185/get_Val_X; 
+            }
+            else if((.4 < -get_Val_X && -get_Val_X < 1.3) ){
+              offval = .185/get_Val_X; 
+            }
+            else if((1.3 < -get_Val_X && -get_Val_X < 2.2)){
+              offval = .185/get_Val_X; 
+            }
+          
+          }
+         
+
+          
+          
           abs_final_Y = Math.copySign((Math.abs(get_Val_X) + Math.abs(get_Val_X * offval)) - .25, -get_Val_X); 
 
 
@@ -379,40 +379,49 @@ public class AlignAprilTag extends Command {
         }
         else{
 
-          //
-        
-          // if the robot is to the right of the apriltag. Also check if we are a certain distance away to enter different section	
-          if(Math.abs(get_Val_X) >= 1 && Math.abs(get_Val_Z) >= 1){
 
-            // Check if rotation big
-            if(grabTX >= 1){
-              xOffset = .39;
-              System.out.println("Section 2, part 1");
-            }
-            else{
-              // if small make goal smaller
-              xOffset = .44;
-              System.out.println("Section 2, part 2");
-            }
+          
+          if((0 < -get_Val_Z && -get_Val_Z < 1)){
 
-          }
-          else{
-            
-            // NOT certain distance, check if rotation big
-            if(grabTX >= 1){
-              xOffset = -.1;
-              System.out.println("Section 2, part 3");
+            if((0 < get_Val_X && get_Val_X < .4)){
+              offval = .185/get_Val_X; 
             }
-            else{
-              // if low rot then make goal small
-              xOffset = -0.02;
-              System.out.println("Section 2, part 4");
+            else if((.4 < get_Val_X && get_Val_X < 1.3) ){
+              offval = .185/get_Val_X; 
             }
-
+            else if((1.3 < get_Val_X && get_Val_X < 2.2)){
+              offval = .185/get_Val_X; 
+            }
+          
           }
           
-          //.6658
-          // xOffset = .6585;
+          else if((1 < -get_Val_Z && -get_Val_Z < 1.5)){
+
+            if((0 < get_Val_X && get_Val_X < .4)){
+              offval = .185/get_Val_X; 
+            }
+            else if((.4 < get_Val_X && get_Val_X < 1.3) ){
+              offval = .185/get_Val_X; 
+            }
+            else if((1.3 < get_Val_X && get_Val_X < 2.2)){
+              offval = .185/get_Val_X; 
+            }
+          
+          }
+          else if((1.5 < -get_Val_Z && -get_Val_Z < 2)){
+
+            if((0 < get_Val_X && get_Val_X < .4)){
+              offval = .185/get_Val_X; 
+            }
+            else if((.4 < get_Val_X && get_Val_X < 1.3) ){
+              offval = .185/get_Val_X; 
+            }
+            else if((1.3 < get_Val_X && get_Val_X < 2.2)){
+              offval = .185/get_Val_X; 
+            }
+          
+          }
+        
           //.574 actually kinda worked
 
           // apply the equation afterward
@@ -521,12 +530,13 @@ public class AlignAprilTag extends Command {
       // @ELEV MOVEMENT HERE MAKE SURE TO UNCOMMENT IF WANT TO TEST
   
       //  elev.elevMovement(2.7);
-      if(elev.getEncoderPos() <= 5.21){
-        elev.elevMovement(5.21);
+      if(elev.getEncoderPos() <= 9.27){
+        System.out.println("RUNNING THE ELEVATOR ");
+        elev.elevMovement(9.32);
       }else{
-        elev.elevUpAndDown(0);
+        // elev.elevUpAndDown(0);
         intake.autoHook();
-        System.out.println("realesaeaseaewas");
+        System.out.println("AUTO HOOK INITIATED");
       }
       System.out.println("Elevator Code Activated");
     }
@@ -559,3 +569,100 @@ public class AlignAprilTag extends Command {
     return false;
   }
 }
+
+
+
+/*
+ * 
+ * // Checks if the robot is to the left of the robot
+        if( (-get_Val_X) > 0){
+
+          // offval was 0.185/get_Val_X
+          
+
+          // abs_final_Y = Math.copySign((Math.abs(get_Val_X ) - Math.abs(get_Val_X/5.15)), -get_Val_X);// -0.02 or remove all mods, .196/get_Val_X
+
+           // If we are a certain distance away we enter a new section
+          if(Math.abs(get_Val_X) >= 1 && Math.abs(get_Val_Z) >= 1){
+
+            // TX IS POSITIVE WHEN LEFT OF THE LIMELIGHT AND NEGATIVE WHEN TO THE RIGHT OF THE LIMELIGHT!
+
+      			// If there is big rotation gap we want to increase the goal size
+            if(grabTX >= 1){
+              offval = .45/get_Val_X;
+              System.out.println("Section 1, part 1");
+            }
+            else{
+              // make goal smaller incase the rotation is not big
+              offval = .398/get_Val_X;
+              System.out.println("Section 1, part 2");
+            }
+
+          }
+
+          // if we are NOT a certain distance away and are relatively "Close"
+          else{
+            //xOffset was .6585
+
+            
+            // We check if we have big rotation and increase goal if so
+            if(grabTX >= 1){
+              offval = .01/get_Val_X;
+              System.out.println("Section 1, part 3");
+            }
+            else{
+              // make goal smaller incase the rotation is not big
+              offval = .32/get_Val_X;
+              System.out.println("Section 1, part 4");
+            }
+          }
+          
+
+          //testing new values
+          //.1936
+          
+          // Once we do the scaling, apply the configs to the math
+          abs_final_Y = Math.copySign((Math.abs(get_Val_X) + Math.abs(get_Val_X * offval)) - .25, -get_Val_X); 
+
+
+
+          // abs_final_Y = Math.copySign((Math.abs(get_Val_X) + (1.1 * get_Val_X / 1.79)), -get_Val_X);// -0.02 or remove all mods
+          // abs_final = Math.copySign(Math.abs(final_gyro_yaw-3), final_gyro_yaw);
+        }
+        else{
+          // if the robot is to the right of the apriltag. Also check if we are a certain distance away to enter different section	
+          if(Math.abs(get_Val_X) >= 1 && Math.abs(get_Val_Z) >= 1){
+
+            // Check if rotation big
+            if(grabTX >= 1){
+              xOffset = .39;
+              System.out.println("Section 2, part 1");
+            }
+            else{
+              // if small make goal smaller
+              xOffset = .44;
+              System.out.println("Section 2, part 2");
+            }
+
+          }
+          else{
+            
+            // NOT certain distance, check if rotation big
+            if(grabTX >= 1){
+              xOffset = -.1;
+              System.out.println("Section 2, part 3");
+            }
+            else{
+              // if low rot then make goal small
+              xOffset = -0.02;
+              System.out.println("Section 2, part 4");
+            }
+
+          }
+          
+          //.6658
+          // xOffset = .6585; 
+        
+        }
+ * 
+ */

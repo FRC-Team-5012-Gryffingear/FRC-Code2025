@@ -34,8 +34,9 @@ public class ElevatorSubsys extends SubsystemBase {
     private TalonSRX elevClimb = new TalonSRX(Constants.elev_climb);
 
 
-    private PIDController elevHold = new PIDController(2, 0, 0); // might not work because of gravity variable not taken into count
+    private PIDController elevHold = new PIDController(1.5, 0, 0); // might not work because of gravity variable not taken into count
 
+    
     public ElevatorSubsys(intakePneumatics intakePneu) {
         this.intakePneu = intakePneu; 
         

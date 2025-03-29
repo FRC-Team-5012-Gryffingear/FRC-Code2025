@@ -41,7 +41,7 @@ public class intakePneumatics extends SubsystemBase {
     hookPiston.set(absoluteVal);
     flapPiston.set(absoluteVal);
 
-    Timer.delay(.5);
+    // Timer.delay(.5);
     liftPiston.set(absoluteVal);
 
     canReverse = true;
