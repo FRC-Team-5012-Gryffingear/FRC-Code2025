@@ -306,6 +306,10 @@ public class AlignAprilTag extends Command {
       double offval = 0;
       double xOffset = 0;
 
+      double row=0;
+      String side = "nothing";
+      String combinedData="null";
+
       // if(Math.abs(get_Val_X) < .4){
       //   // Getting rid of the constant/x distance since when straight causes major movement that overshoots
       //   // abs_final_Y = Math.copySign((Math.abs(get_Val_X) + .22), -get_Val_X);
@@ -325,8 +329,9 @@ public class AlignAprilTag extends Command {
         // Checks if the robot is to the left of the tag
          // offval was 0.185/get_Val_X
         if( (-get_Val_X) > 0){
-          
+          side = "LEFT";
           if((1 < -get_Val_Z && -get_Val_Z < 2)){
+            row = 1;
             System.out.println("SECTION 1 ROW 1 ENTRANCE");
             if((0 < -get_Val_X && -get_Val_X < .45)){
               offval = -.2/get_Val_X; 
@@ -344,33 +349,34 @@ public class AlignAprilTag extends Command {
               offval = .2/get_Val_X; 
               System.out.println("SECTION 1 ROW 1 BOX 4");
             }
-            // else if((3.35 < -get_Val_X && -get_Val_X < 4.45)){
-            //   offval = .185/get_Val_X; 
-            //   System.out.println("SECTION 1 ROW 1 BOX 5");
-            // }
-            // else if((4.45 < -get_Val_X && -get_Val_X < 5.55)){
-            //   offval = .185/get_Val_X; 
-            //   System.out.println("SECTION 1 ROW 1 BOX 6");
-            // }
+            else if((3.35 < -get_Val_X && -get_Val_X < 4.45)){
+              offval = .185/get_Val_X; 
+              System.out.println("SECTION 1 ROW 1 BOX 5");
+            }
+            else if((4.45 < -get_Val_X && -get_Val_X < 5.55)){
+              offval = .185/get_Val_X; 
+              System.out.println("SECTION 1 ROW 1 BOX 6");
+            }
           
           }
           
           else if((2 < -get_Val_Z && -get_Val_Z < 3)){
+            row = 2;
             System.out.println("SECTION 1 ROW 2 ENTRANCE");
             if((0 < -get_Val_X && -get_Val_X < .45)){
-              offval = .185/get_Val_X; 
+              offval = -.2/get_Val_X; 
               System.out.println("SECTION 1 ROW 2 BOX 1");
             }
             else if((.45 < -get_Val_X && -get_Val_X < 1.15) ){
-              offval = .185/get_Val_X; 
+              offval = .32/get_Val_X; 
               System.out.println("SECTION 1 ROW 2 BOX 2");
             }
             else if((1.15 < -get_Val_X && -get_Val_X < 2.25)){
-              offval = .185/get_Val_X; 
+              offval = .4/get_Val_X; 
               System.out.println("SECTION 1 ROW 2 BOX 3");
             }
             else if((2.25 < -get_Val_X && -get_Val_X < 3.35)){
-              offval = .185/get_Val_X; 
+              offval = .2/get_Val_X; 
               System.out.println("SECTION 1 ROW 2 BOX 4");
             }
             else if((3.35 < -get_Val_X && -get_Val_X < 4.45)){
@@ -384,21 +390,22 @@ public class AlignAprilTag extends Command {
           
           }
           else if((3 < -get_Val_Z && -get_Val_Z < 4)){
+            row = 3;
             System.out.println("SECTION 1 ROW 3 ENTRANCE");
             if((0 < -get_Val_X && -get_Val_X < .45)){
-              offval = .185/get_Val_X; 
+              offval = -.2/get_Val_X; 
               System.out.println("SECTION 1 ROW 3 BOX 1");
             }
             else if((.45 < -get_Val_X && -get_Val_X < 1.15) ){
-              offval = .185/get_Val_X; 
+              offval = .32/get_Val_X; 
               System.out.println("SECTION 1 ROW 3 BOX 2");
             }
             else if((1.15 < -get_Val_X && -get_Val_X < 2.25)){
-              offval = .185/get_Val_X; 
+              offval = .4/get_Val_X; 
               System.out.println("SECTION 1 ROW 3 BOX 3");
             }
             else if((2.25 < -get_Val_X && -get_Val_X < 3.35)){
-              offval = .185/get_Val_X; 
+              offval = .2/get_Val_X; 
               System.out.println("SECTION 1 ROW 3 BOX 4");
             }
             else if((3.35 < -get_Val_X && -get_Val_X < 4.45)){
@@ -421,23 +428,26 @@ public class AlignAprilTag extends Command {
 
           // abs_final_Y = Math.copySign((Math.abs(get_Val_X) + (1.1 * get_Val_X / 1.79)), -get_Val_X);// -0.02 or remove all mods
           // abs_final = Math.copySign(Math.abs(final_gyro_yaw-3), final_gyro_yaw);
+          combinedData = "We are on Row: " + row + ", and on the " + side + " side, with a scaling factor of: " + offval;
+
         }
         else{
-          
+          side = "RIGHT";
           // To the right of the apriltag
 
-          if((0 < -get_Val_Z && -get_Val_Z < 1)){
+          if((1 < -get_Val_Z && -get_Val_Z < 2)){
+            row = 1;
             System.out.println("SECTION 2 ROW 1 ENTRANCE");
             if((0 < get_Val_X && get_Val_X < .45)){
-              xOffset = .574; 
+              xOffset = -.02; 
               System.out.println("SECTION 2 ROW 1 BOX 1");
             }
             else if((.45 < get_Val_X && get_Val_X < 1.15) ){
-              xOffset = .574; 
+              xOffset = -.02; 
               System.out.println("SECTION 2 ROW 1 BOX 2");
             }
             else if((1.15 < get_Val_X && get_Val_X < 2.25)){
-              xOffset = .574;
+              xOffset = .45;
               System.out.println("SECTION 2 ROW 1 BOX 3");
             }
             else if((2.25 < get_Val_X && get_Val_X < 3.35)){
@@ -454,18 +464,19 @@ public class AlignAprilTag extends Command {
             }
           }
           
-          else if((1 < -get_Val_Z && -get_Val_Z < 1.5)){
+          else if((2 < -get_Val_Z && -get_Val_Z < 3)){
+            row = 2;
             System.out.println("SECTION 2 ROW 2 ENTRANCE");
             if((0 < get_Val_X && get_Val_X < .45)){
               xOffset = .574; 
               System.out.println("SECTION 2 ROW 2 BOX 1");
             }
             else if((.45 < get_Val_X && get_Val_X < 1.15) ){
-              xOffset = .574;
+              xOffset = -.1;
               System.out.println("SECTION 2 ROW 2 BOX 2");
             }
             else if((1.15 < get_Val_X && get_Val_X < 2.25)){
-              xOffset = .574; 
+              xOffset = .44; 
               System.out.println("SECTION 2 ROW 2 BOX 3");
             }
             else if((2.25 < get_Val_X && get_Val_X < 3.35)){
@@ -482,7 +493,8 @@ public class AlignAprilTag extends Command {
             }
           
           }
-          else if((1.5 < -get_Val_Z && -get_Val_Z < 2)){
+          else if((3 < -get_Val_Z && -get_Val_Z < 4)){
+            row = 3;
             System.out.println("SECTION 2 ROW 3 ENTRANCE");
             if((0 < get_Val_X && get_Val_X < .45)){
               xOffset = .574; 
@@ -500,14 +512,14 @@ public class AlignAprilTag extends Command {
               xOffset = .574; 
               System.out.println("SECTION 2 ROW 3 BOX 4");
             }
-            else if((3.35 < get_Val_X && get_Val_X < 4.45)){
-              xOffset = .574; 
-              System.out.println("SECTION 2 ROW 3 BOX 5");
-            }
-            else if((4.45 < get_Val_X && get_Val_X < 5.55)){
-              xOffset = .574; 
-              System.out.println("SECTION 2 ROW 3 BOX 6");
-            }
+            // else if((3.35 < get_Val_X && get_Val_X < 4.45)){
+            //   xOffset = .574; 
+            //   System.out.println("SECTION 2 ROW 3 BOX 5");
+            // }
+            // else if((4.45 < get_Val_X && get_Val_X < 5.55)){
+            //   xOffset = .574; 
+            //   System.out.println("SECTION 2 ROW 3 BOX 6");
+            // }
           
           }
         
@@ -521,6 +533,8 @@ public class AlignAprilTag extends Command {
          
          
           // abs_final_Y = Math.copySign(Math.abs(get_Val_X) + (1.1 * get_Val_X / 1.79 ), -get_Val_X); // +.17 or add .4
+          combinedData = "We are on Row: " + row + ", and on the " + side + " side, with a scaling factor of: " + xOffset;
+
         }
       // }
 
@@ -530,6 +544,18 @@ public class AlignAprilTag extends Command {
 
       SmartDashboard.putNumber("Abs final side move", abs_final_Y);
 
+      
+
+
+
+      SmartDashboard.putNumber(combinedData, get_Val_X);
+
+
+
+
+
+
+      
       
       //SIDE TO SIDE: odometry Y / FOWARD BACK: Odometry X 
            
