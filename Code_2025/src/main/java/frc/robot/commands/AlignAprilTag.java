@@ -58,7 +58,7 @@ public class AlignAprilTag extends Command {
   private static double final_gyro_yaw = 1000000;
   private static boolean look_for_new_tag = true;
   private static boolean moving_fwd = false;
-  private static boolean moving_side = false;
+  private static boolean moving_side,leftside,rightside = false;
   private boolean check, phase1,phase2 = false;
   private static final double conversion = 14.968;
   // private static double snap = 0;
@@ -118,6 +118,9 @@ public class AlignAprilTag extends Command {
     current_id = -1;
     phase1 = true;
     phase2 = false;
+
+    leftside = false;
+    rightside = false;
 
     swerve.resetPose();
     
@@ -329,6 +332,10 @@ public class AlignAprilTag extends Command {
         // Checks if the robot is to the left of the tag
          // offval was 0.185/get_Val_X
         if( (-get_Val_X) > 0){
+
+          leftside = true;
+          rightside = false;
+
           side = "LEFT";
           if((1 < -get_Val_Z && -get_Val_Z < 2)){
             row = 1;
@@ -428,12 +435,15 @@ public class AlignAprilTag extends Command {
 
           // abs_final_Y = Math.copySign((Math.abs(get_Val_X) + (1.1 * get_Val_X / 1.79)), -get_Val_X);// -0.02 or remove all mods
           // abs_final = Math.copySign(Math.abs(final_gyro_yaw-3), final_gyro_yaw);
-          combinedData = "We are on Row: " + row + ", and on the " + side + " side, with a scaling factor of: " + offval;
+          combinedData = "We are on Row: " + row + ", and on the " + side + " side, with a scaling factor of: " + (offval*get_Val_X);
 
         }
         else{
           side = "RIGHT";
           // To the right of the apriltag
+
+          rightside = true;
+          leftside = false;
 
           if((1 < -get_Val_Z && -get_Val_Z < 2)){
             row = 1;
@@ -542,6 +552,8 @@ public class AlignAprilTag extends Command {
     
       double speedY = MathUtil.clamp(yPID.calculate(((swerve.odometry.getPoseMeters().getY()) / conversion), abs_final_Y) , -.05,.05); // -get_Val_X as setpoint
 
+      SmartDashboard.putBoolean("Right side check", rightside);
+      SmartDashboard.putBoolean("Right side check", rightside);
       SmartDashboard.putNumber("Abs final side move", abs_final_Y);
 
       
