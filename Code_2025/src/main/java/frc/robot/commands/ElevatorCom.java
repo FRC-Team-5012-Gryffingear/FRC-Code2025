@@ -65,10 +65,10 @@ public class ElevatorCom extends Command {
       elev.elevMovement(5.36);
     }
     else if(controller2.y().getAsBoolean()){
-      elev.elevMovement(9.6); 
+      elev.elevMovement(9.65); 
     }
     else if(controller2.leftStick().getAsBoolean()){
-      elev.elevMovement(1.02); 
+      elev.elevMovement(1.23); 
     }
     else if(controller2.rightStick().getAsBoolean()){
       elev.resetEncoderPos();

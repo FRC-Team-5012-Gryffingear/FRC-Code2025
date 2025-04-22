@@ -67,6 +67,7 @@ public class AlignAprilTag extends Command {
   private static double grabTX = 0;
   private static Timer time = new Timer();
   private static Timer force_Timer = new Timer();
+  private static Timer delayTimer = new Timer();
 
   private static double first_tag_id = -1;
   private static double current_id = -1;
@@ -99,6 +100,8 @@ public class AlignAprilTag extends Command {
     time.reset();
     force_Timer.stop();
     force_Timer.reset();
+    delayTimer.stop();
+    delayTimer.reset();
     // xPID.setTolerance(0.1);
     // yPID.setTolerance(0.1);
     // rotPID.setTolerance(3);
@@ -129,7 +132,7 @@ public class AlignAprilTag extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    time.start();
+    delayTimer.start();
     // double real_wheel_rotation = swerve.odometry.getPoseMeters().getX();
     System.out.println("WE ARE EXECUTING");
 
@@ -143,11 +146,16 @@ public class AlignAprilTag extends Command {
 
     SmartDashboard.putNumber("REAL TIME APRIL TAG", Math.toDegrees(detectedID.getRotation().getY()));
 
-    if(LimelightHelpers.getTV("limelight-senior")){
-      target_seen = true;
-      current_id = LimelightHelpers.getFiducialID("limelight-senior");
-    }
-    
+   
+    System.out.println("DELAY!1!");
+
+    if(delayTimer.get() >= 5){
+      time.start();
+
+      if(LimelightHelpers.getTV("limelight-senior")){
+        target_seen = true;
+        current_id = LimelightHelpers.getFiducialID("limelight-senior");
+      }
     if(!target_seen){
 
       if(time.get() > 4 && time.get() < 6){
@@ -161,6 +169,7 @@ public class AlignAprilTag extends Command {
     else{
     time.stop();
     force_Timer.start();
+    
 
 
     
@@ -178,6 +187,7 @@ public class AlignAprilTag extends Command {
       if(needs_rotate && initial_gyro_yaw == -10000){ //  && april_tag_rotation == -10000
         // april_tag_rotation = Math.toDegrees(LimelightHelpers.getCameraPose3d_TargetSpace("").getY());
         initial_gyro_yaw = swerve.getYaw();
+        SmartDashboard.putNumber("Current ID AUTO", current_id);
         grabTX = LimelightHelpers.getTX("limelight-senior");
         // get_Val_X = detectedID.getX();
         get_Val_Z = detectedID.getZ();
@@ -199,7 +209,7 @@ public class AlignAprilTag extends Command {
 
 
         final_gyro_yaw = Math.toDegrees(april_tag_rotation) + initial_gyro_yaw;
-        SmartDashboard.putNumber("Final_gyro_value", final_gyro_yaw+10);
+        SmartDashboard.putNumber("Final_gyro_value", final_gyro_yaw+5);
         
         
         if(april_tag_rotation > 0){
@@ -309,7 +319,7 @@ public class AlignAprilTag extends Command {
       double offval = 0;
       double xOffset = 0;
 
-      double row=0;
+      double row,box=0;
       String side = "nothing";
       String combinedData="null";
 
@@ -332,7 +342,8 @@ public class AlignAprilTag extends Command {
         // Checks if the robot is to the left of the tag
          // offval was 0.185/get_Val_X
         if( (-get_Val_X) > 0){
-
+          row = 0;
+          box = 0;
           leftside = true;
           rightside = false;
 
@@ -341,28 +352,34 @@ public class AlignAprilTag extends Command {
             row = 1;
             System.out.println("SECTION 1 ROW 1 ENTRANCE");
             if((0 < -get_Val_X && -get_Val_X < .45)){
-              offval = -.2/get_Val_X; 
+              offval = -.208/get_Val_X; 
               System.out.println("SECTION 1 ROW 1 BOX 1");
+              box = 1;
             }
             else if((.45 < -get_Val_X && -get_Val_X < 1.15) ){
               offval = .28/get_Val_X; 
               System.out.println("SECTION 1 ROW 1 BOX 2");
+              box = 2;
             }
             else if((1.15 < -get_Val_X && -get_Val_X < 2.25)){
               offval = .4/get_Val_X; 
               System.out.println("SECTION 1 ROW 1 BOX 3");
+              box = 3;
             }
             else if((2.25 < -get_Val_X && -get_Val_X < 3.35)){
               offval = .2/get_Val_X; 
               System.out.println("SECTION 1 ROW 1 BOX 4");
+              box = 4;
             }
             else if((3.35 < -get_Val_X && -get_Val_X < 4.45)){
               offval = .185/get_Val_X; 
               System.out.println("SECTION 1 ROW 1 BOX 5");
+              box = 5;
             }
             else if((4.45 < -get_Val_X && -get_Val_X < 5.55)){
               offval = .185/get_Val_X; 
               System.out.println("SECTION 1 ROW 1 BOX 6");
+              box = 6;
             }
           
           }
@@ -373,26 +390,32 @@ public class AlignAprilTag extends Command {
             if((0 < -get_Val_X && -get_Val_X < .45)){
               offval = -.2/get_Val_X; 
               System.out.println("SECTION 1 ROW 2 BOX 1");
+              box = 1;
             }
             else if((.45 < -get_Val_X && -get_Val_X < 1.15) ){
               offval = .32/get_Val_X; 
               System.out.println("SECTION 1 ROW 2 BOX 2");
+              box = 2;
             }
             else if((1.15 < -get_Val_X && -get_Val_X < 2.25)){
-              offval = .4/get_Val_X; 
+              offval = .05/get_Val_X; 
               System.out.println("SECTION 1 ROW 2 BOX 3");
+              box = 3;
             }
             else if((2.25 < -get_Val_X && -get_Val_X < 3.35)){
               offval = .2/get_Val_X; 
               System.out.println("SECTION 1 ROW 2 BOX 4");
+              box = 4;
             }
             else if((3.35 < -get_Val_X && -get_Val_X < 4.45)){
               offval = .185/get_Val_X; 
               System.out.println("SECTION 1 ROW 2 BOX 5");
+              box = 5;
             }
             else if((4.45 < -get_Val_X && -get_Val_X < 5.55)){
               offval = .185/get_Val_X; 
               System.out.println("SECTION 1 ROW 2 BOX 6");
+              box = 6;
             }
           
           }
@@ -402,26 +425,32 @@ public class AlignAprilTag extends Command {
             if((0 < -get_Val_X && -get_Val_X < .45)){
               offval = -.2/get_Val_X; 
               System.out.println("SECTION 1 ROW 3 BOX 1");
+              box = 1;
             }
             else if((.45 < -get_Val_X && -get_Val_X < 1.15) ){
-              offval = .32/get_Val_X; 
+              offval = .2/get_Val_X; 
               System.out.println("SECTION 1 ROW 3 BOX 2");
+              box = 2;
             }
             else if((1.15 < -get_Val_X && -get_Val_X < 2.25)){
-              offval = .4/get_Val_X; 
+              offval = .185/get_Val_X; 
               System.out.println("SECTION 1 ROW 3 BOX 3");
+              box = 3;
             }
             else if((2.25 < -get_Val_X && -get_Val_X < 3.35)){
               offval = .2/get_Val_X; 
               System.out.println("SECTION 1 ROW 3 BOX 4");
+              box = 4;
             }
             else if((3.35 < -get_Val_X && -get_Val_X < 4.45)){
               offval = .185/get_Val_X; 
               System.out.println("SECTION 1 ROW 3 BOX 5");
+              box = 5;
             }
             else if((4.45 < -get_Val_X && -get_Val_X < 5.55)){
               offval = .185/get_Val_X; 
               System.out.println("SECTION 1 ROW 3 BOX 6");
+              box = 6;
             }
           
           }
@@ -435,11 +464,12 @@ public class AlignAprilTag extends Command {
 
           // abs_final_Y = Math.copySign((Math.abs(get_Val_X) + (1.1 * get_Val_X / 1.79)), -get_Val_X);// -0.02 or remove all mods
           // abs_final = Math.copySign(Math.abs(final_gyro_yaw-3), final_gyro_yaw);
-          combinedData = "We are on Row: " + row + ", and on the " + side + " side, with a scaling factor of: " + (offval*get_Val_X);
+          combinedData = "We are on Row: " + row + ", and on the " + side + " side, in Box "+ box +" with a scaling factor of: " + (offval*get_Val_X);
 
         }
         else{
           side = "RIGHT";
+          row = 0;
           // To the right of the apriltag
 
           rightside = true;
@@ -448,58 +478,72 @@ public class AlignAprilTag extends Command {
           if((1 < -get_Val_Z && -get_Val_Z < 2)){
             row = 1;
             System.out.println("SECTION 2 ROW 1 ENTRANCE");
+            box = 0;
             if((0 < get_Val_X && get_Val_X < .45)){
-              xOffset = -.02; 
+              xOffset = -.013; 
               System.out.println("SECTION 2 ROW 1 BOX 1");
+              box = 1;
             }
             else if((.45 < get_Val_X && get_Val_X < 1.15) ){
-              xOffset = -.02; 
+              xOffset = -.015; 
               System.out.println("SECTION 2 ROW 1 BOX 2");
+              box = 2;
             }
             else if((1.15 < get_Val_X && get_Val_X < 2.25)){
-              xOffset = .45;
+              xOffset = .25;
               System.out.println("SECTION 2 ROW 1 BOX 3");
+              box = 3;
             }
             else if((2.25 < get_Val_X && get_Val_X < 3.35)){
-              xOffset = .574; 
+              xOffset = .25; 
               System.out.println("SECTION 2 ROW 1 BOX 4");
+              box = 4;
             }
             else if((3.35 < get_Val_X && get_Val_X < 4.45)){
-              xOffset = .574; 
+              xOffset = .25; 
               System.out.println("SECTION 2 ROW 1 BOX 5");
+              box = 5;
             }
             else if((4.45 < get_Val_X && get_Val_X < 5.55)){
-              xOffset = .574; 
+              xOffset = .25; 
               System.out.println("SECTION 2 ROW 1 BOX 6");
+              box = 6;
             }
           }
           
           else if((2 < -get_Val_Z && -get_Val_Z < 3)){
             row = 2;
+            box = 0;
             System.out.println("SECTION 2 ROW 2 ENTRANCE");
             if((0 < get_Val_X && get_Val_X < .45)){
-              xOffset = .574; 
+              xOffset = .274; 
               System.out.println("SECTION 2 ROW 2 BOX 1");
+              box = 1;
             }
             else if((.45 < get_Val_X && get_Val_X < 1.15) ){
-              xOffset = -.1;
+              xOffset = -.02;
               System.out.println("SECTION 2 ROW 2 BOX 2");
+              box = 2;
             }
             else if((1.15 < get_Val_X && get_Val_X < 2.25)){
-              xOffset = .44; 
+              xOffset = .1; 
               System.out.println("SECTION 2 ROW 2 BOX 3");
+              box = 3;
             }
             else if((2.25 < get_Val_X && get_Val_X < 3.35)){
-              xOffset = .574; 
+              xOffset = .25; 
               System.out.println("SECTION 2 ROW 2 BOX 4");
+              box = 4;
             }
             else if((3.35 < get_Val_X && get_Val_X < 4.45)){
-              xOffset = .574; 
+              xOffset = .25; 
               System.out.println("SECTION 2 ROW 2 BOX 5");
+              box = 5;
             }
             else if((4.45 < get_Val_X && get_Val_X < 5.55)){
-              xOffset = .574; 
+              xOffset = .25; 
               System.out.println("SECTION 2 ROW 2 BOX 6");
+              box = 6;
             }
           
           }
@@ -507,29 +551,35 @@ public class AlignAprilTag extends Command {
             row = 3;
             System.out.println("SECTION 2 ROW 3 ENTRANCE");
             if((0 < get_Val_X && get_Val_X < .45)){
-              xOffset = .574; 
+              xOffset = .25; 
               System.out.println("SECTION 2 ROW 3 BOX 1");
+              box = 1;
             }
             else if((.45 < get_Val_X && get_Val_X < 1.15) ){
-              xOffset = .574; 
+              xOffset = .25; 
               System.out.println("SECTION 2 ROW 3 BOX 2");
+              box = 2;
             }
             else if((1.15 < get_Val_X && get_Val_X < 2.25)){
-              xOffset = .574;
+              xOffset = .25;
               System.out.println("SECTION 2 ROW 3 BOX 3");
+              box = 3;
             }
             else if((2.25 < get_Val_X && get_Val_X < 3.35)){
-              xOffset = .574; 
+              xOffset = .15; 
               System.out.println("SECTION 2 ROW 3 BOX 4");
+              box = 4;
             }
-            // else if((3.35 < get_Val_X && get_Val_X < 4.45)){
-            //   xOffset = .574; 
-            //   System.out.println("SECTION 2 ROW 3 BOX 5");
-            // }
-            // else if((4.45 < get_Val_X && get_Val_X < 5.55)){
-            //   xOffset = .574; 
-            //   System.out.println("SECTION 2 ROW 3 BOX 6");
-            // }
+            else if((3.35 < get_Val_X && get_Val_X < 4.45)){
+              xOffset = .25; 
+              System.out.println("SECTION 2 ROW 3 BOX 5");
+              box = 5;
+            }
+            else if((4.45 < get_Val_X && get_Val_X < 5.55)){
+              xOffset = .25; 
+              System.out.println("SECTION 2 ROW 3 BOX 6");
+              box = 6;
+            }
           
           }
         
@@ -543,7 +593,7 @@ public class AlignAprilTag extends Command {
          
          
           // abs_final_Y = Math.copySign(Math.abs(get_Val_X) + (1.1 * get_Val_X / 1.79 ), -get_Val_X); // +.17 or add .4
-          combinedData = "We are on Row: " + row + ", and on the " + side + " side, with a scaling factor of: " + xOffset;
+          combinedData = "We are on Row: " + row + ", and on the " + side + " side, in Box " + box + " with a scaling factor of: " + xOffset;
 
         }
       // }
@@ -553,7 +603,7 @@ public class AlignAprilTag extends Command {
       double speedY = MathUtil.clamp(yPID.calculate(((swerve.odometry.getPoseMeters().getY()) / conversion), abs_final_Y) , -.05,.05); // -get_Val_X as setpoint
 
       SmartDashboard.putBoolean("Right side check", rightside);
-      SmartDashboard.putBoolean("Right side check", rightside);
+      SmartDashboard.putBoolean("Left side check", leftside);
       SmartDashboard.putNumber("Abs final side move", abs_final_Y);
 
       
@@ -652,14 +702,16 @@ public class AlignAprilTag extends Command {
      
 
 
-     if((!phase1 && !phase2) || force_Timer.get() >= 5){
+     if((!phase1 && !phase2) || force_Timer.get() >= 4.5){
       swerve.drive3(0, 0, 0, true);
       // @ELEV MOVEMENT HERE MAKE SURE TO UNCOMMENT IF WANT TO TEST
   
+      SmartDashboard.putNumber("AUTO ENCODER POSITION", elev.getEncoderPos());
       //  elev.elevMovement(2.7);
-      if(elev.getEncoderPos() <= 9.23 && force_Timer.get() < 8.5){
+      if(elev.getEncoderPos() <= 9.62 && force_Timer.get() < 6.5){
         System.out.println("RUNNING THE ELEVATOR ");
-        elev.elevMovement(9.32);
+        
+        elev.elevMovement(9.6);
       }else{
         // elev.elevUpAndDown(0);
         intake.autoHook();
@@ -672,6 +724,7 @@ public class AlignAprilTag extends Command {
 
 
     }
+  }
   }
 
   // Called once the command ends or is interrupted.

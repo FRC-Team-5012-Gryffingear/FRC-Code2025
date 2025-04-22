@@ -52,7 +52,7 @@ public class ElevatorSubsys extends SubsystemBase {
         CANcoderConfiguration config = new CANcoderConfiguration();
         config.MagnetSensor.MagnetOffset = offset;
         config.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 1;
-        config.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
+        config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
 
         elevEncoder.getConfigurator().apply(config); 
     }
