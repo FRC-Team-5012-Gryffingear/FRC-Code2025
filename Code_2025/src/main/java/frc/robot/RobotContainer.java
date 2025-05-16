@@ -9,12 +9,14 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.autos1;
 import frc.robot.commands.hookCom;
+import frc.robot.commands.neoCOm;
 import frc.robot.commands.pneumatiCom2;
 import frc.robot.commands.pneumaticCom;
 import frc.robot.commands.reverseHookCom;
 import frc.robot.commands.testCom;
 import frc.robot.commands.testCom2;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.neo;
 import frc.robot.subsystems.pneumatic;
 import frc.robot.subsystems.test;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -34,9 +36,11 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  private final pneumatic pneu = new pneumatic();
+  // private final pneumatic pneu = new pneumatic();
+  private final neo neos = new neo();
 
-  private final test t = new test();
+
+  // private final test t = new test();
   private boolean toggle = true;
   // private final testCom tCom = new testCom(t, 0);
   
@@ -49,6 +53,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+    neos.setDefaultCommand(new neoCOm(neos));
 
   }
 
@@ -61,8 +66,10 @@ public class RobotContainer {
 
   private void configureBindings() {
 
-    m_driverController.a().onTrue(new pneumaticCom(pneu));
-    m_driverController.b().onTrue(new pneumatiCom2(pneu));
+    // m_driverController.a().onTrue(new pneumaticCom(pneu));
+    // m_driverController.b().onTrue(new pneumatiCom2(pneu));
+
+    
 
     // pneu.setDefaultCommand(new pneumaticCom(pneu,
     // () -> m_driverController.a().getAsBoolean(),
@@ -110,7 +117,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return new autos1(pneu);
+    return null;
     // Autos.exampleAuto(m_exampleSubsystem);
   }
 }
