@@ -6,9 +6,14 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
+import frc.robot.commands.ElevatorCom;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.intakeState1;
+import frc.robot.commands.intakeState2;
+import frc.robot.subsystems.ElevatorSubsys;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.intakePneumatics;
 import swervelib.SwerveInputStream;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -24,11 +29,15 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final SwerveSubsystem drivebase = new SwerveSubsystem();
+  private final intakePneumatics intakePneu = new intakePneumatics();
+
+  private final ElevatorSubsys elev = new ElevatorSubsys(intakePneu);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.DriverContrlPort);
-
+  private final CommandXboxController operatorController = 
+      new CommandXboxController(OperatorConstants.OperatorContrlPort);
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
@@ -69,6 +78,13 @@ public class RobotContainer {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
     // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    operatorController.leftBumper().onTrue(new intakeState1(intakePneu));
+    operatorController.rightBumper().onTrue(new intakeState2(intakePneu));
+    operatorController.y().whileTrue(new ElevatorCom(elev, operatorController)); //1st level 0.75
+    operatorController.a().whileTrue(new ElevatorCom(elev,operatorController)); // 2st level 2.41
+    operatorController.b().whileTrue(new ElevatorCom(elev,operatorController)); // 3nd level 5.2 
+    operatorController.x().whileTrue(new ElevatorCom(elev, operatorController)); // 4rd level  9.65
+    operatorController.leftStick().whileTrue(new ElevatorCom(elev, operatorController)); // Human player station  1.2
   }
 
   /**
