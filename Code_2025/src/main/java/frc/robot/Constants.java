@@ -4,6 +4,10 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.util.Units;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -13,7 +17,19 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  public static class OperatorConstants {
-    public static final int kDriverControllerPort = 0;
+
+  public static final double MAX_SPEED = Units.feetToMeters(4.5);
+
+
+  public static class ModConstants{
+    // Hopefully no need to adjust
+    public static final double KP = 0.4;
+    public static final double KI = 0;
+    public static final double KD = 0;
   }
+
+  public static class OperatorConstants{
+    public static final int DriverContrlPort = 0;
+  } 
+  
 }
