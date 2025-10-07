@@ -29,6 +29,7 @@ public final class Constants {
   }
 
   public static class OperatorConstants{
+    public static final double DEADBAND = 0.05;
     public static final int DriverContrlPort = 0;
   } 
   
