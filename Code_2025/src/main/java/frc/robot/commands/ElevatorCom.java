@@ -54,30 +54,31 @@ public class ElevatorCom extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    
     // use this one for the stages
-    if(controller2.a().getAsBoolean()){
-      elev.elevMovement(0);
-    }
-    else if(controller2.b().getAsBoolean()){
-      elev.elevMovement(2.34);
-    }
-    else if(controller2.x().getAsBoolean()){
-      elev.elevMovement(5.36);
-    }
-    else if(controller2.y().getAsBoolean()){
-      elev.elevMovement(9.65); 
-    }
-    else if(controller2.leftStick().getAsBoolean()){
-      elev.elevMovement(1.23); 
-    }
-    else if(controller2.rightStick().getAsBoolean()){
-      elev.resetEncoderPos();
-    }
-    else{
-      if(!DriverStation.isAutonomous()){
-        elev.elevUpAndDown(controller2.getRightTriggerAxis() - controller2.getLeftTriggerAxis());
-      } 
-    }
+    // if(controller2.a().getAsBoolean()){
+    //   elev.elevMovement(0);
+    // }
+    // else if(controller2.b().getAsBoolean()){
+    //   elev.elevMovement(2.34);
+    // }
+    // else if(controller2.x().getAsBoolean()){
+    //   elev.elevMovement(5.36);
+    // }
+    // else if(controller2.y().getAsBoolean()){
+    //   elev.elevMovement(9.65); 
+    // }
+    // else if(controller2.leftStick().getAsBoolean()){
+    //   elev.elevMovement(1.23); 
+    // }
+    // else if(controller2.rightStick().getAsBoolean()){
+    //   elev.resetEncoderPos();
+    // }
+    // else{
+    //   if(!DriverStation.isAutonomous()){
+    //     elev.elevUpAndDown(controller2.getRightTriggerAxis() - controller2.getLeftTriggerAxis());
+    //   } 
+    // }
     // elev.elevUpAndDown(controller2.getRightTriggerAxis() - controller2.getLeftTriggerAxis());
     
 

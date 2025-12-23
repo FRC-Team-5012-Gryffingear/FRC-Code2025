@@ -20,7 +20,7 @@ public class intakeState1 extends InstantCommand {
     }
     @Override
     public void execute(){
-        hookSubsystem.toggle();
+        // hookSubsystem.toggle();
         
      
     }

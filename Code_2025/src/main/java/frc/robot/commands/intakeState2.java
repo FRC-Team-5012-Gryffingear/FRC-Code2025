@@ -14,6 +14,6 @@ public class intakeState2 extends InstantCommand {
 
     @Override
     public void initialize() {
-        hookSubsystem.reverseHook();
+        // hookSubsystem.reverseHook();
     }
 }
