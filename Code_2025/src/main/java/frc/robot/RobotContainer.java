@@ -15,7 +15,16 @@ import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.intakePneumatics;
 import swervelib.SwerveInputStream;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -26,6 +35,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+  private final SendableChooser<Command> autoChooser;
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final SwerveSubsystem drivebase = new SwerveSubsystem();
@@ -57,6 +67,23 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+    //Create the NamedCommands that will be used in PathPlanner
+    NamedCommands.registerCommand("test", Commands.print("I EXIST"));
+
+    //Have the autoChooser pull in all PathPlanner autos as options
+    autoChooser = AutoBuilder.buildAutoChooser();
+
+    //Set the default auto (do nothing) 
+    autoChooser.setDefaultOption("Do Nothing", Commands.none());
+
+    //Add a simple auto option to have the robot drive forward for 1 second then stop
+    autoChooser.addOption("Drive Forward", drivebase.driveForward());
+
+    autoChooser.addOption("New Weird Path", drivebase.DriveWithWayPoints());
+
+    autoChooser.addOption("Auto for Test", new PathPlannerAuto("New Auto"));
+    //Put the autoChooser on the SmartDashboard
+    SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
  
@@ -73,7 +100,6 @@ public class RobotContainer {
     Command driveFieldOrientedDirectAngle = drivebase.driveFieldOriented(driveDirectAngle);
 
     Command driveFieldOrientedAngularVelocity = drivebase.driveFieldOriented(driveAngularVelocity);
-    drivebase.setDefaultCommand(driveFieldOrientedAngularVelocity);
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     // new Trigger(m_exampleSubsystem::exampleCondition)
     //     .onTrue(new ExampleCommand(m_exampleSubsystem));
@@ -81,6 +107,17 @@ public class RobotContainer {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
     // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    Command driveFieldOrientedDirectAngle2 = drivebase.driveCommand(
+        () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.DEADBAND),
+        () -> MathUtil.applyDeadband(driverXbox.getLeftX(), OperatorConstants.DEADBAND),
+        () -> driverXbox.getRightX(),
+        () -> driverXbox.getRightY());
+    
+    drivebase.setDefaultCommand(driveFieldOrientedAngularVelocity);
+
+
+
+
     operatorController.leftBumper().onTrue(new intakeState1(intakePneu));
     operatorController.rightBumper().onTrue(new intakeState2(intakePneu));
     operatorController.y().whileTrue(new ElevatorCom(elev, operatorController)); //1st level 0.75
@@ -97,7 +134,8 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return null;
+   return autoChooser.getSelected();
+
     // Autos.exampleAuto(m_exampleSubsystem);
   }
 }
