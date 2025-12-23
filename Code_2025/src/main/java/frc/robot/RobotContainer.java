@@ -39,28 +39,27 @@ public class RobotContainer {
   private final CommandXboxController operatorController = 
       new CommandXboxController(OperatorConstants.OperatorContrlPort);
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
+
+  SwerveInputStream driverAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
+  () -> m_driverController.getLeftY() * -1, 
+  () -> m_driverController.getLeftX() * -1)
+  .withControllerRotationAxis(m_driverController::getRightX)
+  .deadband(OperatorConstants.DEADBAND)
+  .scaleTranslation(0.8)
+  .allianceRelativeControl(true);
+
+ SwerveInputStream driveDirectAngle = driverAngularVelocity.copy().
+ withControllerHeadingAxis(m_driverController::getRightX, m_driverController::getRightY)
+ .headingWhile(true);
+
+
+
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
-    drivebase.setDefaultCommand(driveFieldOrientedAngularVelocity);
   }
 
-  SwerveInputStream driverAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
-   () -> m_driverController.getLeftY() * -1, 
-   () -> m_driverController.getLeftX() * -1)
-   .withControllerRotationAxis(m_driverController::getRightX)
-   .deadband(OperatorConstants.DEADBAND)
-   .scaleTranslation(0.8)
-   .allianceRelativeControl(true);
-
-  SwerveInputStream driveDirectAngle = driverAngularVelocity.copy().
-  withControllerHeadingAxis(m_driverController::getRightX, m_driverController::getRightY)
-  .headingWhile(true);
-
-  Command driveFieldOrientedDirectAngle = drivebase.driveFieldOriented(driveDirectAngle);
-
-  Command driveFieldOrientedAngularVelocity = drivebase.driveFieldOriented(driverAngularVelocity);
-
+ 
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
@@ -71,6 +70,10 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    Command driveFieldOrientedDirectAngle = drivebase.driveFieldOriented(driveDirectAngle);
+
+    Command driveFieldOrientedAngularVelocity = drivebase.driveFieldOriented(driverAngularVelocity);
+    drivebase.setDefaultCommand(driveFieldOrientedAngularVelocity);
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     // new Trigger(m_exampleSubsystem::exampleCondition)
     //     .onTrue(new ExampleCommand(m_exampleSubsystem));
