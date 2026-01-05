@@ -77,6 +77,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    swerveDrive.updateOdometry();
     // This method will be called once per scheduler run
   }
 
@@ -187,20 +188,13 @@ return AutoBuilder.followPath(path);
           // Robot pose supplier
           swerveDrive::resetOdometry,
           // Method to reset odometry (will be called if your auto has a starting pose)
-          swerveDrive::getRobotVelocity,
+          () -> ChassisSpeeds.fromRobotRelativeSpeeds(
+          swerveDrive.getRobotVelocity(),
+          swerveDrive.getOdometryHeading()
+          ),
           // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
           (speedsRobotRelative, moduleFeedForwards) -> {
-            if (enableFeedforward)
-            {
-              swerveDrive.drive(
-                  speedsRobotRelative,
-                  swerveDrive.kinematics.toSwerveModuleStates(speedsRobotRelative),
-                  moduleFeedForwards.linearForces()
-                               );
-            } else
-            {
-              swerveDrive.setChassisSpeeds(speedsRobotRelative);
-            }
+            swerveDrive.setChassisSpeeds(speedsRobotRelative);
           },
           // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
           new PPHolonomicDriveController(
