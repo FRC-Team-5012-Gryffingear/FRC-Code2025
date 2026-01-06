@@ -21,6 +21,8 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -56,7 +58,7 @@ public class RobotContainer {
                                                             .withControllerRotationAxis(() -> driverXbox.getRightX() * -1)
                                                             .deadband(OperatorConstants.DEADBAND)
                                                             .scaleTranslation(1.8)
-                                                            .allianceRelativeControl(false);
+                                                            .allianceRelativeControl(true);
 
  SwerveInputStream driveDirectAngle = driveAngularVelocity.copy().
  withControllerHeadingAxis(driverXbox::getRightX, driverXbox::getRightY)
@@ -113,7 +115,19 @@ public class RobotContainer {
         () -> driverXbox.getRightX(),
         () -> driverXbox.getRightY());
     
-    drivebase.setDefaultCommand(drivebase.driveFieldOriented(driveAngularVelocity));
+    
+    driverXbox.a().onTrue(
+    Commands.runOnce(() -> {
+        Pose2d currentPose = drivebase.getSwerveDrive().getPose();
+        Pose2d newPose = new Pose2d(
+            currentPose.getTranslation(),
+            Rotation2d.fromDegrees(0)
+        );
+        drivebase.getSwerveDrive().resetOdometry(newPose);
+    })
+);
+
+    drivebase.setDefaultCommand(driveFieldOrientedAngularVelocity);
 
 
 
@@ -135,7 +149,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-   return autoChooser.getSelected();
+   return new PathPlannerAuto("Auto3");
 
     // Autos.exampleAuto(m_exampleSubsystem);
   }

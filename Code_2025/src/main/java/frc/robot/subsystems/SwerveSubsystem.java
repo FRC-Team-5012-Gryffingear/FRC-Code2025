@@ -35,9 +35,11 @@ import edu.wpi.first.wpilibj.Filesystem;
 import swervelib.parser.SwerveParser;
 import swervelib.SwerveDrive;
 import swervelib.SwerveInputStream;
+import swervelib.imu.SwerveIMU;
 import swervelib.math.SwerveMath;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
@@ -89,6 +91,14 @@ public class SwerveSubsystem extends SubsystemBase {
   public SwerveDrive getSwerveDrive() {
     return swerveDrive;
   }
+
+  public Command resetOdometry(){
+    return run(() -> {
+      swerveDrive.setGyro(swerveDrive.getGyroRotation3d());
+    });
+  }
+
+
 
   public void driveFieldOriented(ChassisSpeeds velocity){
     swerveDrive.driveFieldOriented(velocity);
@@ -199,10 +209,10 @@ return AutoBuilder.followPath(path);
           // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
           new PPHolonomicDriveController(
               // PPHolonomicController is the built in path following controller for holonomic drive trains
-              new PIDConstants(5.0, 0.0, 0.0),
-              // Translation PID constants
-              new PIDConstants(5.0, 0.0, 0.0)
-              // Rotation PID constants
+              new PIDConstants(7.7, 0.4, 0.04),
+              // Translatio
+              new PIDConstants(7.175, 0.4, 0)
+              // Rotation PID constants 
           ),
           config,
           // The robot configuration
