@@ -209,8 +209,8 @@ return AutoBuilder.followPath(path);
           // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
           new PPHolonomicDriveController(
               // PPHolonomicController is the built in path following controller for holonomic drive trains
-              new PIDConstants(7.7, 0.4, 0.04),
-              // Translatio
+              new PIDConstants(7.798, 0.4, 0.04),
+              // Translation
               new PIDConstants(7.175, 0.4, 0)
               // Rotation PID constants 
           ),
