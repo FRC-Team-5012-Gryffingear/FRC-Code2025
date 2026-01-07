@@ -1,0 +1,43 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Start to Kilo"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Kilo to Feed"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Feed to Delta"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Delta to Feed"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": null
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "New Folder",
+  "choreoAuto": false
+}

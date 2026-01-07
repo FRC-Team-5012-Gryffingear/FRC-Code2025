@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.AutonomousVisionCommand;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ElevatorCom;
 import frc.robot.commands.ExampleCommand;
@@ -12,7 +13,9 @@ import frc.robot.commands.intakeState1;
 import frc.robot.commands.intakeState2;
 import frc.robot.subsystems.ElevatorSubsys;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.VisionMemorySubsystem;
 import frc.robot.subsystems.intakePneumatics;
 import swervelib.SwerveInputStream;
 
@@ -44,6 +47,9 @@ public class RobotContainer {
   private final intakePneumatics intakePneu = new intakePneumatics();
 
   private final ElevatorSubsys elev = new ElevatorSubsys(intakePneu);
+
+   private final LimelightSubsystem limelight = new LimelightSubsystem();
+   private final VisionMemorySubsystem visionMemory = new VisionMemorySubsystem(limelight);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driverXbox =
@@ -88,6 +94,9 @@ public class RobotContainer {
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
+
+  
+
  
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
@@ -127,6 +136,17 @@ public class RobotContainer {
     })
 );
 
+    driverXbox.b().onTrue(
+            new AutonomousVisionCommand(
+                drivebase,
+                limelight,
+                visionMemory,
+                6,      // Target tag ID (1-8)
+                0.5     // Approach distance in meters
+            )
+        );
+
+
     drivebase.setDefaultCommand(driveFieldOrientedAngularVelocity);
 
 
@@ -149,7 +169,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-   return new PathPlannerAuto("Auto3");
+   return new PathPlannerAuto("Auton test #1");
 
     // Autos.exampleAuto(m_exampleSubsystem);
   }
