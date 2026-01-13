@@ -32,7 +32,7 @@ public class AlignToReefCommand extends Command {
     private static final double X_TOLERANCE = 0.05;
     private static final double Y_TOLERANCE = 0.05;
     private static final double ROT_TOLERANCE = 2;
-    private static final double TIMEOUT = 3.0;
+    private static final double TIMEOUT = 6.0;
     
     private double commandStartTime;
     
@@ -49,9 +49,9 @@ public class AlignToReefCommand extends Command {
         this.targetTagID = tagID;
         this.approachDistance = approachDistance;
         
-        this.xController = new PIDController(1.0, 0.0, 0.05);
-        this.yController = new PIDController(1.0, 0.0, 0.05);
-        this.rotController = new PIDController(3.0, 0.0, 0.1);
+        this.xController = new PIDController(0.25, 0.0, 0.05);
+        this.yController = new PIDController(0.25, 0.0, 0.05);
+        this.rotController = new PIDController(0.26, 0.0, 0);
         
         xController.setTolerance(X_TOLERANCE);
         yController.setTolerance(Y_TOLERANCE);
@@ -94,14 +94,14 @@ public class AlignToReefCommand extends Command {
         double errorY = targetPose.getY() - robotPose.getY();
         double errorRotDegrees = targetPose.getRotation()
             .minus(robotPose.getRotation())
-            .getDegrees();
+            .getDegrees() + 40;
         
         // Normalize rotation error
         while (errorRotDegrees > 180) errorRotDegrees -= 360;
         while (errorRotDegrees < -180) errorRotDegrees += 360;
         
-        double vx = xController.calculate(0, errorX);
-        double vy = yController.calculate(0, errorY);
+        double vx = clamp(xController.calculate(0, errorX), 0, 0.1);
+        double vy = clamp(yController.calculate(0, errorY), 0, 0.1);
         double omega = rotController.calculate(0, Math.toRadians(errorRotDegrees));
         
         vx = clamp(vx, -2.0, 2.0);

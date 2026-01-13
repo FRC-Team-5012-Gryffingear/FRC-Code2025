@@ -1,0 +1,31 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "START TO A  (shoot preload)"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "A to B (reload balls)"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "B to A (shoot fresh fuel)"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
