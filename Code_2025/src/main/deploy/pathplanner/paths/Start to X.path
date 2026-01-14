@@ -3,42 +3,35 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.6070128205128216,
-        "y": 5.511782051282052
+        "x": 3.502435897435899,
+        "y": 4.046628205128206
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7447993070129455,
-        "y": 5.106813647785329
+        "x": 2.7480961133869313,
+        "y": 4.066681922194965
       },
       "isLocked": false,
-      "linkedName": "B"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.0140512820512835,
-        "y": 3.976858974358975
+        "x": 2.514038461538463,
+        "y": 4.046628205128206
       },
       "prevControl": {
-        "x": 2.2047442299172557,
-        "y": 4.58446248659307
+        "x": 3.3130221458996467,
+        "y": 4.049200543996729
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "A"
+      "linkedName": "X"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "shoot fresh fuel",
-      "waypointRelativePos": 1.0,
-      "endWaypointRelativePos": null,
-      "command": null
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 5.4,
     "maxAcceleration": 3.0,
@@ -55,7 +48,7 @@
   "folder": "New Folder",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 120.46554491945989
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

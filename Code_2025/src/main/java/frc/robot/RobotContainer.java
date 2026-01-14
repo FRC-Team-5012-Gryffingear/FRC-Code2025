@@ -6,11 +6,13 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AlignToReefCommand;
+import frc.robot.commands.ChaseAprilTagCommand;
 import frc.robot.commands.ElevatorCom;
 import frc.robot.commands.intakeState1;
 import frc.robot.commands.intakeState2;
 import frc.robot.subsystems.ElevatorSubsys;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.LimelightPoseProvider;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.SwervePoseEstimatorSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -43,6 +45,7 @@ public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final SwerveSubsystem drivebase = new SwerveSubsystem();
   private final intakePneumatics intakePneu = new intakePneumatics();
+  private final LimelightPoseProvider limelightPoseProvider = new LimelightPoseProvider(drivebase);
 
   private final ElevatorSubsys elev = new ElevatorSubsys(intakePneu);
   private final LimelightSubsystem limelight = new LimelightSubsystem();
@@ -135,9 +138,9 @@ public class RobotContainer {
         drivebase.getSwerveDrive().resetOdometry(newPose);
     })
 );
-     driverXbox.b().onTrue(
-            new AlignToReefCommand(drivebase, poseEstimator, limelight, 6, 0.4)
-        );
+     driverXbox.b().whileTrue(
+    new ChaseAprilTagCommand(drivebase, limelightPoseProvider, 18, 1)
+);
 
     
 
